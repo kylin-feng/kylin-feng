@@ -9,14 +9,14 @@ I want to be an interesting person and create something that can be remembered b
 - 🌱 I’m currently learning Computer Science & AI & Drawing, and want to learn everything interesting.
 - 🤔 I want to make a ElectronBot. 
 - ❤️ I like eating 🍎, planting 🌼, playing ⚽, sleeping in 🛌 and watching 📺
-- 💬 Be free to ask me about anything [here](https://github.com/accPenguin/accpenguin/issues).
+- 💬 Be free to ask me about anything [here](https://github.com/kylin-feng/kylin-feng/issues).
 
 ---
 
 #### Languages
 
 
-<img align="right" width="450" src="https://github-readme-stats.vercel.app/api?username=accPenguin&show_icons=true&icon_color=0078e7&title_color=0078e7&include_all_commits=true"/>
+<img align="right" width="450" src="https://github-readme-stats.vercel.app/api?username=kylin-feng&show_icons=true&icon_color=0078e7&title_color=0078e7&include_all_commits=true"/>
 <code><img height="20" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/python/python.png" alt="python" /></code>
 
 #### Frameworks and Tools
