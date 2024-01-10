@@ -8,7 +8,7 @@ I want to be an interesting person and create something that can be remembered b
 - 🔭 I’m currently writing some amateur [open source projects].
 - 🌱 I’m currently learning Computer Science & AI & Drawing, and want to learn everything interesting.
 - 🤔 I want to make a ElectronBot. 
-- ❤️ I like eating 🍎, planting 🌼, playing ⚽, sleeping in 🛌 and watching 📺
+- ❤️ I enjoy coding 💻, exploring 🌍, listening to 🎵, practicing yoga 🧘‍♀️, and reading 📚
 - 💬 Be free to ask me about anything [here](https://github.com/kylin-feng/kylin-feng/issues).
 
 ---
