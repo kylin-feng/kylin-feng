@@ -1,35 +1,22 @@
-### Hi there, I'm [Kylin Feng]. 👋
+# 自动化学习记录
 
-I am a learning student from China.
-I like open source and all interesting things and want to try to do it.
-I want to be an interesting person and create something that can be remembered by others.
+## 项目简介
+这是一个自动化维护的学习记录仓库，记录日常的技术学习和实践。
 
+## 更新记录
+- 最后更新: 2025-10-03 17:20:59
+- 自动化脚本维护
 
-- 🔭 I’m currently writing some amateur [open source projects].
-- 🌱 I’m currently learning Computer Science & AI & Drawing, and want to learn everything interesting.
-- 🤔 I want to make a ElectronBot. 
-- ❤️ I enjoy coding 💻, exploring 🌍, listening to 🎵, practicing yoga 🧘‍♀️, and reading 📚
-- 💬 Be free to ask me about anything [here](https://github.com/kylin-feng/kylin-feng/issues).
+## 目录结构
+```
+├── daily_logs/     # 日常学习日志
+├── learning_notes/ # 技术学习笔记
+└── README.md      # 项目说明
+```
+
+## 学习统计
+- 总提交数: 8
+- 持续更新中...
 
 ---
-
-#### Languages
-
-
-<img align="right" width="450" src="https://github-readme-stats.vercel.app/api?username=kylin-feng&show_icons=true&icon_color=0078e7&title_color=0078e7&include_all_commits=true"/>
-<code><img height="20" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/python/python.png" alt="python" /></code>
-
-#### Frameworks and Tools
-
-
-<code><img height="20" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/vue/vue.png" alt="vue" /></code>
-<code><img height="20" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/react/react.png" alt="react" /></code>
-<code><img height="20" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/git/git.png" alt="git" /></code>
-
-
-#### Interested
-
-
-<code><img height="20" src="https://simpleicons.org/icons/blender.svg" alt="blender" /></code>
-<code><img height="20" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/unity/unity.png" alt="unity" /></code>
-
+*由自动化脚本维护 - 2025-10-03*
