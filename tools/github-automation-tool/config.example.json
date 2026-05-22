@@ -1,0 +1,7 @@
+{
+  "tasks": [],
+  "github_repo_path": "/path/to/your/local/github/repo",
+  "github_remote": "origin",
+  "github_branch": "main",
+  "auto_push": true
+}
