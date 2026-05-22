@@ -1,0 +1,42 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}Add Video Hook{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-5">添加新视频钩子</h1>
+    
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form method="POST">
+                <div class="form-group mb-3">
+                    <label for="title">标题</label>
+                    <input type="text" class="form-control" id="title" name="title" required>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="description">描述</label>
+                    <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="url">视频URL</label>
+                    <input type="url" class="form-control" id="url" name="url" required>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="thumbnail">缩略图URL</label>
+                    <input type="url" class="form-control" id="thumbnail" name="thumbnail" required>
+                    <small class="form-text text-muted">可以使用 https://neeko-copilot.bytedance.net/api/text2image?prompt=关键词&image_size=square_hd 生成缩略图</small>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">添加</button>
+                    <a href="/" class="btn btn-secondary ml-2">取消</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

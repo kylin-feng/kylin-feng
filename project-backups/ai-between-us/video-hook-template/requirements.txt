@@ -1,0 +1,4 @@
+Flask
+Flask-Bootstrap
+requests
+python-dotenv

@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人中心 - Between Us</title>
+    <link rel="stylesheet" href="/static/css/common.css">
+    <style>
+        /* 返回按钮优化 */
+        body.profile-page .profile-back {
+            width: 38px;
+            height: 38px;
+            padding: 0;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.75);
+            border: 1px solid var(--home-border);
+            color: var(--home-ink);
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(74, 59, 57, 0.08);
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        body.profile-page .profile-back:hover {
+            background: rgba(255, 255, 255, 0.95);
+            transform: translateX(-2px);
+            box-shadow: 0 6px 16px rgba(74, 59, 57, 0.12);
+        }
+
+        body.profile-page .profile-back:active {
+            transform: scale(0.95);
+        }
+
+        body.profile-page .profile-spacer {
+            width: 38px;
+        }
+    </style>
+</head>
+<body class="profile-page">
+    <div class="container">
+        <header class="profile-header">
+            <button class="profile-back" onclick="window.location.href='/home'" aria-label="返回">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M15 18l-6-6 6-6"/>
+                            </svg>
+                        </button>
+            <div class="profile-title">个人中心</div>
+            <div class="profile-spacer" aria-hidden="true"></div>
+        </header>
+
+        <div class="home-container">
+            <div class="home-banner">
+                <div class="home-intro">亲密关系 · 个人中心</div>
+                <h1>💝 Between Us</h1>
+                <p>把绑定、冷静期与退出都放在这里，主页只留给陪伴。</p>
+            </div>
+
+            <div class="user-info" id="userInfo">
+                <p><strong>手机号：</strong><span id="userPhone">--</span></p>
+                <p><strong>昵称：</strong><span id="userNickname">--</span></p>
+                <p><strong>绑定状态：</strong><span id="bindingStatus">未绑定</span></p>
+                <p id="bindingCodeDisplay" class="binding-code" style="display: none;">
+                    <strong>我的绑定码：</strong>
+                    <span id="bindingCode" class="binding-code-value">------</span>
+                    <button onclick="copyBindingCode()" class="binding-code-copy">复制</button>
+                </p>
+            </div>
+
+            <div class="user-actions">
+                <button class="btn btn-secondary" onclick="showEditNicknameModal()">修改昵称</button>
+                <button class="btn btn-secondary" onclick="showBindModal()" id="bindBtn">绑定伴侣</button>
+                <button class="btn btn-secondary" onclick="showUnbindModal()" id="unbindBtn" style="display: none;">解绑伴侣</button>
+                <button class="btn btn-secondary" onclick="logout()">退出登录</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="home-shape home-shape-1" aria-hidden="true"></div>
+    <div class="home-shape home-shape-2" aria-hidden="true"></div>
+    <div class="home-shape home-shape-3" aria-hidden="true"></div>
+
+    <!-- 绑定模态框 -->
+    <div id="bindModal" class="modal-overlay">
+        <div class="modal-card">
+            <h2 class="modal-title">绑定伴侣</h2>
+            <p class="modal-subtitle">输入对方的绑定码，一起开启亲密陪伴。</p>
+            <div class="input-group">
+                <label>输入伴侣的绑定码</label>
+                <input type="text" id="partnerCode" placeholder="请输入6位绑定码">
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-primary" onclick="bindPartner()">确认绑定</button>
+                <button class="btn btn-secondary" onclick="closeBindModal()">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 修改昵称模态框 -->
+    <div id="editNicknameModal" class="modal-overlay">
+        <div class="modal-card">
+            <h2 class="modal-title">修改昵称</h2>
+            <p class="modal-subtitle">设置一个你喜欢的昵称吧</p>
+            <div class="input-group">
+                <label>新昵称</label>
+                <input type="text" id="newNickname" placeholder="请输入新昵称" maxlength="20">
+                <small style="color: var(--home-muted); font-size: 12px; margin-top: 4px; display: block;">最长20个字符</small>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-primary" onclick="updateNickname()">确认修改</button>
+                <button class="btn btn-secondary" onclick="closeEditNicknameModal()">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 解绑模态框 -->
+    <div id="unbindModal" class="modal-overlay">
+        <div class="modal-card">
+            <h2 class="modal-title">解绑伴侣</h2>
+            <p class="modal-subtitle">解绑后将进入 1 个月冷静期，冷静期内可撤销。</p>
+            <p class="modal-note">确定要解绑吗？</p>
+            <div class="modal-actions">
+                <button class="btn btn-primary" onclick="unbindPartner()">确认解绑</button>
+                <button class="btn btn-secondary" onclick="closeUnbindModal()">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 冷静期倒计时模态框 -->
+    <div id="cooldownModal" class="modal-overlay">
+        <div class="modal-card modal-card-soft">
+            <div class="modal-tag">冷静期倒计时</div>
+            <h2 class="modal-title">给彼此一点缓冲的空间</h2>
+            <p class="modal-subtitle">这段时间里，你们仍被认真对待。如果想挽回，随时可以撤销解绑。</p>
+            <div class="cooldown-panel">
+                <div class="cooldown-label">剩余时间</div>
+                <div id="cooldownTime" class="cooldown-time">--</div>
+                <div id="cooldownMeta" class="cooldown-meta">--</div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-primary" onclick="cancelUnbind()">撤销解绑</button>
+                <button class="btn btn-secondary" onclick="closeCooldownModal()">继续冷静</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 绑定成功仪式弹窗 -->
+    <div id="bindSuccessModal" class="modal-overlay">
+        <div class="modal-card modal-card-success">
+            <div class="success-icon">💞</div>
+            <h2 class="modal-title">绑定完成</h2>
+            <p class="modal-subtitle">从这一刻起，你们的关系被温柔看见。</p>
+            <div class="modal-actions">
+                <button class="btn btn-primary" onclick="enterLounge()">进入情感客厅</button>
+                <button class="btn btn-secondary" onclick="closeBindSuccessModal()">稍后</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="fireworks" class="fireworks"></div>
+
+    <script>
+        // Toast 提示函数
+        function showToast(message, type = 'info', duration = 2500) {
+            let container = document.querySelector('.toast-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.className = 'toast-container';
+                document.body.appendChild(container);
+            }
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.textContent = message;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.add('toast-out');
+                setTimeout(() => toast.remove(), 300);
+            }, duration);
+        }
+
+        let userData = null;
+        let cooldownEndAt = null;
+        let cooldownTimer = null;
+
+        async function loadUserInfo() {
+            try {
+                const response = await fetch('/api/user/info');
+                const data = await response.json();
+
+                if (data.success) {
+                    userData = data.user;
+                    document.getElementById('userPhone').textContent = userData.phone;
+                    
+                    // 显示昵称（如果没有昵称，显示手机号后4位）
+                    const displayNickname = userData.nickname || (userData.phone.length >= 4 ? userData.phone.slice(-4) : userData.phone);
+                    document.getElementById('userNickname').textContent = displayNickname;
+
+                    if (userData.has_partner) {
+                        document.getElementById('bindBtn').style.display = 'none';
+                        document.getElementById('unbindBtn').style.display = 'block';
+                        document.getElementById('bindingCodeDisplay').style.display = 'none';
+
+                        if (userData.unbind_at) {
+                            document.getElementById('bindingStatus').textContent = '冷静期中 ⏳';
+                            updateUnbindButtonState(true);
+                            setCooldownFromServer(userData.unbind_at);
+                        } else {
+                            document.getElementById('bindingStatus').textContent = '已绑定 ❤️';
+                            updateUnbindButtonState(false);
+                            clearCooldownState();
+                        }
+                    } else {
+                        document.getElementById('bindingStatus').textContent = '未绑定';
+                        document.getElementById('unbindBtn').style.display = 'none';
+                        document.getElementById('bindBtn').style.display = 'block';
+                        clearCooldownState();
+
+                        const codeResponse = await fetch('/api/binding/code');
+                        const codeData = await codeResponse.json();
+                        if (codeData.success) {
+                            document.getElementById('bindingCode').textContent = codeData.binding_code;
+                            document.getElementById('bindingCodeDisplay').style.display = 'block';
+                        }
+                    }
+                } else {
+                    window.location.href = '/';
+                }
+            } catch (error) {
+                console.error(error);
+                window.location.href = '/';
+            }
+        }
+
+        function copyBindingCode() {
+            const code = document.getElementById('bindingCode').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                showToast('绑定码已复制到剪贴板！', 'success');
+            });
+        }
+
+        function showBindModal() {
+            document.getElementById('bindModal').style.display = 'flex';
+        }
+
+        function closeBindModal() {
+            document.getElementById('bindModal').style.display = 'none';
+        }
+
+        function showEditNicknameModal() {
+            const currentNickname = userData?.nickname || '';
+            document.getElementById('newNickname').value = currentNickname;
+            document.getElementById('editNicknameModal').style.display = 'flex';
+        }
+
+        function closeEditNicknameModal() {
+            document.getElementById('editNicknameModal').style.display = 'none';
+        }
+
+        async function updateNickname() {
+            const nickname = document.getElementById('newNickname').value.trim();
+            
+            if (!nickname) {
+                showToast('昵称不能为空', 'error');
+                return;
+            }
+
+            if (nickname.length > 20) {
+                showToast('昵称最长20个字符', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/user/update_nickname', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nickname })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    closeEditNicknameModal();
+                    showToast('昵称修改成功！', 'success');
+                    loadUserInfo();
+                } else {
+                    showToast(data.message || '修改失败', 'error');
+                }
+            } catch (error) {
+                showToast('网络错误', 'error');
+                console.error(error);
+            }
+        }
+
+        function showUnbindModal() {
+            if (cooldownEndAt) {
+                showCooldownModal();
+                return;
+            }
+            document.getElementById('unbindModal').style.display = 'flex';
+        }
+
+        function closeUnbindModal() {
+            document.getElementById('unbindModal').style.display = 'none';
+        }
+
+        function showCooldownModal() {
+            document.getElementById('cooldownModal').style.display = 'flex';
+            startCooldownTimer();
+        }
+
+        function closeCooldownModal() {
+            document.getElementById('cooldownModal').style.display = 'none';
+            stopCooldownTimer();
+        }
+
+        function showBindSuccessModal() {
+            document.getElementById('bindSuccessModal').style.display = 'flex';
+        }
+
+        function closeBindSuccessModal() {
+            document.getElementById('bindSuccessModal').style.display = 'none';
+        }
+
+        function enterLounge() {
+            window.location.href = '/lounge';
+        }
+
+        async function bindPartner() {
+            const code = document.getElementById('partnerCode').value.trim();
+            if (!code) {
+                showToast('请输入绑定码', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/binding/bind', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ binding_code: code })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    closeBindModal();
+                    showRitualCelebration();
+                    setTimeout(() => {
+                        showBindSuccessModal();
+                        loadUserInfo();
+                    }, 1200);
+                } else {
+                    showToast(data.message || '绑定失败', 'error');
+                }
+            } catch (error) {
+                showToast('网络错误', 'error');
+                console.error(error);
+            }
+        }
+
+        async function unbindPartner() {
+            try {
+                const response = await fetch('/api/binding/unbind', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    closeUnbindModal();
+                    setCooldownFromServer(data.unbind_at);
+                    showCooldownModal();
+                    loadUserInfo();
+                } else {
+                    showToast(data.message || '解绑失败', 'error');
+                }
+            } catch (error) {
+                showToast('网络错误', 'error');
+                console.error(error);
+            }
+        }
+
+        function showRitualCelebration() {
+            const container = document.getElementById('fireworks');
+            if (!container) return;
+            container.innerHTML = '';
+            container.classList.add('active');
+
+            const glow = document.createElement('div');
+            glow.className = 'ritual-glow';
+            container.appendChild(glow);
+
+            const icons = ['💗', '🌸', '✨', '💞', '💫'];
+            const count = 120;
+            for (let i = 0; i < count; i += 1) {
+                const particle = document.createElement('div');
+                particle.className = 'ritual-particle';
+                particle.textContent = icons[Math.floor(Math.random() * icons.length)];
+                const x = (Math.random() - 0.5) * 80;
+                const y = (Math.random() - 0.5) * 70 - 10;
+                const scale = 0.7 + Math.random() * 0.8;
+                const rotate = (Math.random() - 0.5) * 120;
+                const delay = Math.random() * 0.5;
+                const duration = 1.8 + Math.random() * 1.2;
+
+                particle.style.setProperty('--x', `${x}vw`);
+                particle.style.setProperty('--y', `${y}vh`);
+                particle.style.setProperty('--scale', scale.toFixed(2));
+                particle.style.setProperty('--rotate', `${rotate.toFixed(0)}deg`);
+                particle.style.setProperty('--delay', `${delay.toFixed(2)}s`);
+                particle.style.setProperty('--dur', `${duration.toFixed(2)}s`);
+                particle.style.fontSize = `${14 + Math.random() * 10}px`;
+                container.appendChild(particle);
+            }
+
+            setTimeout(() => {
+                container.classList.remove('active');
+                container.innerHTML = '';
+            }, 2600);
+        }
+
+        function updateUnbindButtonState(isCoolingDown) {
+            const unbindBtn = document.getElementById('unbindBtn');
+            if (!unbindBtn) return;
+            if (isCoolingDown) {
+                unbindBtn.textContent = '查看倒计时';
+                unbindBtn.classList.add('is-cooldown');
+            } else {
+                unbindBtn.textContent = '解绑伴侣';
+                unbindBtn.classList.remove('is-cooldown');
+            }
+        }
+
+        function setCooldownFromServer(unbindAt) {
+            if (!unbindAt) return;
+            const startTime = new Date(unbindAt);
+            const endTime = new Date(startTime.getTime() + 30 * 24 * 60 * 60 * 1000);
+            cooldownEndAt = endTime;
+            localStorage.setItem('unbindAt', startTime.toISOString());
+            updateUnbindButtonState(true);
+            startCooldownTimer();
+        }
+
+        function clearCooldownState() {
+            cooldownEndAt = null;
+            localStorage.removeItem('unbindAt');
+            updateUnbindButtonState(false);
+            stopCooldownTimer();
+        }
+
+        function startCooldownTimer() {
+            stopCooldownTimer();
+            updateCooldownDisplay();
+            cooldownTimer = setInterval(updateCooldownDisplay, 1000);
+        }
+
+        function stopCooldownTimer() {
+            if (cooldownTimer) {
+                clearInterval(cooldownTimer);
+                cooldownTimer = null;
+            }
+        }
+
+        function updateCooldownDisplay() {
+            const timeEl = document.getElementById('cooldownTime');
+            const metaEl = document.getElementById('cooldownMeta');
+            if (!cooldownEndAt || !timeEl || !metaEl) return;
+
+            const now = new Date();
+            let diff = cooldownEndAt - now;
+            if (diff <= 0) {
+                timeEl.textContent = '冷静期已结束';
+                timeEl.classList.add('is-urgent');
+                metaEl.textContent = '冷静期已结束，解绑即将生效。';
+                return;
+            }
+
+            const twoDaysMs = 48 * 60 * 60 * 1000;
+            if (diff <= twoDaysMs) {
+                const totalSeconds = Math.floor(diff / 1000);
+                const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+                const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+                const seconds = String(totalSeconds % 60).padStart(2, '0');
+                timeEl.textContent = `${hours}:${minutes}:${seconds}`;
+                timeEl.classList.add('is-urgent');
+                metaEl.textContent = '冷静期进入最后 48 小时。';
+                return;
+            }
+
+            const days = Math.floor(diff / (24 * 60 * 60 * 1000));
+            const hours = Math.floor((diff % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
+            timeEl.textContent = `${days}天${hours}小时`;
+            timeEl.classList.remove('is-urgent');
+            const dateText = cooldownEndAt.toLocaleDateString('zh-CN', {
+                month: '2-digit',
+                day: '2-digit'
+            });
+            metaEl.textContent = `预计 ${dateText} 生效`;
+        }
+
+        async function cancelUnbind() {
+            try {
+                const response = await fetch('/api/binding/cancel_unbind', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                const data = await response.json();
+                if (data.success) {
+                    closeCooldownModal();
+                    clearCooldownState();
+                    loadUserInfo();
+                } else {
+                    showToast(data.message || '撤销失败', 'error');
+                }
+            } catch (error) {
+                showToast('网络错误', 'error');
+                console.error(error);
+            }
+        }
+
+        function logout() {
+            fetch('/api/logout', { method: 'POST' })
+                .then(() => {
+                    localStorage.clear();
+                    window.location.href = '/';
+                });
+        }
+
+        loadUserInfo();
+    </script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+{
+  "$schema": "https://modelscope.cn/api/v1/studios/deploy_schema.json",
+  "sdk_type": "docker",
+  "resource_configuration": "platform/2v-cpu-16g-mem",
+  "port": 7860,
+  "environment_variables": [
+    {
+      "name": "COZE_API_KEY",
+      "value": "your-coze-api-token"
+    },
+    {
+      "name": "COZE_BOT_ID_COACH",
+      "value": "75957503example-phone-number"
+    },
+    {
+      "name": "COZE_BOT_ID_LOUNGE",
+      "value": "7596example-phone-number8699"
+    },
+    {
+      "name": "FLASK_ENV",
+      "value": "production"
+    }
+  ]
+}

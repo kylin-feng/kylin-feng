@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>情感客厅 - Between Us</title>
+    <link rel="stylesheet" href="/static/css/common.css">
+    <link rel="stylesheet" href="/static/css/emoji-picker.css">
+    <style>
+        /* 复用原有样式 */
+        .cooldown-notice {
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.1), rgba(255, 152, 0, 0.1));
+            border-bottom: 1px solid rgba(255, 193, 7, 0.3);
+            padding: 12px 20px;
+            display: none;
+        }
+        .cooldown-notice.show { display: block; }
+        .cooldown-notice-content {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            color: #8b6914;
+        }
+        .cooldown-notice-icon { font-size: 16px; }
+        .cooldown-notice-text { flex: 1; }
+        .cooldown-notice-link {
+            color: #d97706;
+            text-decoration: none;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        .cooldown-notice-link:hover { text-decoration: underline; }
+
+        .couple-bar {
+            background: linear-gradient(135deg, rgba(230, 168, 164, 0.12), rgba(199, 178, 255, 0.16));
+            border-bottom: 1px solid var(--home-border);
+            padding: 12px 20px;
+        }
+        .couple-bar .couple-row {
+            margin-top: 0 !important;
+            padding-top: 0;
+            border-top: none;
+        }
+
+        .chat-input-wrapper {
+            background: rgba(255, 255, 255, 0.85);
+            border-top: 1px solid var(--home-border);
+            padding: 10px 16px 12px;
+        }
+        .chat-input-wrapper .chat-input {
+            border-top: none;
+            padding: 8px 0 0;
+            background: transparent;
+        }
+
+        .coach-tag-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 999px;
+            border: 1.5px solid transparent;
+            background: linear-gradient(#fff, #fff) padding-box,
+                        linear-gradient(135deg, #e6a8a4, #c7b2ff) border-box;
+            color: var(--home-ink, #4a3b39);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 12px rgba(230, 168, 164, 0.2);
+        }
+        .coach-tag-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(230, 168, 164, 0.35);
+        }
+        .coach-tag-btn:active { transform: scale(0.97); }
+        .coach-tag-icon { font-size: 14px; }
+
+        .chat-messages { padding: 16px 8px; }
+
+        .message {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            margin-bottom: 14px;
+            padding: 0 0px;
+            width: 100%;
+        }
+        .message.user {
+            flex-direction: row-reverse;
+            justify-content: flex-start;
+        }
+        .message.partner, .message.assistant {
+            justify-content: flex-start;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 6px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+        }
+        .message.user .message-avatar {
+            background: linear-gradient(135deg, #e6a8a4, #d4a5c9);
+        }
+        .message.partner .message-avatar {
+            background: linear-gradient(135deg, #c7b2ff, #a89ad9);
+        }
+        .message.assistant .message-avatar {
+            background: linear-gradient(135deg, #f0c27b, #d4a574);
+        }
+
+        .message-body {
+            max-width: calc(100% - 64px); /* 扩展到对侧头像左边框：容器宽度 - 头像(40px) - 间距(8px) - 内边距(16px) */
+            display: flex;
+            flex-direction: column;
+        }
+        .message.user .message-body { align-items: flex-end; }
+        .message.partner .message-body,
+        .message.assistant .message-body { align-items: flex-start; }
+
+        .message-sender {
+            margin-bottom: 4px;
+            padding: 0 4px;
+        }
+        .message.user .message-sender { display: none; }
+        .sender-name {
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.01em;
+        }
+        .sender-name.partner { color: #8b7aa8; }
+        .sender-name.coach { color: #9d7a5a; }
+        .sender-name .coach-icon {
+            font-size: 11px;
+            margin-right: 2px;
+        }
+
+        .message .message-content {
+            max-width: 100%;
+            padding: 10px 14px;
+            border-radius: 8px;
+            word-wrap: break-word;
+            line-height: 1.65;
+            font-size: 15px;
+            white-space: pre-wrap;
+        }
+        .message.assistant .message-content {
+            line-height: 1.7;
+            letter-spacing: 0.02em;
+        }
+
+        /* 教练消息内的格式化元素 */
+        .message.assistant .message-content strong {
+            color: #9d7a5a;
+            font-weight: 600;
+        }
+
+        .message.assistant .message-content em {
+            font-style: italic;
+            color: #8b7a6a;
+        }
+
+        .message.user .message-content {
+            background: linear-gradient(135deg, var(--home-accent), var(--home-accent-2));
+            color: #fff;
+            border-radius: 8px 2px 8px 8px;
+        }
+        .message.partner .message-content {
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--home-ink);
+            border: 1px solid var(--home-border);
+            border-radius: 2px 8px 8px 8px;
+        }
+        .message.assistant .message-content {
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--home-ink);
+            border: 1px solid rgba(240, 194, 123, 0.3);
+            border-radius: 2px 8px 8px 8px;
+        }
+
+        .chat-header .back-btn {
+            width: 38px;
+            height: 38px;
+            padding: 0;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.75);
+            border: 1px solid var(--home-border);
+            color: var(--home-ink);
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(74, 59, 57, 0.08);
+            transition: all 0.2s ease;
+        }
+        .chat-header .back-btn:hover {
+            background: rgba(255, 255, 255, 0.95);
+            transform: translateX(-2px);
+            box-shadow: 0 6px 16px rgba(74, 59, 57, 0.12);
+        }
+        .chat-header .back-btn:active { transform: scale(0.95); }
+
+        /* 思考过程折叠样式 */
+        .thinking-container {
+            margin-bottom: 8px;
+            width: 100%;
+        }
+
+        .thinking-toggle {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            color: var(--home-accent);
+            font-size: 13px;
+            padding: 6px 10px;
+            background: var(--home-chip);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            transition: all 0.2s;
+        }
+
+        .thinking-toggle:hover {
+            background: rgba(230, 168, 164, 0.28);
+        }
+
+        .thinking-toggle .icon {
+            margin-right: 6px;
+            transition: transform 0.3s;
+        }
+
+        .thinking-toggle.collapsed .icon {
+            transform: rotate(-90deg);
+        }
+
+        .thinking-content {
+            padding: 10px 12px;
+            background: rgba(230, 168, 164, 0.08);
+            border-left: 3px solid var(--home-accent);
+            border-radius: 0 8px 8px 0;
+            font-size: 13px;
+            color: var(--home-muted);
+            line-height: 1.6;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+        }
+
+        .thinking-content.collapsed {
+            max-height: 0;
+            padding: 0 12px;
+            overflow: hidden;
+            opacity: 0;
+        }
+
+        /* 正文内容样式 */
+        .answer-content {
+            white-space: pre-wrap;
+            line-height: 1.7;
+        }
+
+        /* 流式输出光标 */
+        .streaming-cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1em;
+            background: var(--home-accent);
+            margin-left: 2px;
+            animation: blink 0.8s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% {
+                opacity: 1;
+            }
+            51%, 100% {
+                opacity: 0;
+            }
+        }
+
+        /* AI 思考中动画 */
+        .ai-thinking {
+            opacity: 0.7;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+    </style>
+</head>
+<body class="lounge-page">
+    <div class="container">
+        <div class="chat-container">
+            <div class="chat-header">
+                <button class="back-btn" onclick="window.location.href='/home'" aria-label="返回">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M15 18l-6-6 6-6"/>
+                    </svg>
+                </button>
+                <h2>💑 情感客厅</h2>
+                <div></div>
+            </div>
+
+            <div class="cooldown-notice" id="cooldownNotice">
+                <div class="cooldown-notice-content">
+                    <span class="cooldown-notice-icon">⏳</span>
+                    <span class="cooldown-notice-text">冷静期中，仍可正常使用客厅。如需撤销解绑，</span>
+                    <a href="/profile" class="cooldown-notice-link">前往个人中心 →</a>
+                </div>
+            </div>
+
+            <div class="couple-bar">
+                <div class="couple-row" aria-label="情侣标识">
+                    <div class="couple-pill">
+                        <span class="couple-avatar">我</span>
+                        <span class="couple-name" id="myNickname">--</span>
+                    </div>
+                    <span class="couple-heart" aria-hidden="true">💗</span>
+                    <div class="couple-pill">
+                        <span class="couple-avatar">Ta</span>
+                        <span class="couple-name" id="partnerNickname">--</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+                <!-- 消息列表 -->
+            </div>
+
+            <div class="chat-input-wrapper">
+                <button class="coach-tag-btn" onclick="insertCoachTag()">
+                    <span class="coach-tag-icon">🎯</span>
+                    <span>教练你怎么看？</span>
+                </button>
+                <div class="chat-input">
+                    <input type="text" id="messageInput" placeholder="一起聊聊你的想法..." onkeypress="handleEnter(event)" onkeydown="handleAtSymbol(event)">
+                    <button class="send-btn" onclick="sendMessage()">发送</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="gentle-shape gentle-shape-1" aria-hidden="true"></div>
+    <div class="gentle-shape gentle-shape-2" aria-hidden="true"></div>
+    <div class="gentle-shape gentle-shape-3" aria-hidden="true"></div>
+
+    <script src="/static/js/emoji-picker.js"></script>
+    <script>
+        let roomId = null;
+        let userId = null;
+        let userPhone = '';
+        let partnerPhone = '';
+        let messages = [];
+        let userNickname = '我';
+        let partnerNickname = 'Ta';
+        let lastMessageId = 0;  // 记录最后一条消息的 ID
+        let pollingInterval = null;
+        let nicknameRefreshInterval = null;
+        let currentUserData = null;  // 轮询定时器
+        let isAIThinking = false;  // AI 是否正在思考
+
+        // Toast 提示
+        function showToast(message, type = 'info', duration = 2500) {
+            let container = document.querySelector('.toast-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.className = 'toast-container';
+                document.body.appendChild(container);
+            }
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.textContent = message;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.add('toast-out');
+                setTimeout(() => toast.remove(), 300);
+            }, duration);
+        }
+
+        async function init() {
+            const userResponse = await fetch('/api/user/info');
+            if (userResponse.status === 401) {
+                showToast('登录已过期，请重新登录', 'error');
+                window.location.href = '/';
+                return;
+            }
+
+            const userData = await userResponse.json();
+            
+            // 保存用户数据供后续使用
+            currentUserData = userData;
+            
+            if (!userData.success || !userData.user.has_partner) {
+                showToast('您还没有绑定伴侣，无法进入情感客厅', 'info');
+                window.location.href = '/home';
+                return;
+            }
+
+            userId = userData.user.id;
+            userPhone = userData.user.phone || '';
+            
+            if (userData.user.unbind_at) {
+                document.getElementById('cooldownNotice')?.classList.add('show');
+            }
+            
+            // 使用昵称，如果没有昵称则用手机号后4位
+            userNickname = userData.user.nickname || (userPhone ? userPhone.slice(-4) : '我');
+            
+            if (userData.user.partner_id) {
+                try {
+                    const partnerRes = await fetch(`/api/user/${userData.user.partner_id}`);
+                    if (partnerRes.ok) {
+                        const partnerData = await partnerRes.json();
+                        if (partnerData.success && partnerData.user) {
+                            partnerPhone = partnerData.user.phone || '';
+                            // 使用伴侣的昵称，如果没有昵称则用手机号后4位
+                            partnerNickname = partnerData.user.nickname || (partnerPhone ? partnerPhone.slice(-4) : 'Ta');
+                        }
+                    }
+                } catch (e) {
+                    console.error('获取伴侣信息失败', e);
+                }
+            }
+            
+            updateCoupleBar(userNickname, partnerNickname);
+
+            const roomResponse = await fetch('/api/lounge/room');
+            if (roomResponse.status === 401) {
+                showToast('登录已过期，请重新登录', 'error');
+                window.location.href = '/';
+                return;
+            }
+
+            const roomData = await roomResponse.json();
+            if (!roomData.success) {
+                showToast('无法获取房间信息', 'error');
+                window.location.href = '/home';
+                return;
+            }
+
+            roomId = roomData.room_id;
+
+            // 加载历史记录
+            await loadHistory();
+
+            // 启动短轮询（每 1.5 秒检查一次新消息）
+            startPolling();
+        }
+
+        async function loadHistory() {
+            try {
+                const response = await fetch('/api/lounge/history');
+                const data = await response.json();
+                if (data.success) {
+                    messages = data.messages;
+                    if (messages.length > 0) {
+                        lastMessageId = Math.max(...messages.map(m => m.id || 0));
+                    }
+                    renderMessages();
+                }
+            } catch (error) {
+                console.error('加载历史记录失败', error);
+            }
+        }
+
+        function startPolling() {
+            // 每 1.5 秒检查一次新消息
+            pollingInterval = setInterval(async () => {
+                await checkNewMessages();
+            }, 1500);
+            
+            // 每 30 秒刷新一次昵称（检测伴侣是否修改了昵称）
+            nicknameRefreshInterval = setInterval(async () => {
+                await refreshNicknames();
+            }, 30000);
+        }
+        
+        // 刷新昵称函数
+        async function refreshNicknames() {
+            try {
+                // 重新获取伴侣信息
+                if (currentUserData && currentUserData.user && currentUserData.user.partner_id) {
+                    const partnerRes = await fetch(`/api/user/${currentUserData.user.partner_id}`);
+                    if (partnerRes.ok) {
+                        const partnerData = await partnerRes.json();
+                        if (partnerData.success && partnerData.user) {
+                            const newPartnerNickname = partnerData.user.nickname || (partnerData.user.phone ? partnerData.user.phone.slice(-4) : 'Ta');
+                            if (newPartnerNickname !== partnerNickname) {
+                                partnerNickname = newPartnerNickname;
+                                updateCoupleBar(userNickname, partnerNickname);
+                                console.log('[Lounge] 伴侣昵称已更新:', partnerNickname);
+                            }
+                        }
+                    }
+                }
+                
+                // 同时刷新自己的昵称（可能在其他设备修改了）
+                const userResponse = await fetch('/api/user/info');
+                if (userResponse.ok) {
+                    const userData = await userResponse.json();
+                    if (userData.success) {
+                        const newUserNickname = userData.user.nickname || (userData.user.phone ? userData.user.phone.slice(-4) : '我');
+                        if (newUserNickname !== userNickname) {
+                            userNickname = newUserNickname;
+                            updateCoupleBar(userNickname, partnerNickname);
+                            console.log('[Lounge] 自己的昵称已更新:', userNickname);
+                        }
+                    }
+                }
+            } catch (e) {
+                console.error('[Lounge] 刷新昵称失败:', e);
+            }
+        }
+
+        async function checkNewMessages() {
+            try {
+                const response = await fetch(`/api/lounge/messages/new?since_id=${lastMessageId}`);
+                const data = await response.json();
+                
+                if (data.success && data.messages && data.messages.length > 0) {
+                    // 有新消息，添加前检查是否已存在（防止重复）
+                    data.messages.forEach(msg => {
+                        // 检查消息是否已存在
+                        const exists = messages.find(m => m.id === msg.id);
+                        if (!exists) {
+                            messages.push(msg);
+                            if (msg.id > lastMessageId) {
+                                lastMessageId = msg.id;
+                            }
+                        }
+                    });
+                    renderMessages();
+                }
+            } catch (error) {
+                console.error('检查新消息失败', error);
+            }
+        }
+
+        function renderMessages() {
+            const container = document.getElementById('chatMessages');
+            container.innerHTML = '';
+
+            messages.forEach((msg) => {
+                // 先判断消息类型，确定正确的 CSS class
+                let messageClass = 'message';
+                let senderName = '';
+                let senderType = '';
+                let avatarText = '';
+
+                if (msg.role === 'assistant') {
+                    messageClass += ' assistant';
+                    senderName = '情感教练';
+                    senderType = 'coach';
+                    avatarText = '✨';
+                } else if (msg.user_id === userId) {
+                    messageClass += ' user';
+                    senderName = userNickname;
+                    senderType = 'self';
+                    avatarText = '我';
+                } else {
+                    messageClass += ' partner';
+                    senderName = partnerNickname;
+                    senderType = 'partner';
+                    avatarText = 'Ta';
+                }
+
+                const messageDiv = document.createElement('div');
+                messageDiv.className = messageClass;
+                messageDiv.dataset.msgId = msg.id;  // 添加数据属性，用于流式更新
+
+                // 如果是 AI 正在思考的消息
+                if (msg.role === 'assistant' && msg.isStreaming) {
+                    messageDiv.classList.add('ai-thinking');
+                }
+
+                const avatarDiv = document.createElement('div');
+                avatarDiv.className = 'message-avatar';
+                avatarDiv.textContent = avatarText;
+
+                const bodyDiv = document.createElement('div');
+                bodyDiv.className = 'message-body';
+
+                const senderDiv = document.createElement('div');
+                senderDiv.className = 'message-sender';
+                
+                const senderSpan = document.createElement('span');
+                senderSpan.className = `sender-name ${senderType}`;
+                
+                if (senderType === 'coach') {
+                    senderSpan.innerHTML = `<span class="coach-icon">✨</span>${senderName}`;
+                } else {
+                    senderSpan.textContent = senderName;
+                }
+                senderDiv.appendChild(senderSpan);
+
+                const contentDiv = document.createElement('div');
+                contentDiv.className = 'message-content';
+                
+                // 根据消息类型决定是否格式化
+                if (msg.role === 'assistant') {
+                    // 如果是流式消息，由 updateStreamingMessage 处理
+                    if (msg.isStreaming) {
+                        contentDiv.innerHTML = '<div class="answer-content">🎯 情感教练正在分析...<span class="streaming-cursor"></span></div>';
+                    }
+                    // 如果有思考过程，显示折叠区域
+                    else if (msg.reasoning_content) {
+                        const thinkingContainer = document.createElement('div');
+                        thinkingContainer.className = 'thinking-container';
+
+                        const thinkingToggle = document.createElement('div');
+                        thinkingToggle.className = 'thinking-toggle collapsed';
+                        thinkingToggle.innerHTML = '<span class="icon">▼</span><span>🧠 思考过程（点击展开）</span>';
+
+                        const thinkingContent = document.createElement('div');
+                        thinkingContent.className = 'thinking-content collapsed';
+                        thinkingContent.textContent = msg.reasoning_content;
+
+                        thinkingToggle.onclick = function () {
+                            this.classList.toggle('collapsed');
+                            thinkingContent.classList.toggle('collapsed');
+                        };
+
+                        thinkingContainer.appendChild(thinkingToggle);
+                        thinkingContainer.appendChild(thinkingContent);
+                        contentDiv.appendChild(thinkingContainer);
+
+                        // 正文内容
+                        const answerContent = document.createElement('div');
+                        answerContent.className = 'answer-content';
+                        answerContent.innerHTML = formatMessageContent(msg.content, true);
+                        contentDiv.appendChild(answerContent);
+                    } else {
+                        // 没有思考过程，直接显示内容
+                        contentDiv.innerHTML = formatMessageContent(msg.content, true);
+                    }
+                } else {
+                    contentDiv.textContent = msg.content;
+                }
+
+                bodyDiv.appendChild(senderDiv);
+                bodyDiv.appendChild(contentDiv);
+
+                messageDiv.appendChild(avatarDiv);
+                messageDiv.appendChild(bodyDiv);
+                container.appendChild(messageDiv);
+            });
+
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // 格式化消息内容（支持基本 Markdown）
+        function formatMessageContent(content, isAssistant = false) {
+            if (!isAssistant) {
+                // 普通用户消息，只做基本转义
+                return escapeHtml(content);
+            }
+
+            // AI 消息，支持简单的 Markdown 格式
+            let formatted = escapeHtml(content);
+            
+            // 1. 先处理加粗文本（**文本**），使用非贪婪匹配，支持跨行
+            formatted = formatted.replace(/\*\*(.+?)\*\*/gs, function(match, text) {
+                // 如果包含冒号，使用特殊颜色
+                if (text.includes('：') || text.includes(':')) {
+                    return '<strong style="color: #9d7a5a;">' + text + '</strong>';
+                }
+                return '<strong>' + text + '</strong>';
+            });
+            
+            // 2. 处理单星号斜体（*文本*），但要避免匹配到emoji后的星号
+            // 使用负向前瞻和后顾，确保星号前后是空格或标点
+            formatted = formatted.replace(/(?<!\*)(?<!\S)\*([^\s*][^*]*?)\*(?!\*)(?!\S)/g, '<em>$1</em>');
+            
+            return formatted;
+        }
+
+        // HTML 转义函数
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function updateCoupleBar(myName, partnerName) {
+            const myNicknameEl = document.getElementById('myNickname');
+            const partnerNicknameEl = document.getElementById('partnerNickname');
+            if (myNicknameEl) myNicknameEl.textContent = myName;
+            if (partnerNicknameEl) partnerNicknameEl.textContent = partnerName;
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const content = input.value.trim();
+
+            if (!content) return;
+
+            try {
+                // 发送消息到服务器
+                const response = await fetch('/api/lounge/send', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        room_id: roomId,
+                        user_id: userId,
+                        content: content
+                    })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    // 立即添加到本地消息列表
+                    messages.push(data.message);
+                    if (data.message.id > lastMessageId) {
+                        lastMessageId = data.message.id;
+                    }
+                    renderMessages();
+                    input.value = '';
+
+                    // 如果消息包含 @教练，触发 AI
+                    if (content.includes('@教练') || content.includes('@AI') || content.includes('@ai')) {
+                        callAI();
+                    }
+                } else {
+                    showToast(data.message || '发送失败', 'error');
+                }
+            } catch (error) {
+                console.error('发送消息失败', error);
+                showToast('发送失败，请重试', 'error');
+            }
+        }
+
+        async function callAI() {
+            if (isAIThinking) return;  // 防止重复调用
+            
+            isAIThinking = true;
+
+            // 创建流式消息占位
+            const streamingMsgId = 'streaming_' + Date.now();
+            const streamingMsg = {
+                id: streamingMsgId,
+                role: 'assistant',
+                content: '',
+                reasoning_content: '',
+                isStreaming: true
+            };
+            messages.push(streamingMsg);
+            renderMessages();
+
+            let reasoningText = '';
+            let answerText = '';
+            let hasReasoning = false;
+
+            try {
+                const response = await fetch('/api/lounge/call_ai/stream', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ room_id: roomId })
+                });
+
+                if (response.status === 401) {
+                    showToast('登录已过期，请重新登录', 'error');
+                    window.location.href = '/';
+                    return;
+                }
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+
+                    const chunk = decoder.decode(value, { stream: true });
+                    const lines = chunk.split('\n');
+
+                    for (const line of lines) {
+                        if (line.startsWith('data: ')) {
+                            try {
+                                const data = JSON.parse(line.slice(6));
+
+                                if (data.type === 'reasoning') {
+                                    if (!hasReasoning) {
+                                        hasReasoning = true;
+                                    }
+                                    reasoningText += data.content;
+                                    streamingMsg.reasoning_content = reasoningText;
+                                    updateStreamingMessage(streamingMsgId, reasoningText, answerText, true);
+                                }
+                                else if (data.type === 'reasoning_done') {
+                                    updateStreamingMessage(streamingMsgId, reasoningText, answerText, false);
+                                }
+                                else if (data.type === 'content') {
+                                    answerText += data.content;
+                                    streamingMsg.content = answerText;
+                                    updateStreamingMessage(streamingMsgId, reasoningText, answerText, hasReasoning);
+                                }
+                                else if (data.type === 'done') {
+                                    // 流式完成，移除临时消息，重新加载历史
+                                    messages = messages.filter(m => m.id !== streamingMsgId);
+                                    await checkNewMessages();
+                                }
+                                else if (data.type === 'error') {
+                                    showToast('AI 调用失败: ' + data.content, 'error');
+                                    messages = messages.filter(m => m.id !== streamingMsgId);
+                                    renderMessages();
+                                }
+                            } catch (e) {
+                                console.error('解析数据包失败:', e);
+                            }
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('AI 调用失败', error);
+                messages = messages.filter(m => m.id !== streamingMsgId);
+                renderMessages();
+                showToast('AI 调用失败，请重试', 'error');
+            } finally {
+                isAIThinking = false;
+            }
+        }
+
+        function updateStreamingMessage(msgId, reasoning, content, isThinking) {
+            const container = document.getElementById('chatMessages');
+            const msgElements = container.querySelectorAll('.message');
+            
+            for (let msgEl of msgElements) {
+                if (msgEl.dataset.msgId === msgId) {
+                    const contentDiv = msgEl.querySelector('.message-content');
+                    contentDiv.innerHTML = '';
+
+                    // 如果有思考过程
+                    if (reasoning) {
+                        const thinkingContainer = document.createElement('div');
+                        thinkingContainer.className = 'thinking-container';
+
+                        const thinkingToggle = document.createElement('div');
+                        thinkingToggle.className = 'thinking-toggle';
+                        thinkingToggle.innerHTML = isThinking 
+                            ? '<span class="icon">▼</span><span>🧠 思考中...</span>'
+                            : '<span class="icon">▼</span><span>🧠 思考过程（点击展开）</span>';
+                        
+                        if (!isThinking) {
+                            thinkingToggle.classList.add('collapsed');
+                        }
+
+                        const thinkingContent = document.createElement('div');
+                        thinkingContent.className = isThinking ? 'thinking-content streaming' : 'thinking-content collapsed';
+                        thinkingContent.textContent = reasoning;
+                        // 思考内容不显示光标
+
+                        thinkingToggle.onclick = function() {
+                            this.classList.toggle('collapsed');
+                            thinkingContent.classList.toggle('collapsed');
+                        };
+
+                        thinkingContainer.appendChild(thinkingToggle);
+                        thinkingContainer.appendChild(thinkingContent);
+                        contentDiv.appendChild(thinkingContainer);
+                    }
+
+                    // 正文内容
+                    const answerContent = document.createElement('div');
+                    answerContent.className = 'answer-content';
+                    answerContent.innerHTML = formatMessageContent(content, true);
+                    // 只在正文内容区域显示光标（且只在流式输出时）
+                    if (isThinking && content) {
+                        answerContent.innerHTML += '<span class="streaming-cursor"></span>';
+                    }
+                    contentDiv.appendChild(answerContent);
+
+                    // 滚动到底部
+                    container.scrollTop = container.scrollHeight;
+                    break;
+                }
+            }
+        }
+
+        function handleEnter(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function handleAtSymbol(event) {
+            // 只在按下 @ 键时触发（Shift + 2 或直接输入@）
+            if (event.key === '@' || (event.shiftKey && event.key === '2')) {
+                event.preventDefault(); // 阻止默认的@输入
+                
+                const input = event.target;
+                const cursorPos = input.selectionStart;
+                const value = input.value;
+                
+                // 插入"@教练 "
+                const before = value.substring(0, cursorPos);
+                const after = value.substring(cursorPos);
+                input.value = before + '@教练 ' + after;
+                
+                // 将光标移到"@教练 "后面
+                const newPos = cursorPos + 4; // "@教练 " 共4个字符
+                input.setSelectionRange(newPos, newPos);
+            }
+        }
+
+        function insertCoachTag() {
+            const input = document.getElementById('messageInput');
+            input.value = '@教练 ';
+            input.focus();
+        }
+
+        // 页面卸载时清除定时器
+        window.addEventListener('beforeunload', () => {
+            if (pollingInterval) {
+                clearInterval(pollingInterval);
+            }
+        });
+
+        // 初始化 Emoji 选择器
+        let emojiPicker = null;
+        function initEmojiPicker() {
+            const messageInput = document.getElementById('messageInput');
+            if (messageInput && !emojiPicker) {
+                emojiPicker = new EmojiPicker(messageInput, {
+                    position: 'top'
+                });
+            }
+        }
+
+        // 初始化
+        init().then(() => {
+            initEmojiPicker();
+        });
+    </script>
+</body>
+</html>

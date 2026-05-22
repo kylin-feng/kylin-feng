@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YanChen Fortune Telling - Mystical Divination</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #000000 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: auto;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 600px;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .mystical-border {
+            border: 2px solid #ffffff;
+            padding: 3rem;
+            position: relative;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .mystical-border::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #ffffff, #666666, #ffffff);
+            z-index: -1;
+            animation: borderGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes borderGlow {
+            0% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            letter-spacing: 0.2em;
+        }
+
+        .fortune-btn {
+            background: transparent;
+            border: 2px solid #ffffff;
+            color: #ffffff;
+            padding: 1rem 3rem;
+            font-size: 1.2rem;
+            font-family: 'Courier New', monospace;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .fortune-btn:hover {
+            background: #ffffff;
+            color: #000000;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
+        .fortune-btn:active {
+            transform: scale(0.95);
+        }
+
+        .input-container {
+            margin: 2rem 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .input-group label {
+            font-size: 1rem;
+            opacity: 0.8;
+            text-align: left;
+        }
+
+        .mystical-input {
+            background: transparent;
+            border: 1px solid #ffffff;
+            color: #ffffff;
+            padding: 0.8rem 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .mystical-input:focus {
+            outline: none;
+            border-color: #ffffff;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .mystical-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .fortune-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .fortune-btn:disabled:hover {
+            background: transparent;
+            color: #ffffff;
+            box-shadow: none;
+        }
+
+        .result-container {
+            margin-top: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        .result-container.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .lucky-color {
+            font-size: 1.5rem;
+            margin: 1rem 0;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+        }
+
+        .lucky-number {
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 1rem 0;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+        }
+
+        .fortune-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin: 1rem 0;
+            padding: 1rem;
+            border-left: 3px solid #ffffff;
+            background: rgba(255, 255, 255, 0.05);
+            text-align: left;
+        }
+
+        .loading {
+            display: none;
+            margin: 2rem 0;
+        }
+
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .error {
+            color: #ff6b6b;
+            margin: 1rem 0;
+            padding: 1rem;
+            border: 1px solid #ff6b6b;
+            background: rgba(255, 107, 107, 0.1);
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #ffffff;
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0; }
+            50% { transform: translateY(-100px) rotate(180deg); opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .mystical-border {
+                padding: 2rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .fortune-btn {
+                padding: 0.8rem 2rem;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    
+    <div class="container">
+        <div class="mystical-border">
+            <h1>Mystical Fortune Telling</h1>
+            <p style="margin-bottom: 1rem; opacity: 0.8;">Explore the mysteries of fate, reveal the secrets of the future</p>
+            <p style="margin-bottom: 2rem; opacity: 0.6; font-size: 0.9rem; letter-spacing: 0.1em;">YanChen Intelligent Fortune Telling</p>
+            
+            <div class="input-container">
+                <div class="input-group">
+                    <label for="userName">Your Name:</label>
+                    <input type="text" id="userName" placeholder="Enter your name" class="mystical-input">
+                </div>
+                <div class="input-group">
+                    <label for="userBirthday">Birthday:</label>
+                    <input type="date" id="userBirthday" class="mystical-input">
+                </div>
+            </div>
+            
+            <button class="fortune-btn" onclick="getFortune()" id="fortuneBtn" disabled>
+                Begin Divination
+            </button>
+            
+            <div class="loading" id="loading">
+                Calculating...
+            </div>
+            
+            <div class="result-container" id="result">
+                <!-- 结果将在这里动态生成 -->
+            </div>
+            
+            <div class="error" id="error" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script>
+        // 创建粒子效果
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 50;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // 获取运势测算
+        async function getFortune() {
+            const userName = document.getElementById('userName').value.trim();
+            const userBirthday = document.getElementById('userBirthday').value;
+            
+            if (!userName || !userBirthday) {
+                alert('Please enter your name and birthday first.');
+                return;
+            }
+            
+            const loading = document.getElementById('loading');
+            const result = document.getElementById('result');
+            const error = document.getElementById('error');
+            const btn = document.getElementById('fortuneBtn');
+            
+            // 重置状态
+            loading.style.display = 'block';
+            result.classList.remove('show');
+            error.style.display = 'none';
+            btn.disabled = true;
+            btn.textContent = 'Calculating...';
+            
+            // 清除之前的结果内容
+            result.innerHTML = '';
+            
+            try {
+                // 发送POST请求到后端API
+                const response = await fetch('http://localhost:5003/send_udp', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        fortune: true,
+                        userName: userName,
+                        userBirthday: userBirthday
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                console.log('API Response:', data); // 调试信息
+                
+                // 重新创建结果元素
+                const userInfo = document.createElement('div');
+                userInfo.style.cssText = 'font-size: 0.9rem; opacity: 0.7; margin-bottom: 1rem; text-align: center;';
+                userInfo.textContent = `For: ${userName} (${userBirthday})`;
+                
+                const luckyColor = document.createElement('div');
+                luckyColor.className = 'lucky-color';
+                luckyColor.textContent = `Lucky Color: ${data.lucky_color}`;
+                
+                const luckyNumber = document.createElement('div');
+                luckyNumber.className = 'lucky-number';
+                luckyNumber.textContent = data.lucky_number;
+                
+                const fortuneText = document.createElement('div');
+                fortuneText.className = 'fortune-text';
+                // Convert \n to <br> tags for proper line breaks
+                fortuneText.innerHTML = data.fortune.replace(/\n/g, '<br>');
+                
+                // 添加到结果容器
+                result.appendChild(userInfo);
+                result.appendChild(luckyColor);
+                result.appendChild(luckyNumber);
+                result.appendChild(fortuneText);
+                
+                // 添加显示动画
+                setTimeout(() => {
+                    result.classList.add('show');
+                }, 100);
+                
+            } catch (err) {
+                console.error('Error:', err);
+                error.style.display = 'block';
+                error.textContent = `Divination failed: ${err.message}`;
+                
+                // 如果是网络错误，提供更详细的错误信息
+                if (err.name === 'TypeError' && err.message.includes('fetch')) {
+                    error.textContent = 'Network error: Please check if the backend server is running on port 5003';
+                }
+            } finally {
+                loading.style.display = 'none';
+                btn.disabled = false;
+                btn.textContent = 'Try Again';
+            }
+        }
+
+        // 检查输入是否完整
+        function checkInputs() {
+            const userName = document.getElementById('userName').value.trim();
+            const userBirthday = document.getElementById('userBirthday').value;
+            const fortuneBtn = document.getElementById('fortuneBtn');
+            
+            if (userName && userBirthday) {
+                fortuneBtn.disabled = false;
+            } else {
+                fortuneBtn.disabled = true;
+            }
+        }
+
+        // 页面加载时创建粒子效果
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+            
+            // 添加输入监听器
+            document.getElementById('userName').addEventListener('input', checkInputs);
+            document.getElementById('userBirthday').addEventListener('input', checkInputs);
+        });
+
+        // 添加键盘事件支持
+        document.addEventListener('keydown', function(event) {
+            if (event.code === 'Space' || event.code === 'Enter') {
+                event.preventDefault();
+                const btn = document.getElementById('fortuneBtn');
+                if (!btn.disabled) {
+                    getFortune();
+                }
+            }
+        });
+    </script>
+</body>
+</html> 

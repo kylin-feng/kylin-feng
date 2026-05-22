@@ -6,6 +6,7 @@ build/
 .next/
 coverage/
 .cache/
+.swc/
 .dart_tool/
 .gradle/
 .idea/
@@ -15,12 +16,19 @@ xcuserdata/
 *.xcuserstate
 oh_modules/
 .hvigor/
+linux/flutter/ephemeral/
+windows/flutter/ephemeral/
+macos/Flutter/ephemeral/
+ios/Flutter/ephemeral/
 __pycache__/
 *.pyc
 *.log
 *.db
 *.sqlite
 *.sqlite3
+data/*.json
+static/demo/*qr*
+static/demo/wechat-group-qr.*
 .DS_Store
 .env
 .env.*

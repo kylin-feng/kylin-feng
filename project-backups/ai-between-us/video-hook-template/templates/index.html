@@ -1,0 +1,36 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}Video Hook Template{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-5">海外视频钩子模板</h1>
+    
+    <div class="mb-4 text-center">
+        <a href="/add" class="btn btn-primary">添加新视频钩子</a>
+    </div>
+    
+    <div class="row">
+        {% for hook in video_hooks %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <img src="{{ hook.thumbnail }}" class="card-img-top" alt="{{ hook.title }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ hook.title }}</h5>
+                    <p class="card-text">{{ hook.description }}</p>
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ hook.url }}" class="btn btn-secondary" target="_blank">查看视频</a>
+                        <a href="/delete/{{ hook.id }}" class="btn btn-danger">删除</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

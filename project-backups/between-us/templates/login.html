@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录 - Between Us</title>
+    <link rel="stylesheet" href="/static/css/common.css">
+</head>
+<body class="login-page">
+    <div class="container">
+        <div class="card">
+            <div class="login-intro">温柔疗愈 · 安心登录</div>
+            <h1 class="title">💝 Between Us</h1>
+            <p class="login-subtitle">让关系与情绪都有去处</p>
+
+            <div id="loginForm">
+                <div class="input-group">
+                    <label>手机号</label>
+                    <input type="text" id="loginPhone" placeholder="请输入手机号">
+                </div>
+                <div class="input-group">
+                    <label>密码</label>
+                    <input type="password" id="loginPassword" placeholder="请输入密码">
+                </div>
+                <button class="btn btn-primary" onclick="login()">登录</button>
+                <button class="btn btn-secondary" onclick="showRegister()">注册新账号</button>
+            </div>
+
+            <div id="registerForm" style="display: none;">
+                <div class="input-group">
+                    <label>手机号</label>
+                    <input type="text" id="registerPhone" placeholder="请输入手机号">
+                </div>
+                <div class="input-group">
+                    <label>密码</label>
+                    <input type="password" id="registerPassword" placeholder="请设置密码">
+                </div>
+                <div class="input-group">
+                    <label>昵称（选填）</label>
+                    <input type="text" id="registerNickname" placeholder="不填默认为手机号后4位" maxlength="20">
+                    <small style="color: var(--home-muted); font-size: 12px; margin-top: 4px; display: block;">最长20个字符</small>
+                </div>
+                <button class="btn btn-primary" onclick="register()">注册</button>
+                <button class="btn btn-secondary" onclick="showLogin()">返回登录</button>
+            </div>
+
+            <div class="link">
+                <p>开始您的情感陪伴之旅 ❤️</p>
+            </div>
+        </div>
+    </div>
+    <div class="gentle-shape gentle-shape-1" aria-hidden="true"></div>
+    <div class="gentle-shape gentle-shape-2" aria-hidden="true"></div>
+    <div class="gentle-shape gentle-shape-3" aria-hidden="true"></div>
+
+    <script>
+        // Toast 提示函数
+        function showToast(message, type = 'info', duration = 2500) {
+            let container = document.querySelector('.toast-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.className = 'toast-container';
+                document.body.appendChild(container);
+            }
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.textContent = message;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.add('toast-out');
+                setTimeout(() => toast.remove(), 300);
+            }, duration);
+        }
+
+        function showRegister() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'block';
+        }
+
+        function showLogin() {
+            document.getElementById('registerForm').style.display = 'none';
+            document.getElementById('loginForm').style.display = 'block';
+        }
+
+        async function login() {
+            const phone = document.getElementById('loginPhone').value;
+            const password = document.getElementById('loginPassword').value;
+
+            if (!phone || !password) {
+                showToast('请填写手机号和密码', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ phone, password })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    localStorage.setItem('userId', data.user.id);
+                    localStorage.setItem('userPhone', data.user.phone);
+                    window.location.href = '/home';
+                } else {
+                    showToast(data.message || '登录失败', 'error');
+                }
+            } catch (error) {
+                showToast('网络错误，请稍后再试', 'error');
+                console.error(error);
+            }
+        }
+
+        async function register() {
+            const phone = document.getElementById('registerPhone').value;
+            const password = document.getElementById('registerPassword').value;
+            const nickname = document.getElementById('registerNickname').value.trim();
+
+            if (!phone || !password) {
+                showToast('请填写手机号和密码', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ phone, password, nickname })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showToast('注册成功！请登录', 'success');
+                    showLogin();
+                    document.getElementById('loginPhone').value = phone;
+                } else {
+                    showToast(data.message || '注册失败', 'error');
+                }
+            } catch (error) {
+                showToast('网络错误，请稍后再试', 'error');
+                console.error(error);
+            }
+        }
+
+        // 回车登录
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('loginPassword').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    login();
+                }
+            });
+
+            document.getElementById('registerPassword').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    register();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

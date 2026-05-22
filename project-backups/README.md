@@ -34,6 +34,11 @@
 - `app-hm/`：鸿蒙应用原型
 - `codex-red-quiz/`：Codex 生成的答题/测验项目
 - `aiedu-app-center-prototype/`：AI 教育应用中心原型
+- `work-test-app/`：Work-2025-10 里的 Flutter 测试应用，已排除构建产物
+- `ai-between-us/`：Trae Solo Hackathon 关系/沟通 AI 原型，已替换 Coze PAT
+- `between-us/`：Between-Us Web/AI 原型，已替换 Coze PAT
+- `lucky-web/`：幸运色/运势 Web 原型
+- `lucky-wuxing/`：五行/幸运色工具原型，已替换硬编码 API Key
 
 未纳入的内容：
 
