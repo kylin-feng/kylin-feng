@@ -39,8 +39,10 @@
 - `between-us/`：Between-Us Web/AI 原型，已替换 Coze PAT
 - `lucky-web/`：幸运色/运势 Web 原型
 - `lucky-wuxing/`：五行/幸运色工具原型，已替换硬编码 API Key
+- `p340-ai-answering/`：P340 机械臂 AI 答题项目，已替换配置里的 DeepSeek API Key
 
 未纳入的内容：
 
 - 部分 iCloud 占位文件读取超时的目录，避免备份成空壳
 - 第三方大型源码、依赖缓存、构建产物和本地密钥配置
+- 运行日志、虚拟环境、`data/input/`、`data/output/` 等本机运行数据

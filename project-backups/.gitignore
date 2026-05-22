@@ -27,6 +27,8 @@ __pycache__/
 *.sqlite
 *.sqlite3
 data/*.json
+data/input/
+data/output/
 static/demo/*qr*
 static/demo/wechat-group-qr.*
 .DS_Store

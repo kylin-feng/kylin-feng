@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>机械臂控制台</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0f0f1a;
+    color: #e0e0ff;
+    font-family: 'Segoe UI', sans-serif;
+    display: flex; flex-direction: column; align-items: center;
+    min-height: 100vh; padding: 16px; gap: 14px;
+  }
+  h1 { font-size: 1.3rem; letter-spacing: 2px; color: #7eb8ff; }
+
+  .row { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; width: 100%; max-width: 1100px; }
+
+  /* 视频 */
+  .video-wrap { position: relative; border-radius: 12px; overflow: hidden; box-shadow: 0 0 24px #3060ff33; flex-shrink: 0; }
+  #stream { display: block; width: 420px; height: 315px; object-fit: cover; background: #111; }
+
+  /* 面板通用 */
+  .panel { background: #1a1a2e; border-radius: 12px; padding: 14px 16px; }
+  .panel h2 { font-size: 0.9rem; color: #7eb8ff; margin-bottom: 10px; letter-spacing: 1px; }
+
+  /* 角度条 */
+  .angles-panel { min-width: 200px; }
+  .joint { margin-bottom: 10px; }
+  .joint-label { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 3px; color: #aac4ff; }
+  .bar-bg { background: #2a2a44; border-radius: 4px; height: 7px; overflow: hidden; }
+  .bar { height: 7px; border-radius: 4px; background: linear-gradient(90deg, #3a6fff, #7eb8ff); transition: width 0.08s; width: 50%; }
+
+  /* 状态点 */
+  .status-row { display: flex; align-items: center; gap: 7px; margin-top: 8px; font-size: 0.78rem; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; background: #444; transition: background 0.3s; }
+  .dot.on  { background: #4eff91; box-shadow: 0 0 6px #4eff91; }
+  .dot.off { background: #ff4e4e; box-shadow: 0 0 6px #ff4e4e; }
+
+  /* 模式切换 */
+  .mode-btn {
+    display: flex; gap: 8px; margin-bottom: 10px;
+  }
+  .mode-btn button {
+    flex: 1; padding: 7px; border-radius: 8px; border: 1px solid #3a3a6a;
+    background: #2a2a44; color: #aac4ff; font-size: 0.82rem; cursor: pointer;
+    transition: all 0.2s;
+  }
+  .mode-btn button.active { background: #3a6fff; color: #fff; border-color: #3a6fff; }
+
+  /* 键盘控制 */
+  .kb-panel { min-width: 260px; }
+  .kb-grid { display: grid; gap: 5px; margin-bottom: 10px; }
+  .kb-row { display: flex; gap: 5px; justify-content: center; }
+  .kb-btn {
+    width: 54px; height: 40px; border-radius: 7px; border: 1px solid #3a3a6a;
+    background: #2a2a44; color: #c0d4ff; font-size: 0.75rem; cursor: pointer;
+    transition: all 0.15s; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; line-height: 1.2; user-select: none;
+  }
+  .kb-btn:hover, .kb-btn.pressed { background: #3a6fff; color: #fff; border-color: #3a6fff; }
+  .kb-btn .key { font-size: 0.65rem; color: #7eb8ff; }
+  .kb-btn.wide { width: 115px; }
+
+  /* 预设动作 */
+  .preset-panel { min-width: 200px; }
+  .preset-btn {
+    width: 100%; padding: 8px 10px; margin-bottom: 6px;
+    border-radius: 8px; border: 1px solid #3a3a6a;
+    background: #2a2a44; color: #c0d4ff; font-size: 0.82rem;
+    cursor: pointer; text-align: left; transition: all 0.15s;
+  }
+  .preset-btn:hover { background: #2a3a6a; border-color: #3a6fff; }
+  .preset-btn span { font-size: 0.7rem; color: #7eb8ff; float: right; }
+
+  /* 步进大小 */
+  .step-row { display: flex; align-items: center; gap: 8px; margin-top: 8px; font-size: 0.78rem; color: #8899cc; }
+  .step-row input { width: 55px; background: #2a2a44; border: 1px solid #3a3a6a; color: #c0d4ff; border-radius: 5px; padding: 3px 6px; font-size: 0.82rem; }
+
+  /* 提示 */
+  .tips { font-size: 0.75rem; color: #556688; line-height: 1.8; max-width: 1100px; width: 100%; background: #1a1a2e; border-radius: 10px; padding: 10px 14px; }
+  .tips b { color: #7eb8ff; }
+</style>
+</head>
+<body>
+<h1>🤖 机械臂控制台</h1>
+
+<div class="row">
+  <!-- 摄像头 -->
+  <div class="video-wrap">
+    <img id="stream" src="/video_feed" alt="camera">
+  </div>
+
+  <!-- 角度 + 状态 -->
+  <div class="panel angles-panel">
+    <h2>关节角度</h2>
+    <div class="joint"><div class="joint-label"><span>J1 旋转</span><span id="v1">0.0°</span></div><div class="bar-bg"><div class="bar" id="b1"></div></div></div>
+    <div class="joint"><div class="joint-label"><span>J2 仰角</span><span id="v2">0.0°</span></div><div class="bar-bg"><div class="bar" id="b2"></div></div></div>
+    <div class="joint"><div class="joint-label"><span>J3 伸展</span><span id="v3">0.0°</span></div><div class="bar-bg"><div class="bar" id="b3"></div></div></div>
+    <div class="joint"><div class="joint-label"><span>J4 腕转</span><span id="v4">0.0°</span></div><div class="bar-bg"><div class="bar" id="b4"></div></div></div>
+    <div class="status-row"><div class="dot" id="conn-dot"></div><span id="conn-label">连接中...</span></div>
+    <div class="status-row"><div class="dot" id="hand-dot"></div><span id="hand-label">等待手部...</span></div>
+  </div>
+
+  <!-- 键盘控制 -->
+  <div class="panel kb-panel">
+    <h2>键盘控制</h2>
+
+    <!-- 模式切换 -->
+    <div class="mode-btn">
+      <button id="btn-gesture" onclick="setMode('gesture')">✋ 手势模式</button>
+      <button id="btn-keyboard" onclick="setMode('keyboard')" class="active">⌨️ 键盘模式</button>
+    </div>
+
+    <!-- J1 旋转 ← → -->
+    <div style="font-size:0.72rem;color:#556688;margin-bottom:4px">J1 旋转</div>
+    <div class="kb-row" style="margin-bottom:8px">
+      <button class="kb-btn" id="kb-j1-" onmousedown="startStep('j1-')" onmouseup="stopStep" onmouseleave="stopStep">◀<div class="key">← / A</div></button>
+      <button class="kb-btn" id="kb-j1+" onmousedown="startStep('j1+')" onmouseup="stopStep" onmouseleave="stopStep">▶<div class="key">→ / D</div></button>
+    </div>
+
+    <!-- J2 仰角 ↑ ↓ -->
+    <div style="font-size:0.72rem;color:#556688;margin-bottom:4px">J2 仰角</div>
+    <div class="kb-row" style="margin-bottom:8px">
+      <button class="kb-btn" id="kb-j2+" onmousedown="startStep('j2+')" onmouseup="stopStep" onmouseleave="stopStep">▲<div class="key">↑ / W</div></button>
+      <button class="kb-btn" id="kb-j2-" onmousedown="startStep('j2-')" onmouseup="stopStep" onmouseleave="stopStep">▼<div class="key">↓ / S</div></button>
+    </div>
+
+    <!-- J3 伸展 Q E -->
+    <div style="font-size:0.72rem;color:#556688;margin-bottom:4px">J3 伸展</div>
+    <div class="kb-row" style="margin-bottom:8px">
+      <button class="kb-btn" id="kb-j3-" onmousedown="startStep('j3-')" onmouseup="stopStep" onmouseleave="stopStep">收<div class="key">Q</div></button>
+      <button class="kb-btn" id="kb-j3+" onmousedown="startStep('j3+')" onmouseup="stopStep" onmouseleave="stopStep">伸<div class="key">E</div></button>
+    </div>
+
+    <!-- J4 腕转 Z X -->
+    <div style="font-size:0.72rem;color:#556688;margin-bottom:4px">J4 腕转</div>
+    <div class="kb-row" style="margin-bottom:10px">
+      <button class="kb-btn" id="kb-j4-" onmousedown="startStep('j4-')" onmouseup="stopStep" onmouseleave="stopStep">↺<div class="key">Z</div></button>
+      <button class="kb-btn" id="kb-j4+" onmousedown="startStep('j4+')" onmouseup="stopStep" onmouseleave="stopStep">↻<div class="key">X</div></button>
+    </div>
+
+    <div class="step-row">
+      步进大小: <input type="number" id="step-input" value="5" min="1" max="30"> °
+    </div>
+  </div>
+
+  <!-- 预设 -->
+  <div class="panel preset-panel">
+    <h2>预设动作</h2>
+    <button class="preset-btn" onclick="goZero()">🏠 回零位 <span>Space</span></button>
+    <button class="preset-btn" onclick="sendAngles([88.68, 60, 30])">🦾 收起姿态</button>
+    <button class="preset-btn" onclick="sendAngles([0, 45, 60])">📐 前伸姿态</button>
+    <button class="preset-btn" onclick="sendAngles([-90, 21, 47])">↙ 左摆姿态</button>
+    <button class="preset-btn" onclick="sendAngles([90, 21, 47])">↘ 右摆姿态</button>
+    <button class="preset-btn" onclick="sendAngles([0, 0, 110])">⬆ 竖直伸直</button>
+  </div>
+</div>
+
+<div class="tips">
+  <b>手势模式：</b>食指上下=J1旋转，左右=J2仰角，捏合=J3伸展，腕转=J4 &nbsp;|&nbsp;
+  <b>键盘模式：</b>← → 旋转 &nbsp; ↑ ↓ 仰角 &nbsp; Q E 伸展 &nbsp; Z X 腕转 &nbsp; Space 回零
+</div>
+
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<script>
+const socket = io();
+let mode = 'keyboard';   // 'gesture' | 'keyboard'
+let stepTimer = null;
+
+socket.on('connect', () => {
+  document.getElementById('conn-dot').className    = 'dot on';
+  document.getElementById('conn-label').textContent = '已连接';
+});
+socket.on('disconnect', () => {
+  document.getElementById('conn-dot').className    = 'dot off';
+  document.getElementById('conn-label').textContent = '已断开';
+});
+
+const limits = [[-150,170],[-20,90],[-5,110],[-179,179]];
+socket.on('angle_update', (data) => {
+  data.angles.forEach((v, i) => {
+    const n = i + 1;
+    document.getElementById(`v${n}`).textContent = v.toFixed(1) + '°';
+    const [lo, hi] = limits[i];
+    document.getElementById(`b${n}`).style.width = ((v-lo)/(hi-lo)*100).toFixed(1) + '%';
+  });
+  if (data.hand !== undefined) {
+    document.getElementById('hand-dot').className    = 'dot ' + (data.hand ? 'on' : 'off');
+    document.getElementById('hand-label').textContent = data.hand ? '检测到手部' : '未检测到手';
+  }
+});
+
+// ── 模式 ──────────────────────────────────────────
+function setMode(m) {
+  mode = m;
+  document.getElementById('btn-gesture').classList.toggle('active', m === 'gesture');
+  document.getElementById('btn-keyboard').classList.toggle('active', m === 'keyboard');
+  socket.emit('set_mode', { mode: m });
+}
+
+// ── 预设动作 ──────────────────────────────────────
+function goZero() {
+  socket.emit('keyboard_cmd', { cmd: 'go_zero' });
+}
+function sendAngles(angles) {
+  socket.emit('keyboard_cmd', { cmd: 'set_angles', angles });
+}
+
+// ── 步进 ──────────────────────────────────────────
+function getStep() {
+  return parseFloat(document.getElementById('step-input').value) || 5;
+}
+function sendStep(cmd) {
+  if (mode !== 'keyboard') return;
+  socket.emit('keyboard_cmd', { cmd, step: getStep() });
+}
+function startStep(cmd) {
+  sendStep(cmd);
+  stepTimer = setInterval(() => sendStep(cmd), 150);
+  document.getElementById('kb-' + cmd).classList.add('pressed');
+}
+function stopStep() {
+  clearInterval(stepTimer);
+  stepTimer = null;
+  document.querySelectorAll('.kb-btn').forEach(b => b.classList.remove('pressed'));
+}
+
+// ── 键盘事件 ──────────────────────────────────────
+const keyMap = {
+  'ArrowLeft':  'j1-', 'a': 'j1-', 'A': 'j1-',
+  'ArrowRight': 'j1+', 'd': 'j1+', 'D': 'j1+',
+  'ArrowUp':    'j2+', 'w': 'j2+', 'W': 'j2+',
+  'ArrowDown':  'j2-', 's': 'j2-', 'S': 'j2-',
+  'q': 'j3-', 'Q': 'j3-',
+  'e': 'j3+', 'E': 'j3+',
+  'z': 'j4-', 'Z': 'j4-',
+  'x': 'j4+', 'X': 'j4+',
+};
+const held = new Set();
+document.addEventListener('keydown', (e) => {
+  if (e.target.tagName === 'INPUT') return;
+  if (e.key === ' ') { e.preventDefault(); goZero(); return; }
+  if (e.key === 'g' || e.key === 'G') { setMode('gesture'); return; }
+  if (e.key === 'k' || e.key === 'K') { setMode('keyboard'); return; }
+  const cmd = keyMap[e.key];
+  if (cmd && !held.has(e.key)) {
+    held.add(e.key);
+    startStep(cmd);
+  }
+});
+document.addEventListener('keyup', (e) => {
+  held.delete(e.key);
+  if (held.size === 0) stopStep();
+});
+</script>
+</body>
+</html>

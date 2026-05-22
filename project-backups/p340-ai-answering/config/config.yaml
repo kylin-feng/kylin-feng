@@ -1,0 +1,51 @@
+# P340_AI Configuration
+
+# AI Model API Config
+api:
+  deepseek:
+    api_key: YOUR_DEEPSEEK_API_KEY
+    base_url: "https://api.deepseek.com"
+    model: "deepseek-coder"
+  qwen:
+    api_key: xxxxxxxxxxxxxxxxxxxxxxxxxx
+    base_url: "https://dashscope.aliyuncs.com/compatible-mode/v1"
+    model: "qwen3-235b-a22b"
+  qwen_vl:
+    api_key: xxxxxxxxxxxxxxxxxxxxxxxxxx
+    base_url: "https://dashscope.aliyuncs.com/compatible-mode/v1"
+    model: "qwen-vl-max"
+
+# Camera Config
+camera:
+  id: 1
+
+# Path Config
+paths:
+  input:
+    base: "./data/input"
+    images: "./data/input/images"
+  output:
+    base: "./data/output"
+    logs: "./data/output/logs"
+
+# Robot Config
+robot:
+  com_port:  "/dev/cu.wchusbserial1140"       # COM port number
+  baudrate: 115200                    # Baud rate
+  z_up: -65                          # Pen up height (robot arm coordinates)
+  z_down: -70                         # Pen down height (robot arm coordinates)
+  speed_move: 50                      # Movement speed (when not writing)
+  speed_write: 30                     # Writing speed
+  origin_x: 384.05                    # Default X coordinate (robot arm position when at top-left corner of A4 paper)
+  origin_y: -105                      # Default Y coordinate (robot arm position when at top-left corner of A4 paper)
+
+# Logging Config
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file_rotation: "1 day"
+  max_files: 7
+
+# Assets Config
+assets:
+  chinese_fonts: "./assets/Chinese_strokes"
