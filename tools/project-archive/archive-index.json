@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "owner": "kylin-feng",
+  "visibility": "private",
+  "scan_roots": [
+    "/Users/shixianping/Projects",
+    "/Users/shixianping/Desktop",
+    "/Users/shixianping/Documents",
+    "/Users/shixianping/Downloads"
+  ],
+  "archived": [],
+  "skipped": [],
+  "runs": []
+}
