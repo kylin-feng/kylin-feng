@@ -44,6 +44,24 @@
       "archived_at": "2026-05-22T15:00:55+08:00",
       "redacted_files": 0,
       "bytes": 2847890
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/hackson-s-create1-xuanxuetool",
+      "target_repo": "kylin-feng/hackson-s-create1-xuanxuetool",
+      "target_url": "https://github.com/kylin-feng/hackson-s-create1-xuanxuetool",
+      "commit_sha": "07fc5a173864e927ac4dd81bcc6e0f1e44d73722",
+      "archived_at": "2026-05-22T15:30:22+08:00",
+      "redacted_files": 0,
+      "bytes": 54320
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project/web/lucky",
+      "target_repo": "kylin-feng/lucky",
+      "target_url": "https://github.com/kylin-feng/lucky",
+      "commit_sha": "f8a1dc82ca312e6b39f89f25f9b3795ffcca7d88",
+      "archived_at": "2026-05-22T15:30:42+08:00",
+      "redacted_files": 0,
+      "bytes": 91707
     }
   ],
   "skipped": [
@@ -367,6 +385,258 @@
     {
       "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project/web/lucky",
       "reason": "deferred_to_next_run"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project/web/react-web",
+      "reason": "already_archived_in_central_project_backups"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project/web/lucky2",
+      "reason": "deferred_to_next_run"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project/web/ai-town/frontend",
+      "reason": "unreadable_or_icloud_placeholder"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project/web/ai-town/backend",
+      "reason": "unreadable_or_icloud_placeholder"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project/ios/chinese_slang",
+      "reason": "unreadable_or_icloud_placeholder"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project/mobile/magic_calculator",
+      "reason": "unreadable_or_icloud_placeholder"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project/mobile/flutter-ios",
+      "reason": "deferred_to_next_run"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project/mobile/magic_calculator_complete",
+      "reason": "unreadable_or_icloud_placeholder"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project/mobile/time_tracker",
+      "reason": "deferred_to_next_run"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project/ai/deepseek-agent",
+      "reason": "unreadable_or_icloud_placeholder"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project/agent-love",
+      "reason": "container_directory_with_child_projects"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/hackson-s-create-mactool",
+      "reason": "container_directory_with_child_projects"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/kylin-ai/swarm-main-study/swarm-main",
+      "reason": "unreadable_or_icloud_placeholder"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/kylin-ai/agent-new-tech/react/agent-new-tech",
+      "reason": "unreadable_or_icloud_placeholder"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/kylin-ai/study-test/gitlab/knowledge_tools",
+      "reason": "unreadable_or_icloud_placeholder"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/kylin-ai/study-test/langchain",
+      "reason": "unreadable_or_icloud_placeholder"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/kylin-ai/xiaohongshu/ios/chinese_slang",
+      "reason": "unreadable_or_icloud_placeholder"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/kylin-ai/marscode_competetion/frontend/smart_lin",
+      "reason": "unreadable_or_icloud_placeholder"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/kylin-ai/fqm-agent/agent",
+      "reason": "deferred_to_next_run"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/kylin-ai/ai-read/front",
+      "reason": "unreadable_or_icloud_placeholder"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/kylin-wxapp/kylin-wxapp/eye_analyise/eye_analyise",
+      "reason": "unreadable_or_icloud_placeholder"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/LINMING-tech/AI-girl/GPT-SoVITS-v3lora-20250228/GPT-SoVITS-v3lora-20250228",
+      "reason": "unreadable_or_icloud_placeholder"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/LINMING-tech/AI-girl/GPT-SoVITS-main/GPT-SoVITS-main",
+      "reason": "unreadable_or_icloud_placeholder"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/LINMING-tech/ziyong/SpatialLM-main/SpatialLM-main",
+      "reason": "unreadable_or_icloud_placeholder"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/LINMING-tech/real-core/pay-son-sword",
+      "reason": "unreadable_or_icloud_placeholder"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/kylin-React-web/thinking-engine",
+      "reason": "unreadable_or_icloud_placeholder"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/kylin-React-web/white-front-guanwang",
+      "reason": "unreadable_or_icloud_placeholder"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/kylin-React-web/ai-laboratory",
+      "reason": "unreadable_or_icloud_placeholder"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/kylin-React-web/全能AI王",
+      "reason": "unreadable_or_icloud_placeholder"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/kylin-React-web/侘寂风格官网",
+      "reason": "unreadable_or_icloud_placeholder"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/kylin-React-web/ai-toolbox",
+      "reason": "unreadable_or_icloud_placeholder"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/kylin-React-web/memory-ai-chat/memory_ai_chat",
+      "reason": "unreadable_or_icloud_placeholder"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/kylin-React-web/startup-simulator",
+      "reason": "unreadable_or_icloud_placeholder"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/kylin-React-web/web3-card-game",
+      "reason": "unreadable_or_icloud_placeholder"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/kylin-React-web/虚拟直播间",
+      "reason": "unreadable_or_icloud_placeholder"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/kylin-React-web/pet-water-cup-website",
+      "reason": "unreadable_or_icloud_placeholder"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/kylin-React-web/cloud-thinking",
+      "reason": "unreadable_or_icloud_placeholder"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/LINMING-space",
+      "reason": "container_directory_with_child_projects"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/机械臂/P340_AI_Answering-main/P340_AI_Answering-main",
+      "reason": "unreadable_or_icloud_placeholder"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/会议工具/smart-meet",
+      "reason": "already_archived_in_central_project_backups"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/会议工具/zj-meeting",
+      "reason": "already_archived_in_central_project_backups"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/会议工具/zj-smart-meeting",
+      "reason": "already_archived_in_central_project_backups"
+    },
+    {
+      "source_path": "/Users/shixianping/Desktop/桌面 - fenny的MacBook Pro/P340_AI_Answering-main",
+      "reason": "deferred_to_next_run"
+    },
+    {
+      "source_path": "/Users/shixianping/Downloads/True-Story-of-Pangu-main",
+      "reason": "deferred_to_next_run"
+    },
+    {
+      "source_path": "/Users/shixianping/Downloads/P340_AI_Answering",
+      "reason": "already_archived_in_central_project_backups"
+    },
+    {
+      "source_path": "/Users/shixianping/Downloads/04-文档资料",
+      "reason": "deferred_to_next_run"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/01-AI开发者/工具脚本",
+      "reason": "container_directory_with_child_projects"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/01-AI开发者/AI产品/nanoclaw",
+      "reason": "clean_third_party_clone"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/01-AI开发者/AI产品/lifeLens-ai-assistant",
+      "reason": "already_archived_in_central_project_backups"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/01-AI开发者/AI产品/AIwrite_king",
+      "reason": "already_archived_in_central_project_backups"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/01-AI开发者/AI产品/resume-optimizer",
+      "reason": "already_archived_in_central_project_backups"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/01-AI开发者/学习测试/web/spirit_realm_app",
+      "reason": "unreadable_or_icloud_placeholder"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/01-AI开发者/学习测试/web/floating-ball-extension",
+      "reason": "unreadable_or_icloud_placeholder"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/01-AI开发者/学习测试/web/ghost-chat-extension",
+      "reason": "unreadable_or_icloud_placeholder"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/Work-2025-10/test_app",
+      "reason": "already_archived_in_index"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/Work-2025-10/wxapp-edu/Q-AI/Q_AI",
+      "reason": "already_archived_in_index"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/Work-2025-10/app-rokid",
+      "reason": "already_archived_in_index"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/Work-2025-10/taro-app",
+      "reason": "already_archived_in_central_project_backups"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/Work-2025-10/app-hm",
+      "reason": "already_archived_in_central_project_backups"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/Work-2025-10/wxapp-show/Q-AI/Q_AI",
+      "reason": "already_archived_in_index"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/MacProject/app-todo-main",
+      "reason": "unreadable_or_icloud_placeholder"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project/trae-solo-hackson/Between-Us",
+      "reason": "already_archived_in_central_project_backups"
+    },
+    {
+      "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project/trae-solo-hackson/AI-Between-Us",
+      "reason": "already_archived_in_central_project_backups"
     },
     {
       "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project/web/react-web",
@@ -1113,6 +1383,286 @@
         }
       ],
       "finished_at": "2026-05-22T15:00:58+08:00",
+      "status": "archived_projects"
+    },
+    {
+      "started_at": "2026-05-22T15:30:06+08:00",
+      "dry_run": false,
+      "archived": [
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/hackson-s-create1-xuanxuetool",
+          "target_repo": "kylin-feng/hackson-s-create1-xuanxuetool",
+          "target_url": "https://github.com/kylin-feng/hackson-s-create1-xuanxuetool",
+          "commit_sha": "07fc5a173864e927ac4dd81bcc6e0f1e44d73722",
+          "archived_at": "2026-05-22T15:30:22+08:00",
+          "redacted_files": 0,
+          "bytes": 54320
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project/web/lucky",
+          "target_repo": "kylin-feng/lucky",
+          "target_url": "https://github.com/kylin-feng/lucky",
+          "commit_sha": "f8a1dc82ca312e6b39f89f25f9b3795ffcca7d88",
+          "archived_at": "2026-05-22T15:30:42+08:00",
+          "redacted_files": 0,
+          "bytes": 91707
+        }
+      ],
+      "skipped": [
+        {
+          "source_path": "/Users/shixianping/Projects/01-AI开发者/工具脚本",
+          "reason": "container_directory_with_child_projects"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/01-AI开发者/AI产品/nanoclaw",
+          "reason": "clean_third_party_clone"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/01-AI开发者/AI产品/lifeLens-ai-assistant",
+          "reason": "already_archived_in_central_project_backups"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/01-AI开发者/AI产品/AIwrite_king",
+          "reason": "already_archived_in_central_project_backups"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/01-AI开发者/AI产品/resume-optimizer",
+          "reason": "already_archived_in_central_project_backups"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/01-AI开发者/学习测试/web/spirit_realm_app",
+          "reason": "unreadable_or_icloud_placeholder"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/01-AI开发者/学习测试/web/floating-ball-extension",
+          "reason": "unreadable_or_icloud_placeholder"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/01-AI开发者/学习测试/web/ghost-chat-extension",
+          "reason": "unreadable_or_icloud_placeholder"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/Work-2025-10/test_app",
+          "reason": "already_archived_in_index"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/Work-2025-10/wxapp-edu/Q-AI/Q_AI",
+          "reason": "already_archived_in_index"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/Work-2025-10/app-rokid",
+          "reason": "already_archived_in_index"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/Work-2025-10/taro-app",
+          "reason": "already_archived_in_central_project_backups"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/Work-2025-10/app-hm",
+          "reason": "already_archived_in_central_project_backups"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/Work-2025-10/wxapp-show/Q-AI/Q_AI",
+          "reason": "already_archived_in_index"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/MacProject/app-todo-main",
+          "reason": "unreadable_or_icloud_placeholder"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project/trae-solo-hackson/Between-Us",
+          "reason": "already_archived_in_central_project_backups"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project/trae-solo-hackson/AI-Between-Us",
+          "reason": "already_archived_in_central_project_backups"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project/web/react-web",
+          "reason": "already_archived_in_central_project_backups"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project/web/lucky2",
+          "reason": "deferred_to_next_run"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project/web/ai-town/frontend",
+          "reason": "unreadable_or_icloud_placeholder"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project/web/ai-town/backend",
+          "reason": "unreadable_or_icloud_placeholder"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project/ios/chinese_slang",
+          "reason": "unreadable_or_icloud_placeholder"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project/mobile/magic_calculator",
+          "reason": "unreadable_or_icloud_placeholder"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project/mobile/flutter-ios",
+          "reason": "deferred_to_next_run"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project/mobile/magic_calculator_complete",
+          "reason": "unreadable_or_icloud_placeholder"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project/mobile/time_tracker",
+          "reason": "deferred_to_next_run"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project/ai/deepseek-agent",
+          "reason": "unreadable_or_icloud_placeholder"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project/agent-love",
+          "reason": "container_directory_with_child_projects"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/hackson-s-create-mactool",
+          "reason": "container_directory_with_child_projects"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/kylin-ai/swarm-main-study/swarm-main",
+          "reason": "unreadable_or_icloud_placeholder"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/kylin-ai/agent-new-tech/react/agent-new-tech",
+          "reason": "unreadable_or_icloud_placeholder"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/kylin-ai/study-test/gitlab/knowledge_tools",
+          "reason": "unreadable_or_icloud_placeholder"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/kylin-ai/study-test/langchain",
+          "reason": "unreadable_or_icloud_placeholder"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/kylin-ai/xiaohongshu/ios/chinese_slang",
+          "reason": "unreadable_or_icloud_placeholder"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/kylin-ai/marscode_competetion/frontend/smart_lin",
+          "reason": "unreadable_or_icloud_placeholder"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/kylin-ai/fqm-agent/agent",
+          "reason": "deferred_to_next_run"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/kylin-ai/ai-read/front",
+          "reason": "unreadable_or_icloud_placeholder"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/kylin-wxapp/kylin-wxapp/eye_analyise/eye_analyise",
+          "reason": "unreadable_or_icloud_placeholder"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/LINMING-tech/AI-girl/GPT-SoVITS-v3lora-20250228/GPT-SoVITS-v3lora-20250228",
+          "reason": "unreadable_or_icloud_placeholder"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/LINMING-tech/AI-girl/GPT-SoVITS-main/GPT-SoVITS-main",
+          "reason": "unreadable_or_icloud_placeholder"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/LINMING-tech/ziyong/SpatialLM-main/SpatialLM-main",
+          "reason": "unreadable_or_icloud_placeholder"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/LINMING-tech/real-core/pay-son-sword",
+          "reason": "unreadable_or_icloud_placeholder"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/kylin-React-web/thinking-engine",
+          "reason": "unreadable_or_icloud_placeholder"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/kylin-React-web/white-front-guanwang",
+          "reason": "unreadable_or_icloud_placeholder"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/kylin-React-web/ai-laboratory",
+          "reason": "unreadable_or_icloud_placeholder"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/kylin-React-web/全能AI王",
+          "reason": "unreadable_or_icloud_placeholder"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/kylin-React-web/侘寂风格官网",
+          "reason": "unreadable_or_icloud_placeholder"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/kylin-React-web/ai-toolbox",
+          "reason": "unreadable_or_icloud_placeholder"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/kylin-React-web/memory-ai-chat/memory_ai_chat",
+          "reason": "unreadable_or_icloud_placeholder"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/kylin-React-web/startup-simulator",
+          "reason": "unreadable_or_icloud_placeholder"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/kylin-React-web/web3-card-game",
+          "reason": "unreadable_or_icloud_placeholder"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/kylin-React-web/虚拟直播间",
+          "reason": "unreadable_or_icloud_placeholder"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/kylin-React-web/pet-water-cup-website",
+          "reason": "unreadable_or_icloud_placeholder"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/kylin-React-web/cloud-thinking",
+          "reason": "unreadable_or_icloud_placeholder"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/project-1/LINMING-space",
+          "reason": "container_directory_with_child_projects"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/秋招作品/机械臂/P340_AI_Answering-main/P340_AI_Answering-main",
+          "reason": "unreadable_or_icloud_placeholder"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/会议工具/smart-meet",
+          "reason": "already_archived_in_central_project_backups"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/会议工具/zj-meeting",
+          "reason": "already_archived_in_central_project_backups"
+        },
+        {
+          "source_path": "/Users/shixianping/Projects/02-AI教育/会议工具/zj-smart-meeting",
+          "reason": "already_archived_in_central_project_backups"
+        },
+        {
+          "source_path": "/Users/shixianping/Desktop/桌面 - fenny的MacBook Pro/P340_AI_Answering-main",
+          "reason": "deferred_to_next_run"
+        },
+        {
+          "source_path": "/Users/shixianping/Downloads/True-Story-of-Pangu-main",
+          "reason": "deferred_to_next_run"
+        },
+        {
+          "source_path": "/Users/shixianping/Downloads/P340_AI_Answering",
+          "reason": "already_archived_in_central_project_backups"
+        },
+        {
+          "source_path": "/Users/shixianping/Downloads/04-文档资料",
+          "reason": "deferred_to_next_run"
+        }
+      ],
+      "finished_at": "2026-05-22T15:31:05+08:00",
       "status": "archived_projects"
     }
   ]
