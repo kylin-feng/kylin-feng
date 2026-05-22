@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>幸运色生成器 - 颜色生成</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="logo-icon">🎨</span>
+                <span class="logo-text">幸运色生成器</span>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">主页</a>
+                </li>
+                <li class="nav-item">
+                    <a href="color-generator.html" class="nav-link active">颜色生成</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="generator-container">
+            <div class="generator-header">
+                <h1 class="generator-title">今日幸运色</h1>
+                <p class="generator-subtitle">点击按钮获取你的专属幸运色</p>
+            </div>
+
+            <div class="generator-content">
+                <div class="generate-section">
+                    <button id="generateBtn" class="generate-btn">
+                        <span class="btn-icon">🎲</span>
+                        <span class="btn-text">生成幸运色</span>
+                    </button>
+                    <div class="loading-spinner" id="loadingSpinner" style="display: none;">
+                        <div class="spinner"></div>
+                        <p>正在生成...</p>
+                    </div>
+                </div>
+
+                <div class="result-section" id="resultSection" style="display: none;">
+                    <div class="result-header">
+                        <h2>你的幸运色</h2>
+                        <p class="result-description" id="resultDescription"></p>
+                    </div>
+                    
+                    <div class="color-display" id="colorDisplay">
+                        <!-- 颜色将在这里动态显示 -->
+                    </div>
+
+                    <div class="color-details">
+                        <h3>颜色寓意</h3>
+                        <div class="color-meaning" id="colorMeaning">
+                            <!-- 颜色寓意将在这里显示 -->
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button id="shareBtn" class="btn btn-secondary">
+                            <span class="btn-icon">📤</span>
+                            分享结果
+                        </button>
+                        <button id="hardwareBtn" class="btn btn-primary">
+                            <span class="btn-icon">🎯</span>
+                            发送到硬件
+                        </button>
+                        <button id="newGenerateBtn" class="btn btn-primary">
+                            <span class="btn-icon">🔄</span>
+                            重新生成
+                        </button>
+                    </div>
+                </div>
+
+                <div class="history-section">
+                    <h3>今日历史</h3>
+                    <div class="history-list" id="historyList">
+                        <!-- 历史记录将在这里显示 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2024 幸运色生成器. 让每一天都充满色彩与好运.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html> 

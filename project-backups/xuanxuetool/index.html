@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>杭小算-AI运势</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* 全局样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: linear-gradient(135deg, #f8f8f8 0%, #e8e8e8 50%, #d8d8d8 100%);
+            min-height: 100vh;
+            color: #2c2c2c;
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 15% 85%, rgba(44,44,44,0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 85% 15%, rgba(44,44,44,0.06) 0%, transparent 60%),
+                radial-gradient(ellipse at 50% 50%, rgba(44,44,44,0.04) 0%, transparent 70%),
+                linear-gradient(135deg, transparent 0%, rgba(44,44,44,0.02) 50%, transparent 100%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 25% 25%, rgba(44,44,44,0.03) 0%, transparent 40%),
+                radial-gradient(circle at 75% 75%, rgba(44,44,44,0.02) 0%, transparent 40%);
+            pointer-events: none;
+            z-index: -1;
+            animation: liquidFlow 20s ease-in-out infinite;
+        }
+
+        @keyframes liquidFlow {
+            0%, 100% { 
+                transform: translateX(0) translateY(0) rotate(0deg);
+                opacity: 0.3;
+            }
+            25% { 
+                transform: translateX(10px) translateY(-5px) rotate(1deg);
+                opacity: 0.5;
+            }
+            50% { 
+                transform: translateX(-5px) translateY(10px) rotate(-1deg);
+                opacity: 0.4;
+            }
+            75% { 
+                transform: translateX(5px) translateY(-10px) rotate(0.5deg);
+                opacity: 0.6;
+            }
+        }
+
+        .app {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 头部样式 */
+        .header {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(30px) saturate(180%);
+            padding: 1.5rem 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.1) 0%, 
+                rgba(255, 255, 255, 0.05) 50%, 
+                rgba(255, 255, 255, 0.1) 100%);
+            pointer-events: none;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #2c2c2c;
+            justify-content: center;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo i {
+            font-size: 1.8rem;
+            color: #2c2c2c;
+            filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.2));
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover i {
+            transform: rotate(360deg) scale(1.1);
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
+        }
+
+        /* 主要内容区域 */
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 聊天界面样式 */
+        .chat-screen {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 80px);
+        }
+
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-width: 100%;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .message {
+            display: flex;
+            gap: 0.5rem;
+            max-width: 85%;
+            animation: messageSlide 0.3s ease-out;
+            position: relative;
+        }
+
+        .message:hover {
+            transform: translateY(-2px);
+            transition: transform 0.3s ease;
+        }
+
+        .message:hover .message-content {
+            box-shadow: 
+                0 12px 40px rgba(0, 0, 0, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .ai-message {
+            align-self: flex-start;
+        }
+
+        .user-message {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .ai-message .message-avatar {
+            background: linear-gradient(45deg, #2c2c2c, #4a4a4a);
+            color: white;
+            border: 2px solid #2c2c2c;
+        }
+
+        .user-message .message-avatar {
+            background: linear-gradient(45deg, #4a4a4a, #2c2c2c);
+            color: white;
+            border: 2px solid #2c2c2c;
+        }
+
+        .message-content {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(20px) saturate(180%);
+            padding: 1.2rem;
+            border-radius: 20px;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            word-wrap: break-word;
+            line-height: 1.6;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .message-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.1) 0%, 
+                rgba(255, 255, 255, 0.05) 50%, 
+                rgba(255, 255, 255, 0.1) 100%);
+            border-radius: 20px;
+            pointer-events: none;
+        }
+
+        .message-content::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: shimmer 3s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { transform: translateX(-100%) translateY(-100%) rotate(0deg); }
+            50% { transform: translateX(100%) translateY(100%) rotate(180deg); }
+        }
+
+        .ai-message .message-content {
+            border-bottom-left-radius: 5px;
+            border-left: 3px solid #2c2c2c;
+        }
+
+        .user-message .message-content {
+            border-bottom-right-radius: 5px;
+            background: linear-gradient(135deg, #2c2c2c, #4a4a4a);
+            color: white;
+            border-right: 3px solid #2c2c2c;
+        }
+
+        /* 聊天输入区域 */
+        .chat-input {
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(30px) saturate(180%);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 
+                0 -8px 32px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chat-input::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.1) 0%, 
+                rgba(255, 255, 255, 0.05) 50%, 
+                rgba(255, 255, 255, 0.1) 100%);
+            pointer-events: none;
+        }
+
+        .date-input-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .date-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .date-input-group label {
+            color: #2c2c2c;
+            font-weight: 600;
+            text-align: center;
+            font-size: 1.1rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        #birthDate {
+            padding: 1rem 1.2rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px) saturate(180%);
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+            text-align: center;
+            color: #2c2c2c;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #birthDate::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.1) 0%, 
+                rgba(255, 255, 255, 0.05) 50%, 
+                rgba(255, 255, 255, 0.1) 100%);
+            border-radius: 25px;
+            pointer-events: none;
+        }
+
+        #birthDate:focus {
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 
+                0 0 0 3px rgba(255, 255, 255, 0.2),
+                0 8px 32px rgba(0, 0, 0, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        #calculateBtn {
+            background: linear-gradient(135deg, 
+                rgba(44, 44, 44, 0.8) 0%, 
+                rgba(74, 74, 74, 0.8) 100%);
+            backdrop-filter: blur(20px) saturate(180%);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 1.2rem 2.5rem;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            min-width: 220px;
+            justify-content: center;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #calculateBtn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.1) 0%, 
+                rgba(255, 255, 255, 0.05) 50%, 
+                rgba(255, 255, 255, 0.1) 100%);
+            border-radius: 25px;
+            pointer-events: none;
+        }
+
+        #calculateBtn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s ease;
+        }
+
+        #calculateBtn:hover {
+            transform: translateY(-3px);
+            box-shadow: 
+                0 12px 40px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        #calculateBtn:hover::after {
+            left: 100%;
+        }
+
+        #calculateBtn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            background: linear-gradient(135deg, 
+                rgba(102, 102, 102, 0.8) 0%, 
+                rgba(136, 136, 136, 0.8) 100%);
+        }
+
+        /* 打字效果 */
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #2c2c2c;
+            font-style: italic;
+            opacity: 0.8;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 0.2rem;
+        }
+
+        .typing-dots span {
+            width: 6px;
+            height: 6px;
+            background: #2c2c2c;
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out;
+            opacity: 0.7;
+        }
+
+        .typing-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+                opacity: 0.4;
+            }
+            30% {
+                transform: translateY(-10px);
+                opacity: 1;
+            }
+        }
+
+        /* 滚动条样式 */
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: rgba(44, 44, 44, 0.1);
+            border-radius: 3px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #2c2c2c, #4a4a4a);
+            border-radius: 3px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #1a1a1a, #2c2c2c);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 480px) {
+            .message {
+                max-width: 90%;
+            }
+            
+            .message-content {
+                padding: 0.8rem;
+                font-size: 0.9rem;
+            }
+            
+            .quick-actions {
+                gap: 0.3rem;
+            }
+            
+            .quick-btn {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <!-- 头部 -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-yin-yang"></i>
+                <span>杭小算-AI运势</span>
+            </div>
+        </header>
+
+        <!-- 主要内容 -->
+        <main class="main">
+            <!-- 聊天界面 -->
+            <div class="chat-screen" id="chatScreen">
+                <div class="chat-container">
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message ai-message">
+                            <div class="message-avatar">
+                                <i class="fas fa-yin-yang"></i>
+                            </div>
+                            <div class="message-content">
+                                你好！我是杭小算，专门为你提供梅花易数运势测算。<br><br>
+                                请选择你的出生日期，我会运用古老的梅花易数为你分析今日运势！
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-input">
+                        <div class="date-input-container">
+                            <div class="date-input-group">
+                                <label for="birthDate">选择出生日期</label>
+                                <input type="date" id="birthDate" required>
+                            </div>
+                            <button id="calculateBtn" onclick="calculateFortune()">
+                                <i class="fas fa-yin-yang"></i>
+                                梅花易数测算
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // 全局变量
+        let isTyping = false;
+
+        // 梅花易数数据
+        const plumBlossomData = {
+            // 八卦
+            trigrams: [
+                { name: "乾", symbol: "☰", element: "金", nature: "天", meaning: "刚健、领导、父亲" },
+                { name: "坤", symbol: "☷", element: "土", nature: "地", meaning: "柔顺、包容、母亲" },
+                { name: "震", symbol: "☳", element: "木", nature: "雷", meaning: "动、变化、长子" },
+                { name: "巽", symbol: "☴", element: "木", nature: "风", meaning: "入、渗透、长女" },
+                { name: "坎", symbol: "☵", element: "水", nature: "水", meaning: "险、智慧、中男" },
+                { name: "离", symbol: "☲", element: "火", nature: "火", meaning: "明、文明、中女" },
+                { name: "艮", symbol: "☶", element: "土", nature: "山", meaning: "止、稳重、少男" },
+                { name: "兑", symbol: "☱", element: "金", nature: "泽", meaning: "悦、口舌、少女" }
+            ],
+            
+            // 五行
+            elements: ["金", "木", "水", "火", "土"],
+            
+            // 运势等级
+            fortuneLevels: ["大吉", "中吉", "小吉", "平", "小凶", "中凶", "大凶"],
+            
+            // 方位
+            directions: ["东", "南", "西", "北", "东南", "西南", "西北", "东北"],
+            
+            // 颜色
+            colors: ["白色", "绿色", "黑色", "红色", "黄色", "蓝色", "紫色", "橙色"]
+        };
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+        });
+
+        // 初始化应用
+        function initializeApp() {
+            // 设置默认日期为今天
+            const today = new Date().toISOString().split('T')[0];
+            const birthDateInput = document.getElementById('birthDate');
+            if (birthDateInput) {
+                birthDateInput.value = today;
+            }
+        }
+
+        // 测算今日运势
+        function calculateFortune() {
+            const birthDateInput = document.getElementById('birthDate');
+            const calculateBtn = document.getElementById('calculateBtn');
+            
+            if (!birthDateInput.value) {
+                alert('请选择出生日期');
+                return;
+            }
+            
+            if (isTyping) return;
+            
+            // 禁用按钮
+            if (calculateBtn) {
+                calculateBtn.disabled = true;
+            }
+            
+            // 显示AI正在思考
+            showTypingIndicator();
+            
+            // 模拟AI思考时间
+            setTimeout(() => {
+                hideTypingIndicator();
+                const response = generateFortuneResponse(birthDateInput.value);
+                addMessage(response, 'ai');
+                
+                // 重新启用按钮
+                if (calculateBtn) {
+                    calculateBtn.disabled = false;
+                }
+            }, 2000 + Math.random() * 1000);
+        }
+
+        // 添加消息到聊天界面
+        function addMessage(content, sender) {
+            const chatMessages = document.getElementById('chatMessages');
+            if (!chatMessages) return;
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}-message`;
+            
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            avatar.innerHTML = sender === 'ai' ? '<i class="fas fa-yin-yang"></i>' : '<i class="fas fa-user"></i>';
+            
+            const messageContent = document.createElement('div');
+            messageContent.className = 'message-content';
+            messageContent.innerHTML = content.replace(/\n/g, '<br>');
+            
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(messageContent);
+            chatMessages.appendChild(messageDiv);
+            
+            // 滚动到底部
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // 显示打字指示器
+        function showTypingIndicator() {
+            const chatMessages = document.getElementById('chatMessages');
+            if (!chatMessages) return;
+            
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message ai-message typing-message';
+            typingDiv.id = 'typingIndicator';
+            
+            typingDiv.innerHTML = `
+                <div class="message-avatar">
+                    <i class="fas fa-yin-yang"></i>
+                </div>
+                <div class="message-content typing-indicator">
+                    AI正在思考
+                    <div class="typing-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            `;
+            
+            chatMessages.appendChild(typingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            isTyping = true;
+        }
+
+        // 隐藏打字指示器
+        function hideTypingIndicator() {
+            const typingIndicator = document.getElementById('typingIndicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+            isTyping = false;
+        }
+
+        // 生成梅花易数运势响应
+        function generateFortuneResponse(birthDate) {
+            const date = new Date(birthDate);
+            const month = date.getMonth() + 1;
+            const day = date.getDate();
+            const hour = new Date().getHours();
+            
+            // 梅花易数起卦
+            const upperTrigram = plumBlossomData.trigrams[Math.floor(Math.random() * 8)];
+            const lowerTrigram = plumBlossomData.trigrams[Math.floor(Math.random() * 8)];
+            const changingLine = Math.floor(Math.random() * 6) + 1;
+            
+            // 生成运势
+            const overallFortune = plumBlossomData.fortuneLevels[Math.floor(Math.random() * 7)];
+            const loveFortune = plumBlossomData.fortuneLevels[Math.floor(Math.random() * 7)];
+            const careerFortune = plumBlossomData.fortuneLevels[Math.floor(Math.random() * 7)];
+            const wealthFortune = plumBlossomData.fortuneLevels[Math.floor(Math.random() * 7)];
+            const healthFortune = plumBlossomData.fortuneLevels[Math.floor(Math.random() * 7)];
+            
+            // 幸运元素
+            const luckyElement = plumBlossomData.elements[Math.floor(Math.random() * 5)];
+            const luckyDirection = plumBlossomData.directions[Math.floor(Math.random() * 8)];
+            const luckyColor = plumBlossomData.colors[Math.floor(Math.random() * 8)];
+            
+            return `🌸 <strong>梅花易数今日运势</strong><br><br>
+            <strong>🔮 起卦信息：</strong><br>
+            • 上卦：${upperTrigram.name} ${upperTrigram.symbol} (${upperTrigram.nature})<br>
+            • 下卦：${lowerTrigram.name} ${lowerTrigram.symbol} (${lowerTrigram.nature})<br>
+            • 变爻：第${changingLine}爻<br><br>
+            
+            <strong>📊 今日运势总览：</strong><br>
+            • 综合运势：${overallFortune}<br>
+            • 感情运势：${loveFortune}<br>
+            • 事业运势：${careerFortune}<br>
+            • 财运状况：${wealthFortune}<br>
+            • 健康运势：${healthFortune}<br><br>
+            
+            <strong>🌸 梅花易数解析：</strong><br>
+            ${getPlumBlossomInterpretation(upperTrigram, lowerTrigram, changingLine)}<br><br>
+            
+            <strong>🌟 今日宜忌：</strong><br>
+            • 幸运方位：${luckyDirection}<br>
+            • 幸运颜色：${luckyColor}<br>
+            • 幸运元素：${luckyElement}<br>
+            • 幸运时辰：${getLuckyHour(hour)}<br><br>
+            
+            <strong>💫 梅花易数建议：</strong><br>
+            ${getPlumBlossomAdvice(overallFortune, upperTrigram, lowerTrigram)}`;
+        }
+
+        // 梅花易数解析
+        function getPlumBlossomInterpretation(upperTrigram, lowerTrigram, changingLine) {
+            const interpretations = [
+                `上卦${upperTrigram.name}代表${upperTrigram.meaning}，下卦${lowerTrigram.name}代表${lowerTrigram.meaning}。`,
+                `第${changingLine}爻变化，预示着${getChangingLineMeaning(changingLine)}。`,
+                `此卦象显示今日${getTrigramCombination(upperTrigram, lowerTrigram)}，`,
+                `建议${getTrigramAdvice(upperTrigram, lowerTrigram)}。`
+            ];
+            
+            return interpretations.join(' ');
+        }
+
+        // 变爻含义
+        function getChangingLineMeaning(line) {
+            const meanings = [
+                "初爻变，基础稳固，适合开始新计划",
+                "二爻变，人际关系重要，注意沟通",
+                "三爻变，内心变化，需要调整心态",
+                "四爻变，外部环境变化，需要适应",
+                "五爻变，领导地位，需要承担责任",
+                "上爻变，达到顶点，需要谨慎行事"
+            ];
+            return meanings[line - 1];
+        }
+
+        // 卦象组合解析
+        function getTrigramCombination(upper, lower) {
+            const combinations = [
+                "天地交泰，阴阳调和，运势平稳",
+                "雷风相薄，变化迅速，需要灵活应对",
+                "水火既济，矛盾统一，需要平衡",
+                "山泽通气，内外和谐，运势良好",
+                "天雷无妄，诚实守信，避免妄为",
+                "地火明夷，光明被掩，需要耐心",
+                "风山渐，循序渐进，稳步发展",
+                "水天需，等待时机，不可急躁"
+            ];
+            return combinations[Math.floor(Math.random() * combinations.length)];
+        }
+
+        // 卦象建议
+        function getTrigramAdvice(upper, lower) {
+            const advice = [
+                "保持内心平静，顺应自然规律",
+                "发挥主动性，但不可过于急躁",
+                "注重人际关系，寻求他人帮助",
+                "保持谦逊态度，学习他人长处",
+                "坚持原则，但要有灵活性",
+                "保持耐心，等待合适时机",
+                "发挥创造力，寻找新的机会",
+                "保持平衡，避免极端行为"
+            ];
+            return advice[Math.floor(Math.random() * advice.length)];
+        }
+
+        // 获取幸运时辰
+        function getLuckyHour(hour) {
+            const timeSlots = [
+                "子时(23-1点)", "丑时(1-3点)", "寅时(3-5点)", "卯时(5-7点)",
+                "辰时(7-9点)", "巳时(9-11点)", "午时(11-13点)", "未时(13-15点)",
+                "申时(15-17点)", "酉时(17-19点)", "戌时(19-21点)", "亥时(21-23点)"
+            ];
+            return timeSlots[Math.floor(Math.random() * timeSlots.length)];
+        }
+
+        // 梅花易数建议
+        function getPlumBlossomAdvice(fortune, upper, lower) {
+            const adviceMap = {
+                "大吉": "今日运势极佳，适合重要决策和行动，把握机会，但不可骄傲自满。",
+                "中吉": "运势良好，可以积极行动，但需要保持谨慎，避免过度自信。",
+                "小吉": "运势平稳，适合稳步发展，保持积极心态，会有小收获。",
+                "平": "运势平稳，保持现状，不宜大动作，适合思考和规划。",
+                "小凶": "运势不佳，需要谨慎行事，避免重要决策，保持低调。",
+                "中凶": "运势较差，需要特别小心，避免冲突，保持耐心等待。",
+                "大凶": "运势极差，不宜重要行动，保持低调，等待时机转变。"
+            };
+            
+            return adviceMap[fortune] || adviceMap["平"];
+        }
+    </script>
+</body>
+</html>

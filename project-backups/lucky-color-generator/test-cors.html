@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>跨域测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .test-section {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .result {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            white-space: pre-wrap;
+        }
+        .error {
+            background: rgba(255, 0, 0, 0.3);
+        }
+        .success {
+            background: rgba(0, 255, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <h1>🎨 跨域测试页面</h1>
+    
+    <div class="test-section">
+        <h2>测试健康检查API</h2>
+        <button onclick="testHealth()">测试 /health</button>
+        <div id="healthResult" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>测试幸运色API</h2>
+        <button onclick="testLuckyColor()">测试 /api/lucky-color</button>
+        <div id="luckyColorResult" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>测试颜色定义API</h2>
+        <button onclick="testColors()">测试 /api/colors</button>
+        <div id="colorsResult" class="result"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://10.10.100.19:5001';
+        
+        async function testHealth() {
+            const resultDiv = document.getElementById('healthResult');
+            resultDiv.textContent = '测试中...';
+            resultDiv.className = 'result';
+            
+            try {
+                const response = await fetch(`${API_BASE}/health`);
+                const data = await response.json();
+                resultDiv.textContent = `✅ 成功!\n状态: ${JSON.stringify(data, null, 2)}`;
+                resultDiv.className = 'result success';
+            } catch (error) {
+                resultDiv.textContent = `❌ 失败!\n错误: ${error.message}`;
+                resultDiv.className = 'result error';
+            }
+        }
+        
+        async function testLuckyColor() {
+            const resultDiv = document.getElementById('luckyColorResult');
+            resultDiv.textContent = '测试中...';
+            resultDiv.className = 'result';
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/lucky-color`);
+                const data = await response.json();
+                resultDiv.textContent = `✅ 成功!\n数据: ${JSON.stringify(data, null, 2)}`;
+                resultDiv.className = 'result success';
+            } catch (error) {
+                resultDiv.textContent = `❌ 失败!\n错误: ${error.message}`;
+                resultDiv.className = 'result error';
+            }
+        }
+        
+        async function testColors() {
+            const resultDiv = document.getElementById('colorsResult');
+            resultDiv.textContent = '测试中...';
+            resultDiv.className = 'result';
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/colors`);
+                const data = await response.json();
+                resultDiv.textContent = `✅ 成功!\n数据: ${JSON.stringify(data, null, 2)}`;
+                resultDiv.className = 'result success';
+            } catch (error) {
+                resultDiv.textContent = `❌ 失败!\n错误: ${error.message}`;
+                resultDiv.className = 'result error';
+            }
+        }
+    </script>
+</body>
+</html> 

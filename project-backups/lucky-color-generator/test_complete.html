@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>完整流程测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .test-section {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .result {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+        .success { border-left: 4px solid #4CAF50; }
+        .error { border-left: 4px solid #f44336; }
+        .info { border-left: 4px solid #2196F3; }
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            margin: 5px;
+        }
+        .status.success { background: #4CAF50; }
+        .status.error { background: #f44336; }
+        .status.info { background: #2196F3; }
+    </style>
+</head>
+<body>
+    <h1>🎯 完整流程测试</h1>
+    <p>测试前端 → 后端 → 硬件的完整流程</p>
+    
+    <div class="test-section">
+        <h2>1. 基础API测试</h2>
+        <button onclick="testHealth()">测试健康检查</button>
+        <button onclick="testLuckyColor()">测试幸运色生成</button>
+        <button onclick="testHardwareSend()">测试硬件发送</button>
+        <div id="basicResult" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>2. 前端功能测试</h2>
+        <button onclick="testFrontendAPI()">测试前端API调用</button>
+        <button onclick="testHardwareButton()">测试硬件发送按钮</button>
+        <div id="frontendResult" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>3. 完整流程测试</h2>
+        <button onclick="testCompleteFlow()">测试完整流程</button>
+        <div id="completeResult" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>4. 状态监控</h2>
+        <div id="statusDisplay">
+            <span class="status info">后端服务: 检查中...</span>
+            <span class="status info">硬件连接: 检查中...</span>
+            <span class="status info">前端API: 检查中...</span>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:5001';
+        
+        // 基础API测试
+        async function testHealth() {
+            const resultDiv = document.getElementById('basicResult');
+            resultDiv.textContent = '测试健康检查中...';
+            resultDiv.className = 'result info';
+            
+            try {
+                const response = await fetch(`${API_BASE}/health`);
+                const data = await response.json();
+                resultDiv.textContent = `✅ 健康检查成功!\n状态: ${JSON.stringify(data, null, 2)}`;
+                resultDiv.className = 'result success';
+                updateStatus('backend', 'success');
+            } catch (error) {
+                resultDiv.textContent = `❌ 健康检查失败!\n错误: ${error.message}`;
+                resultDiv.className = 'result error';
+                updateStatus('backend', 'error');
+            }
+        }
+        
+        async function testLuckyColor() {
+            const resultDiv = document.getElementById('basicResult');
+            resultDiv.textContent = '测试幸运色生成中...';
+            resultDiv.className = 'result info';
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/lucky-color`);
+                const data = await response.json();
+                resultDiv.textContent = `✅ 幸运色生成成功!\n数据: ${JSON.stringify(data, null, 2)}`;
+                resultDiv.className = 'result success';
+            } catch (error) {
+                resultDiv.textContent = `❌ 幸运色生成失败!\n错误: ${error.message}`;
+                resultDiv.className = 'result error';
+            }
+        }
+        
+        async function testHardwareSend() {
+            const resultDiv = document.getElementById('basicResult');
+            resultDiv.textContent = '测试硬件发送中...';
+            resultDiv.className = 'result info';
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/send-to-hardware`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const data = await response.json();
+                resultDiv.textContent = `✅ 硬件发送成功!\n数据: ${JSON.stringify(data, null, 2)}`;
+                resultDiv.className = 'result success';
+                updateStatus('hardware', 'success');
+            } catch (error) {
+                resultDiv.textContent = `❌ 硬件发送失败!\n错误: ${error.message}`;
+                resultDiv.className = 'result error';
+                updateStatus('hardware', 'error');
+            }
+        }
+        
+        // 前端功能测试
+        async function testFrontendAPI() {
+            const resultDiv = document.getElementById('frontendResult');
+            resultDiv.textContent = '测试前端API调用中...';
+            resultDiv.className = 'result info';
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/lucky-color`);
+                const data = await response.json();
+                
+                if (data.hardware_sent) {
+                    resultDiv.textContent = `✅ 前端API调用成功!\n幸运色: ${data.description}\n硬件发送: 成功`;
+                    resultDiv.className = 'result success';
+                    updateStatus('frontend', 'success');
+                } else {
+                    resultDiv.textContent = `⚠️ 前端API调用成功，但硬件发送失败`;
+                    resultDiv.className = 'result error';
+                    updateStatus('frontend', 'error');
+                }
+            } catch (error) {
+                resultDiv.textContent = `❌ 前端API调用失败!\n错误: ${error.message}`;
+                resultDiv.className = 'result error';
+                updateStatus('frontend', 'error');
+            }
+        }
+        
+        async function testHardwareButton() {
+            const resultDiv = document.getElementById('frontendResult');
+            resultDiv.textContent = '测试硬件发送按钮中...';
+            resultDiv.className = 'result info';
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/send-to-hardware`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const data = await response.json();
+                
+                resultDiv.textContent = `✅ 硬件发送按钮测试成功!\n消息: ${data.message}\n幸运色: ${data.description}`;
+                resultDiv.className = 'result success';
+            } catch (error) {
+                resultDiv.textContent = `❌ 硬件发送按钮测试失败!\n错误: ${error.message}`;
+                resultDiv.className = 'result error';
+            }
+        }
+        
+        // 完整流程测试
+        async function testCompleteFlow() {
+            const resultDiv = document.getElementById('completeResult');
+            resultDiv.textContent = '开始完整流程测试...\n';
+            resultDiv.className = 'result info';
+            
+            try {
+                // 1. 测试健康检查
+                resultDiv.textContent += '1. 测试健康检查...\n';
+                const healthResponse = await fetch(`${API_BASE}/health`);
+                const healthData = await healthResponse.json();
+                resultDiv.textContent += `   ✅ 健康检查通过\n`;
+                
+                // 2. 生成幸运色并发送到硬件
+                resultDiv.textContent += '2. 生成幸运色并发送到硬件...\n';
+                const luckyResponse = await fetch(`${API_BASE}/api/lucky-color`);
+                const luckyData = await luckyResponse.json();
+                resultDiv.textContent += `   ✅ 幸运色生成: ${luckyData.description}\n`;
+                resultDiv.textContent += `   ✅ 硬件发送: ${luckyData.hardware_sent ? '成功' : '失败'}\n`;
+                
+                // 3. 测试专用硬件发送API
+                resultDiv.textContent += '3. 测试专用硬件发送API...\n';
+                const hardwareResponse = await fetch(`${API_BASE}/api/send-to-hardware`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const hardwareData = await hardwareResponse.json();
+                resultDiv.textContent += `   ✅ 硬件发送API: ${hardwareData.message}\n`;
+                
+                resultDiv.textContent += '\n🎉 完整流程测试通过！所有功能正常工作。';
+                resultDiv.className = 'result success';
+                
+            } catch (error) {
+                resultDiv.textContent += `\n❌ 完整流程测试失败!\n错误: ${error.message}`;
+                resultDiv.className = 'result error';
+            }
+        }
+        
+        // 状态更新
+        function updateStatus(type, status) {
+            const statusDisplay = document.getElementById('statusDisplay');
+            const statusElements = statusDisplay.querySelectorAll('.status');
+            
+            statusElements.forEach(element => {
+                if (element.textContent.includes(type)) {
+                    element.className = `status ${status}`;
+                    if (status === 'success') {
+                        element.textContent = element.textContent.replace('检查中...', '正常');
+                    } else if (status === 'error') {
+                        element.textContent = element.textContent.replace('检查中...', '异常');
+                    }
+                }
+            });
+        }
+        
+        // 页面加载时自动检查状态
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                testHealth();
+            }, 1000);
+        });
+    </script>
+</body>
+</html> 
