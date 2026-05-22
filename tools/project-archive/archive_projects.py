@@ -282,7 +282,7 @@ def classify_candidate(path: Path, index: dict[str, Any], backup_slugs: set[str]
     try:
         child_projects = [child for child in path.iterdir() if child.is_dir() and has_project_marker(child)]
         own_markers = {name for name in MARKER_FILES if (path / name).exists()}
-        if child_projects and not (path / ".git").exists() and own_markers <= {"README.md"}:
+        if child_projects and not (path / ".git").exists() and own_markers <= {"README.md", "requirements.txt"}:
             return False, "container_directory_with_child_projects"
     except OSError:
         return False, "unreadable_or_icloud_placeholder"
