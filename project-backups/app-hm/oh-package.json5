@@ -1,0 +1,11 @@
+{
+  "modelVersion": "6.0.0",
+  "name": "ai-writer",
+  "version": "1.0.0",
+  "description": "AI小说生成器鸿蒙应用",
+  "main": "src/main/ets/entryability/EntryAbility.ets",
+  "author": "",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {}
+}

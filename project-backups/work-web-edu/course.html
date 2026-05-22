@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>课程详情 - Q AI圈</title>
+    <!-- shadcn/ui CSS via CDN -->
+    <link rel="stylesheet" href="https://ui.shadcn.com/themes/default.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: ["class"],
+            content: ["./course.html"],
+            theme: {
+                container: {
+                    center: true,
+                    padding: "2rem",
+                    screens: {
+                        "2xl": "1400px",
+                    },
+                },
+                extend: {
+                    colors: {
+                        border: "hsl(var(--border))",
+                        input: "hsl(var(--input))",
+                        ring: "hsl(var(--ring))",
+                        background: "hsl(var(--background))",
+                        foreground: "hsl(var(--foreground))",
+                        primary: {
+                            DEFAULT: "hsl(var(--primary))",
+                            foreground: "hsl(var(--primary-foreground))",
+                        },
+                        secondary: {
+                            DEFAULT: "hsl(var(--secondary))",
+                            foreground: "hsl(var(--secondary-foreground))",
+                        },
+                        muted: {
+                            DEFAULT: "hsl(var(--muted))",
+                            foreground: "hsl(var(--muted-foreground))",
+                        },
+                        accent: {
+                            DEFAULT: "hsl(var(--accent))",
+                            foreground: "hsl(var(--accent-foreground))",
+                        },
+                        card: {
+                            DEFAULT: "hsl(var(--card))",
+                            foreground: "hsl(var(--card-foreground))",
+                        },
+                    },
+                    borderRadius: {
+                        lg: "var(--radius)",
+                        md: "calc(var(--radius) - 2px)",
+                        sm: "calc(var(--radius) - 4px)",
+                    },
+                    keyframes: {
+                        "fade-in": {
+                            from: { opacity: 0, transform: "translateY(20px)" },
+                            to: { opacity: 1, transform: "translateY(0)" },
+                        },
+                    },
+                    animation: {
+                        "fade-in": "fade-in 0.6s ease-out forwards",
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        :root {
+            --background: 0 0% 100%;
+            --foreground: 222.2 84% 4.9%;
+            --card: 0 0% 100%;
+            --card-foreground: 222.2 84% 4.9%;
+            --primary: 222.2 47.4% 11.2%;
+            --primary-foreground: 210 40% 98%;
+            --secondary: 210 40% 96%;
+            --secondary-foreground: 222.2 84% 4.9%;
+            --muted: 210 40% 96%;
+            --muted-foreground: 215.4 16.3% 46.9%;
+            --accent: 210 40% 96%;
+            --accent-foreground: 222.2 84% 4.9%;
+            --border: 214.3 31.8% 91.4%;
+            --input: 214.3 31.8% 91.4%;
+            --ring: 222.2 84% 4.9%;
+            --radius: 0.5rem;
+        }
+
+        body {
+            background-color: hsl(var(--background));
+            color: hsl(var(--foreground));
+        }
+
+        .animate-delay-100 { animation-delay: 0.1s; }
+        .animate-delay-200 { animation-delay: 0.2s; }
+        .animate-delay-300 { animation-delay: 0.3s; }
+        .animate-delay-400 { animation-delay: 0.4s; }
+        .animate-delay-500 { animation-delay: 0.5s; }
+        .animate-delay-600 { animation-delay: 0.6s; }
+        .animate-delay-700 { animation-delay: 0.7s; }
+        .animate-delay-800 { animation-delay: 0.8s; }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="min-h-screen bg-background font-sans antialiased">
+    <!-- Navigation -->
+    <nav class="border-b">
+        <div class="container flex h-14 items-center">
+            <a href="index.html" class="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                ← 返回首页
+            </a>
+        </div>
+    </nav>
+
+    <!-- Course Header -->
+    <section class="container space-y-6 pb-8 pt-6 md:pb-12 md:pt-10">
+        <div class="mx-auto flex max-w-[980px] flex-col gap-2">
+            <div class="opacity-0 animate-fade-in">
+                <div class="inline-flex items-center rounded-lg bg-muted px-3 py-1 text-sm font-medium mb-4">
+                    <span class="w-2 h-2 bg-blue-400 rounded-full mr-2"></span>
+                    AI基础课程
+                </div>
+                <h1 class="text-3xl font-light leading-tight tracking-tighter md:text-4xl lg:text-5xl mb-4">
+                    机器学习与深度学习核心概念
+                </h1>
+                <p class="text-muted-foreground text-lg">
+                    从零开始掌握人工智能核心理论，建立扎实的AI基础
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Course Content -->
+    <section class="container space-y-6 pb-16">
+        <div class="mx-auto grid max-w-4xl gap-4">
+            
+            <!-- Chapter 1 -->
+            <div class="opacity-0 animate-fade-in animate-delay-100">
+                <div class="rounded-lg border bg-card p-6 text-card-foreground shadow-sm">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-lg font-medium">第1章：AI概述与发展历程</h3>
+                        <span class="text-sm text-muted-foreground">2课时</span>
+                    </div>
+                    <div class="space-y-2 text-sm text-muted-foreground">
+                        <div>• 人工智能的定义与分类</div>
+                        <div>• AI发展的三次浪潮</div>
+                        <div>• 当前AI技术现状与趋势</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chapter 2 -->
+            <div class="opacity-0 animate-fade-in animate-delay-200">
+                <div class="rounded-lg border bg-card p-6 text-card-foreground shadow-sm">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-lg font-medium">第2章：机器学习基础</h3>
+                        <span class="text-sm text-muted-foreground">3课时</span>
+                    </div>
+                    <div class="space-y-2 text-sm text-muted-foreground">
+                        <div>• 监督学习与无监督学习</div>
+                        <div>• 回归与分类问题</div>
+                        <div>• 过拟合与正则化</div>
+                        <div>• 模型评估指标</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chapter 3 -->
+            <div class="opacity-0 animate-fade-in animate-delay-300">
+                <div class="rounded-lg border bg-card p-6 text-card-foreground shadow-sm">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-lg font-medium">第3章：神经网络原理</h3>
+                        <span class="text-sm text-muted-foreground">3课时</span>
+                    </div>
+                    <div class="space-y-2 text-sm text-muted-foreground">
+                        <div>• 感知机模型</div>
+                        <div>• 多层感知机与反向传播</div>
+                        <div>• 激活函数选择</div>
+                        <div>• 梯度下降优化算法</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chapter 4 -->
+            <div class="opacity-0 animate-fade-in animate-delay-400">
+                <div class="rounded-lg border bg-card p-6 text-card-foreground shadow-sm">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-lg font-medium">第4章：深度学习架构</h3>
+                        <span class="text-sm text-muted-foreground">2课时</span>
+                    </div>
+                    <div class="space-y-2 text-sm text-muted-foreground">
+                        <div>• 卷积神经网络(CNN)</div>
+                        <div>• 循环神经网络(RNN)</div>
+                        <div>• 注意力机制</div>
+                        <div>• Transformer架构</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chapter 5 -->
+            <div class="opacity-0 animate-fade-in animate-delay-500">
+                <div class="rounded-lg border bg-card p-6 text-card-foreground shadow-sm">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-lg font-medium">第5章：实践项目</h3>
+                        <span class="text-sm text-muted-foreground">2课时</span>
+                    </div>
+                    <div class="space-y-2 text-sm text-muted-foreground">
+                        <div>• 图像分类项目实战</div>
+                        <div>• 文本情感分析</div>
+                        <div>• 模型部署基础</div>
+                        <div>• 性能优化技巧</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course Info -->
+            <div class="opacity-0 animate-fade-in animate-delay-600">
+                <div class="rounded-lg border bg-muted/30 p-6 mt-8">
+                    <div class="grid md:grid-cols-3 gap-4 text-center">
+                        <div>
+                            <div class="text-2xl font-light mb-1">12</div>
+                            <div class="text-sm text-muted-foreground">课时</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-light mb-1">5</div>
+                            <div class="text-sm text-muted-foreground">章节</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-light mb-1">初级</div>
+                            <div class="text-sm text-muted-foreground">难度</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Button -->
+            <div class="opacity-0 animate-fade-in animate-delay-700 text-center pt-8">
+                <button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8">
+                    开始学习
+                </button>
+            </div>
+
+        </div>
+    </section>
+
+    <script>
+        // 页面加载动画
+        document.addEventListener('DOMContentLoaded', function() {
+            // 逐个显示动画元素
+            const fadeElements = document.querySelectorAll('.animate-fade-in');
+            fadeElements.forEach(element => {
+                element.classList.remove('opacity-0');
+            });
+        });
+    </script>
+</body>
+</html>

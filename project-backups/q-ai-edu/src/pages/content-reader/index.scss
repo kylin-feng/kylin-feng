@@ -1,0 +1,346 @@
+.content-reader-page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f8f9fa;
+
+  .top-nav {
+    display: flex;
+    align-items: center;
+    padding: 20px 16px;
+    background-color: #667eea;
+    color: white;
+
+    .back-btn {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 16px;
+      padding: 8px;
+    }
+
+    .page-title {
+      flex: 1;
+      text-align: center;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .nav-spacer {
+      width: 40px;
+    }
+  }
+
+  .content-area {
+    flex: 1;
+    padding: 16px;
+
+    .current-content {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+      .text-content {
+        .section-title {
+          font-size: 20px;
+          font-weight: 600;
+          color: #333;
+          margin-bottom: 16px;
+        }
+
+        .section-text {
+          font-size: 16px;
+          line-height: 1.6;
+          color: #666;
+          white-space: pre-line;
+        }
+      }
+
+      .image-content {
+        .section-title {
+          font-size: 20px;
+          font-weight: 600;
+          color: #333;
+          margin-bottom: 16px;
+        }
+
+        .content-image {
+          width: 100%;
+          border-radius: 8px;
+          margin-bottom: 12px;
+        }
+
+        .image-description {
+          font-size: 14px;
+          color: #888;
+          line-height: 1.5;
+        }
+      }
+
+      .audio-content {
+        .section-title {
+          font-size: 20px;
+          font-weight: 600;
+          color: #333;
+          margin-bottom: 16px;
+        }
+
+        .audio-description {
+          font-size: 14px;
+          color: #888;
+          margin-bottom: 20px;
+        }
+
+        .audio-player {
+          background: #f8f9fa;
+          border-radius: 12px;
+          padding: 20px;
+
+          .audio-controls {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+
+            .play-btn {
+              background: #667eea;
+              color: white;
+              border: none;
+              border-radius: 50%;
+              width: 48px;
+              height: 48px;
+              font-size: 18px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+
+            .progress-info {
+              flex: 1;
+              display: flex;
+              align-items: center;
+              gap: 12px;
+
+              .time-current,
+              .time-total {
+                font-size: 12px;
+                color: #666;
+                min-width: 40px;
+              }
+
+              .progress-bar {
+                flex: 1;
+                height: 4px;
+                background: #e9ecef;
+                border-radius: 2px;
+                overflow: hidden;
+
+                .progress-fill {
+                  height: 100%;
+                  background: #667eea;
+                  transition: width 0.3s ease;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .sections-nav {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+      .nav-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 16px;
+      }
+
+      .sections-list {
+        .section-item {
+          display: flex;
+          align-items: center;
+          padding: 16px;
+          border-radius: 8px;
+          margin-bottom: 8px;
+          transition: all 0.3s ease;
+          cursor: pointer;
+
+          &.active {
+            background: #667eea;
+            color: white;
+
+            .section-type {
+              color: rgba(255, 255, 255, 0.8);
+            }
+          }
+
+          &.locked {
+            opacity: 0.6;
+            background: #f8f9fa;
+          }
+
+          .section-info {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            .section-number {
+              width: 24px;
+              height: 24px;
+              background: #667eea;
+              color: white;
+              border-radius: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 12px;
+              font-weight: 600;
+            }
+
+            .section-title {
+              flex: 1;
+              font-size: 16px;
+              font-weight: 500;
+            }
+
+            .section-type {
+              font-size: 12px;
+              color: #888;
+            }
+          }
+
+          .section-status {
+            .lock-icon,
+            .play-icon {
+              font-size: 16px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .trial-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+
+    .trial-modal {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      margin: 20px;
+      max-width: 300px;
+
+      .modal-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 12px;
+        text-align: center;
+      }
+
+      .modal-content {
+        font-size: 14px;
+        color: #666;
+        line-height: 1.5;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      .modal-buttons {
+        display: flex;
+        gap: 12px;
+
+        .cancel-btn,
+        .buy-btn {
+          flex: 1;
+          padding: 12px;
+          border-radius: 8px;
+          font-size: 14px;
+          border: none;
+        }
+
+        .cancel-btn {
+          background: #f8f9fa;
+          color: #666;
+        }
+
+        .buy-btn {
+          background: #667eea;
+          color: white;
+        }
+      }
+    }
+  }
+
+  .bottom-bar {
+    background: white;
+    padding: 16px;
+    border-top: 1px solid #e9ecef;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    .progress-info {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      .progress-text {
+        font-size: 12px;
+        color: #666;
+        min-width: 60px;
+      }
+
+      .progress-bar {
+        flex: 1;
+        height: 4px;
+        background: #e9ecef;
+        border-radius: 2px;
+        overflow: hidden;
+
+        .progress-fill {
+          height: 100%;
+          background: #667eea;
+          transition: width 0.3s ease;
+        }
+      }
+    }
+
+    .purchase-btn {
+      background: #667eea;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 20px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+  }
+
+  .loading-container,
+  .error-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: #666;
+  }
+}

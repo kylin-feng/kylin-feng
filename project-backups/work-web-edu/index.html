@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Q AI圈</title>
+    <!-- shadcn/ui CSS via CDN -->
+    <link rel="stylesheet" href="https://ui.shadcn.com/themes/default.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: ["class"],
+            content: ["./index.html"],
+            theme: {
+                container: {
+                    center: true,
+                    padding: "2rem",
+                    screens: {
+                        "2xl": "1400px",
+                    },
+                },
+                extend: {
+                    colors: {
+                        border: "hsl(var(--border))",
+                        input: "hsl(var(--input))",
+                        ring: "hsl(var(--ring))",
+                        background: "hsl(var(--background))",
+                        foreground: "hsl(var(--foreground))",
+                        primary: {
+                            DEFAULT: "hsl(var(--primary))",
+                            foreground: "hsl(var(--primary-foreground))",
+                        },
+                        secondary: {
+                            DEFAULT: "hsl(var(--secondary))",
+                            foreground: "hsl(var(--secondary-foreground))",
+                        },
+                        muted: {
+                            DEFAULT: "hsl(var(--muted))",
+                            foreground: "hsl(var(--muted-foreground))",
+                        },
+                        accent: {
+                            DEFAULT: "hsl(var(--accent))",
+                            foreground: "hsl(var(--accent-foreground))",
+                        },
+                        card: {
+                            DEFAULT: "hsl(var(--card))",
+                            foreground: "hsl(var(--card-foreground))",
+                        },
+                    },
+                    borderRadius: {
+                        lg: "var(--radius)",
+                        md: "calc(var(--radius) - 2px)",
+                        sm: "calc(var(--radius) - 4px)",
+                    },
+                    keyframes: {
+                        "fade-in": {
+                            from: { opacity: 0, transform: "translateY(20px)" },
+                            to: { opacity: 1, transform: "translateY(0)" },
+                        },
+                    },
+                    animation: {
+                        "fade-in": "fade-in 0.6s ease-out forwards",
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        :root {
+            --background: 0 0% 100%;
+            --foreground: 222.2 84% 4.9%;
+            --card: 0 0% 100%;
+            --card-foreground: 222.2 84% 4.9%;
+            --primary: 222.2 47.4% 11.2%;
+            --primary-foreground: 210 40% 98%;
+            --secondary: 210 40% 96%;
+            --secondary-foreground: 222.2 84% 4.9%;
+            --muted: 210 40% 96%;
+            --muted-foreground: 215.4 16.3% 46.9%;
+            --accent: 210 40% 96%;
+            --accent-foreground: 222.2 84% 4.9%;
+            --border: 214.3 31.8% 91.4%;
+            --input: 214.3 31.8% 91.4%;
+            --ring: 222.2 84% 4.9%;
+            --radius: 0.5rem;
+        }
+
+        body {
+            background-color: hsl(var(--background));
+            color: hsl(var(--foreground));
+        }
+
+        .animate-delay-100 { animation-delay: 0.1s; }
+        .animate-delay-200 { animation-delay: 0.2s; }
+        .animate-delay-300 { animation-delay: 0.3s; }
+        .animate-delay-400 { animation-delay: 0.4s; }
+        .animate-delay-500 { animation-delay: 0.5s; }
+        .animate-delay-600 { animation-delay: 0.6s; }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="min-h-screen bg-background font-sans antialiased">
+    <!-- Hero Section -->
+    <section class="container space-y-6 pb-8 pt-6 md:pb-12 md:pt-10 lg:py-32">
+        <div class="mx-auto flex max-w-[980px] flex-col items-center gap-2 text-center">
+            <h1 class="text-3xl font-light leading-tight tracking-tighter md:text-4xl lg:text-5xl">
+                Q AI圈
+            </h1>
+        </div>
+    </section>
+
+    <!-- Courses Section -->
+    <section class="container space-y-6 py-8">
+        <div class="mx-auto grid max-w-4xl gap-4">
+            <!-- Course Cards -->
+            <div class="opacity-0 animate-fade-in animate-delay-100">
+                <a href="course.html" class="block">
+                    <div class="rounded-lg border bg-card p-6 text-card-foreground shadow-sm hover:shadow-md transition-all duration-300">
+                        <h3 class="text-lg font-medium mb-2">AI基础课程</h3>
+                        <p class="text-muted-foreground text-sm mb-4">机器学习、深度学习核心概念</p>
+                        <div class="inline-flex items-center text-muted-foreground text-sm">
+                            <span class="w-2 h-2 bg-blue-400 rounded-full mr-2"></span>
+                            12课时
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="opacity-0 animate-fade-in animate-delay-200">
+                <div class="rounded-lg border bg-card p-6 text-card-foreground shadow-sm hover:shadow-md transition-all duration-300">
+                    <h3 class="text-lg font-medium mb-2">大模型应用</h3>
+                    <p class="text-muted-foreground text-sm mb-4">GPT、Claude等模型实战应用</p>
+                    <div class="inline-flex items-center text-muted-foreground text-sm">
+                        <span class="w-2 h-2 bg-green-400 rounded-full mr-2"></span>
+                        8课时
+                    </div>
+                </div>
+            </div>
+
+            <div class="opacity-0 animate-fade-in animate-delay-300">
+                <div class="rounded-lg border bg-card p-6 text-card-foreground shadow-sm hover:shadow-md transition-all duration-300">
+                    <h3 class="text-lg font-medium mb-2">提示词工程</h3>
+                    <p class="text-muted-foreground text-sm mb-4">高效提示词设计与优化技巧</p>
+                    <div class="inline-flex items-center text-muted-foreground text-sm">
+                        <span class="w-2 h-2 bg-amber-400 rounded-full mr-2"></span>
+                        6课时
+                    </div>
+                </div>
+            </div>
+
+            <div class="opacity-0 animate-fade-in animate-delay-400">
+                <div class="rounded-lg border bg-card p-6 text-card-foreground shadow-sm hover:shadow-md transition-all duration-300">
+                    <h3 class="text-lg font-medium mb-2">智能体开发</h3>
+                    <p class="text-muted-foreground text-sm mb-4">Agent框架与多智能体系统</p>
+                    <div class="inline-flex items-center text-muted-foreground text-sm">
+                        <span class="w-2 h-2 bg-purple-400 rounded-full mr-2"></span>
+                        10课时
+                    </div>
+                </div>
+            </div>
+
+            <div class="opacity-0 animate-fade-in animate-delay-500">
+                <div class="rounded-lg border bg-card p-6 text-card-foreground shadow-sm hover:shadow-md transition-all duration-300">
+                    <h3 class="text-lg font-medium mb-2">AI工具链</h3>
+                    <p class="text-muted-foreground text-sm mb-4">开发环境配置与工具使用</p>
+                    <div class="inline-flex items-center text-muted-foreground text-sm">
+                        <span class="w-2 h-2 bg-rose-400 rounded-full mr-2"></span>
+                        6课时
+                    </div>
+                </div>
+            </div>
+
+            <div class="opacity-0 animate-fade-in animate-delay-600">
+                <div class="rounded-lg border bg-card p-6 text-card-foreground shadow-sm hover:shadow-md transition-all duration-300">
+                    <h3 class="text-lg font-medium mb-2">实战项目</h3>
+                    <p class="text-muted-foreground text-sm mb-4">端到端AI应用开发实践</p>
+                    <div class="inline-flex items-center text-muted-foreground text-sm">
+                        <span class="w-2 h-2 bg-emerald-400 rounded-full mr-2"></span>
+                        20课时
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // 页面加载动画
+        document.addEventListener('DOMContentLoaded', function() {
+            // 逐个显示动画元素
+            const fadeElements = document.querySelectorAll('.animate-fade-in');
+            fadeElements.forEach(element => {
+                element.classList.remove('opacity-0');
+            });
+        });
+    </script>
+</body>
+</html>

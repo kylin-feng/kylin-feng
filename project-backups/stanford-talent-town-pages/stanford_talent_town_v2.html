@@ -1,0 +1,1772 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>斯坦福人才小镇 - 智能升级版</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-black: #000000;
+            --secondary-black: #1a1a1a;
+            --tertiary-black: #2d2d2d;
+            --primary-white: #ffffff;
+            --secondary-white: #f8f8f8;
+            --tertiary-white: #e5e5e5;
+            --accent-gray: #666666;
+            --light-gray: #cccccc;
+            --success-green: #00ff88;
+            --warning-yellow: #ffed4e;
+        }
+
+        body {
+            font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--primary-black);
+            color: var(--primary-white);
+            line-height: 1.6;
+            font-weight: 300;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        /* 头部样式 */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--tertiary-black);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+        }
+
+        .logo {
+            font-size: 1.5em;
+            font-weight: 600;
+            color: var(--primary-white);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
+        .nav {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .nav-item {
+            color: var(--accent-gray);
+            text-decoration: none;
+            font-weight: 400;
+            font-size: 0.95em;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            color: var(--primary-white);
+        }
+
+        .nav-item::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--primary-white);
+            transition: width 0.3s ease;
+        }
+
+        .nav-item:hover::after,
+        .nav-item.active::after {
+            width: 100%;
+        }
+
+        .cta-button {
+            padding: 12px 24px;
+            background: var(--primary-white);
+            color: var(--primary-black);
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+            border: 1px solid var(--primary-white);
+            cursor: pointer;
+        }
+
+        .cta-button:hover {
+            background: transparent;
+            color: var(--primary-white);
+        }
+
+        /* 主要内容区域 */
+        .main-content {
+            margin-top: 80px;
+        }
+
+        /* 页面容器 */
+        .page {
+            display: none;
+            min-height: calc(100vh - 80px);
+            padding: 60px 0;
+        }
+
+        .page.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 英雄区域 */
+        .hero {
+            text-align: center;
+            padding: 120px 0;
+            border-bottom: 1px solid var(--tertiary-black);
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 200;
+            margin-bottom: 30px;
+            letter-spacing: -2px;
+            line-height: 1.1;
+        }
+
+        .hero .subtitle {
+            font-size: 1.3em;
+            color: var(--accent-gray);
+            margin-bottom: 50px;
+            font-weight: 300;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            padding: 16px 32px;
+            background: var(--primary-white);
+            color: var(--primary-black);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 2px solid var(--primary-white);
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background: transparent;
+            color: var(--primary-white);
+        }
+
+        .btn-secondary {
+            padding: 16px 32px;
+            background: transparent;
+            color: var(--primary-white);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 2px solid var(--accent-gray);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary-white);
+            background: var(--primary-white);
+            color: var(--primary-black);
+        }
+
+        /* 隐藏的API配置面板 */
+        .api-config-panel {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 400px;
+            height: 100vh;
+            background: var(--secondary-black);
+            border-left: 1px solid var(--tertiary-black);
+            padding: 100px 30px 30px;
+            transition: right 0.3s ease;
+            z-index: 999;
+            overflow-y: auto;
+        }
+
+        .api-config-panel.open {
+            right: 0;
+        }
+
+        .config-toggle {
+            position: fixed;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            background: var(--tertiary-black);
+            border: 1px solid var(--accent-gray);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1001;
+        }
+
+        .config-toggle:hover {
+            background: var(--primary-white);
+            color: var(--primary-black);
+        }
+
+        .api-status-indicator {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ff4444;
+            transition: all 0.3s ease;
+        }
+
+        .api-status-indicator.connected {
+            background: var(--success-green);
+            box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+        }
+
+        /* 智能工作流区域 */
+        .workflow-section {
+            padding: 100px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 3em;
+            font-weight: 200;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.2em;
+            color: var(--accent-gray);
+            margin-bottom: 80px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* 主题输入区域 */
+        .topic-input-section {
+            max-width: 800px;
+            margin: 0 auto 60px;
+            background: var(--secondary-black);
+            border: 1px solid var(--tertiary-black);
+            border-radius: 12px;
+            padding: 40px;
+        }
+
+        .topic-input-section h3 {
+            font-size: 1.8em;
+            font-weight: 300;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .topic-input {
+            width: 100%;
+            padding: 20px;
+            background: var(--tertiary-black);
+            border: 2px solid var(--accent-gray);
+            border-radius: 8px;
+            color: var(--primary-white);
+            font-size: 1.1em;
+            font-weight: 300;
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .topic-input:focus {
+            outline: none;
+            border-color: var(--primary-white);
+            background: var(--secondary-black);
+        }
+
+        .topic-input::placeholder {
+            color: var(--accent-gray);
+            font-style: italic;
+        }
+
+        /* 人才选择和讨论融合区域 */
+        .talent-discussion-area {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .talent-selector {
+            background: var(--secondary-black);
+            border: 1px solid var(--tertiary-black);
+            border-radius: 12px;
+            padding: 30px;
+            max-height: 700px;
+            overflow-y: auto;
+        }
+
+        .talent-selector h4 {
+            font-size: 1.3em;
+            font-weight: 400;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .talent-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .talent-card {
+            background: var(--tertiary-black);
+            border: 1px solid var(--accent-gray);
+            border-radius: 8px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .talent-card:hover {
+            border-color: var(--primary-white);
+            transform: translateX(5px);
+        }
+
+        .talent-card.selected {
+            border-color: var(--success-green);
+            background: linear-gradient(135deg, var(--tertiary-black), var(--secondary-black));
+        }
+
+        .talent-card.selected::before {
+            content: '✓';
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            color: var(--success-green);
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .talent-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-white), var(--accent-gray));
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-black);
+            font-weight: 600;
+            margin-right: 15px;
+            vertical-align: middle;
+        }
+
+        .talent-info {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .talent-name {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .talent-role {
+            color: var(--accent-gray);
+            font-size: 0.9em;
+        }
+
+        .talent-add-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--tertiary-black);
+        }
+
+        .talent-input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .talent-input-group input {
+            flex: 1;
+            padding: 10px;
+            background: var(--tertiary-black);
+            border: 1px solid var(--accent-gray);
+            border-radius: 6px;
+            color: var(--primary-white);
+            font-size: 0.9em;
+        }
+
+        .talent-input-group input:focus {
+            outline: none;
+            border-color: var(--primary-white);
+        }
+
+        .add-talent-btn {
+            width: 100%;
+            padding: 12px;
+            background: transparent;
+            color: var(--primary-white);
+            border: 1px solid var(--accent-gray);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+        }
+
+        .add-talent-btn:hover {
+            background: var(--primary-white);
+            color: var(--primary-black);
+        }
+
+        /* 实时讨论区域 */
+        .discussion-area {
+            background: var(--secondary-black);
+            border: 1px solid var(--tertiary-black);
+            border-radius: 12px;
+            padding: 30px;
+            min-height: 700px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .discussion-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--tertiary-black);
+        }
+
+        .discussion-header h4 {
+            font-size: 1.3em;
+            font-weight: 400;
+        }
+
+        .discussion-status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 500;
+            background: var(--tertiary-black);
+            color: var(--accent-gray);
+        }
+
+        .discussion-status.active {
+            background: var(--success-green);
+            color: var(--primary-black);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .discussion-messages {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding-right: 10px;
+        }
+
+        .discussion-message {
+            background: var(--tertiary-black);
+            border-left: 3px solid var(--accent-gray);
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            animation: slideInRight 0.5s ease;
+        }
+
+        .discussion-message.ai-generated {
+            border-left-color: var(--success-green);
+            background: linear-gradient(135deg, var(--tertiary-black), rgba(0, 255, 136, 0.1));
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .message-sender {
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ai-badge {
+            background: var(--success-green);
+            color: var(--primary-black);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.7em;
+            font-weight: 600;
+        }
+
+        .message-content {
+            color: var(--accent-gray);
+            line-height: 1.6;
+        }
+
+        .discussion-controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .start-discussion-btn {
+            flex: 1;
+            padding: 15px;
+            background: var(--primary-white);
+            color: var(--primary-black);
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .start-discussion-btn:hover {
+            background: var(--success-green);
+            transform: translateY(-2px);
+        }
+
+        .start-discussion-btn:disabled {
+            background: var(--tertiary-black);
+            color: var(--accent-gray);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .clear-btn {
+            padding: 15px 30px;
+            background: transparent;
+            color: var(--accent-gray);
+            border: 1px solid var(--accent-gray);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .clear-btn:hover {
+            color: var(--primary-white);
+            border-color: var(--primary-white);
+        }
+
+        /* 长期记忆创意库 */
+        .memory-section {
+            padding: 100px 0;
+            border-top: 1px solid var(--tertiary-black);
+        }
+
+        .memory-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .stat-card {
+            background: var(--secondary-black);
+            border: 1px solid var(--tertiary-black);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            border-color: var(--accent-gray);
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: 200;
+            color: var(--success-green);
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: var(--accent-gray);
+            font-size: 0.9em;
+        }
+
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+        }
+
+        .memory-item {
+            background: var(--secondary-black);
+            border: 1px solid var(--tertiary-black);
+            border-radius: 12px;
+            padding: 30px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .memory-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .memory-item:hover::before {
+            left: 100%;
+        }
+
+        .memory-item:hover {
+            border-color: var(--success-green);
+            transform: translateY(-5px);
+        }
+
+        .memory-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+            color: var(--accent-gray);
+        }
+
+        .memory-quality {
+            background: var(--success-green);
+            color: var(--primary-black);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: 500;
+        }
+
+        .memory-title {
+            font-size: 1.3em;
+            font-weight: 400;
+            margin-bottom: 15px;
+        }
+
+        .memory-content {
+            color: var(--accent-gray);
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .memory-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .memory-tag {
+            background: var(--tertiary-black);
+            color: var(--primary-white);
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            border: 1px solid var(--accent-gray);
+        }
+
+        /* 定价部分 */
+        .pricing-section {
+            padding: 100px 0;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .pricing-card {
+            background: var(--secondary-black);
+            border: 1px solid var(--tertiary-black);
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pricing-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .pricing-card:hover::before {
+            left: 100%;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent-gray);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .pricing-card.featured {
+            border-color: var(--success-green);
+            background: linear-gradient(135deg, var(--secondary-black), var(--tertiary-black));
+        }
+
+        .featured-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--success-green);
+            color: var(--primary-black);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 500;
+        }
+
+        .pricing-card h3 {
+            font-size: 1.8em;
+            font-weight: 400;
+            margin-bottom: 15px;
+        }
+
+        .pricing-card .price {
+            font-size: 3em;
+            font-weight: 200;
+            margin-bottom: 10px;
+            letter-spacing: -2px;
+        }
+
+        .pricing-card .price-period {
+            color: var(--accent-gray);
+            font-size: 0.9em;
+            margin-bottom: 30px;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 40px;
+            text-align: left;
+        }
+
+        .pricing-features li {
+            padding: 12px 0;
+            border-bottom: 1px solid var(--tertiary-black);
+            color: var(--accent-gray);
+            font-size: 0.95em;
+        }
+
+        .pricing-features li:last-child {
+            border-bottom: none;
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--success-green);
+            font-weight: bold;
+            margin-right: 12px;
+        }
+
+        .select-plan-btn {
+            width: 100%;
+            padding: 16px;
+            background: transparent;
+            color: var(--primary-white);
+            border: 2px solid var(--accent-gray);
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .select-plan-btn:hover {
+            background: var(--primary-white);
+            color: var(--primary-black);
+            border-color: var(--primary-white);
+        }
+
+        .pricing-card.featured .select-plan-btn {
+            background: var(--success-green);
+            color: var(--primary-black);
+            border-color: var(--success-green);
+        }
+
+        .pricing-card.featured .select-plan-btn:hover {
+            background: transparent;
+            color: var(--success-green);
+        }
+
+        /* 表单样式 */
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 400;
+            color: var(--accent-gray);
+            font-size: 0.9em;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 14px;
+            background: var(--tertiary-black);
+            border: 1px solid var(--accent-gray);
+            border-radius: 6px;
+            color: var(--primary-white);
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-white);
+            background: var(--secondary-black);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1024px) {
+            .talent-discussion-area {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .api-config-panel {
+                width: 350px;
+                right: -350px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 20px;
+            }
+
+            .header-content {
+                padding: 15px 20px;
+            }
+
+            .nav {
+                display: none;
+            }
+
+            .hero {
+                padding: 80px 0;
+            }
+
+            .hero h1 {
+                font-size: 2.5em;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .section-title {
+                font-size: 2em;
+            }
+
+            .memory-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .api-config-panel {
+                width: 100vw;
+                right: -100vw;
+            }
+
+            .config-toggle {
+                right: 10px;
+            }
+        }
+
+        /* 加载和状态样式 */
+        .loading {
+            text-align: center;
+            color: var(--accent-gray);
+            font-style: italic;
+            padding: 60px;
+        }
+
+        .error-message {
+            background: var(--secondary-black);
+            color: #ff6b6b;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 3px solid #ff6b6b;
+        }
+
+        .success-message {
+            background: var(--secondary-black);
+            color: var(--success-green);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 3px solid var(--success-green);
+        }
+
+        /* 滚动条样式 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--secondary-black);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-gray);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-white);
+        }
+    </style>
+</head>
+<body>
+    <!-- 固定头部 -->
+    <header class="header">
+        <div class="header-content">
+            <a href="#" class="logo">斯坦福人才小镇</a>
+            <nav class="nav">
+                <a href="#" class="nav-item active" onclick="showPage('home')">首页</a>
+                <a href="#" class="nav-item" onclick="showPage('pricing')">定价</a>
+                <a href="#" class="nav-item" onclick="showPage('memory')">创意库</a>
+                <button class="cta-button" onclick="startWorkflow()">开始使用</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 隐藏的API配置面板 -->
+    <div class="api-config-panel" id="apiConfigPanel">
+        <h3>AI模型配置</h3>
+        <div class="form-group">
+            <label for="apiKey">API密钥</label>
+            <input type="password" id="apiKey" 
+                   placeholder="输入您的API密钥" 
+                   value="your-siliconflow-api-key">
+        </div>
+        
+        <div class="form-group">
+            <label for="modelSelect">AI模型</label>
+            <select id="modelSelect">
+                <option value="Qwen/QwQ-32B">Qwen QwQ-32B</option>
+                <option value="Qwen/Qwen2.5-72B-Instruct">Qwen 2.5-72B</option>
+                <option value="meta-llama/Llama-3.1-70B-Instruct">Llama 3.1-70B</option>
+            </select>
+        </div>
+        
+        <button class="btn-primary" onclick="testConnection()" style="width: 100%; margin-bottom: 20px;">
+            测试连接
+        </button>
+        
+        <div id="connectionStatus"></div>
+    </div>
+
+    <!-- 配置切换按钮 -->
+    <div class="config-toggle" onclick="toggleConfig()">
+        ⚙️
+        <div class="api-status-indicator" id="apiStatusIndicator"></div>
+    </div>
+
+    <main class="main-content">
+        <div class="container">
+            <!-- 首页 -->
+            <div id="home" class="page active">
+                <section class="hero">
+                    <h1>AI驱动的<br>智能创意工厂</h1>
+                    <p class="subtitle">
+                        输入您的想法，AI专家团队将进行深度思辨，生成突破性创意方案。
+                        每一次对话都将成为您的长期记忆财富。
+                    </p>
+                    <div class="hero-buttons">
+                        <button class="btn-primary" onclick="startWorkflow()">立即开始</button>
+                        <button class="btn-secondary" onclick="showPage('pricing')">查看定价</button>
+                    </div>
+                </section>
+            </div>
+
+            <!-- 智能工作流页面 -->
+            <div id="workflow" class="page">
+                <section class="workflow-section">
+                    <h2 class="section-title">智能创意工厂</h2>
+                    <p class="section-subtitle">描述您的挑战，选择专家团队，让AI为您生成创新解决方案</p>
+                    
+                    <!-- 主题输入区域 -->
+                    <div class="topic-input-section">
+                        <h3>📝 您想探讨什么话题？</h3>
+                        <textarea class="topic-input" id="discussionTopic" 
+                                  placeholder="例如：如何设计一款革命性的AI驱动移动应用？请详细描述您的想法、目标用户、核心需求等..."></textarea>
+                        
+                        <div class="discussion-controls">
+                            <button class="start-discussion-btn" onclick="startSmartDiscussion()" id="discussBtn">
+                                🚀 开始AI智能分析
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 人才选择和讨论融合区域 -->
+                    <div class="talent-discussion-area">
+                        <!-- 人才选择器 -->
+                        <div class="talent-selector">
+                            <h4>🎯 选择专家团队</h4>
+                            <div class="talent-grid" id="talentGrid">
+                                <!-- 人才卡片将通过JavaScript动态添加 -->
+                            </div>
+                            
+                            <!-- 添加自定义人才 -->
+                            <div class="talent-add-section">
+                                <div class="talent-input-group">
+                                    <input type="text" id="customTalentRole" placeholder="专业角色">
+                                    <input type="text" id="customTalentName" placeholder="姓名">
+                                </div>
+                                <button class="add-talent-btn" onclick="addCustomTalent()">
+                                    ➕ 添加专家
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 实时讨论区域 -->
+                        <div class="discussion-area">
+                            <div class="discussion-header">
+                                <h4>💭 专家讨论</h4>
+                                <div class="discussion-status" id="discussionStatus">等待开始</div>
+                            </div>
+                            
+                            <div class="discussion-messages" id="discussionMessages">
+                                <div class="loading">
+                                    选择专家团队，输入讨论主题，开启AI智能对话
+                                </div>
+                            </div>
+                            
+                            <div class="discussion-controls">
+                                <button class="clear-btn" onclick="clearDiscussion()">清空</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- 定价页面 -->
+            <div id="pricing" class="page">
+                <section class="pricing-section">
+                    <h2 class="section-title">选择您的方案</h2>
+                    <p class="section-subtitle">智能定价，强大功能，专为创新者设计</p>
+                    
+                    <div class="pricing-grid">
+                        <div class="pricing-card">
+                            <h3>探索版</h3>
+                            <div class="price">¥99</div>
+                            <div class="price-period">每月</div>
+                            <ul class="pricing-features">
+                                <li>5位AI专家</li>
+                                <li>10次智能讨论/月</li>
+                                <li>基础创意存储</li>
+                                <li>标准分析深度</li>
+                                <li>邮件技术支持</li>
+                            </ul>
+                            <button class="select-plan-btn" onclick="selectPlan('explorer')">选择探索版</button>
+                        </div>
+
+                        <div class="pricing-card featured">
+                            <div class="featured-badge">推荐</div>
+                            <h3>创新版</h3>
+                            <div class="price">¥299</div>
+                            <div class="price-period">每月</div>
+                            <ul class="pricing-features">
+                                <li>20位顶级AI专家</li>
+                                <li>无限智能讨论</li>
+                                <li>长期记忆存储</li>
+                                <li>深度分析洞察</li>
+                                <li>多模型智能切换</li>
+                                <li>优先技术支持</li>
+                            </ul>
+                            <button class="select-plan-btn" onclick="selectPlan('innovator')">选择创新版</button>
+                        </div>
+
+                        <div class="pricing-card">
+                            <h3>企业版</h3>
+                            <div class="price">¥999</div>
+                            <div class="price-period">每月</div>
+                            <ul class="pricing-features">
+                                <li>无限AI专家资源</li>
+                                <li>定制专业领域</li>
+                                <li>企业级安全保障</li>
+                                <li>API集成支持</li>
+                                <li>专属客户经理</li>
+                                <li>定制化解决方案</li>
+                            </ul>
+                            <button class="select-plan-btn" onclick="selectPlan('enterprise')">联系销售</button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- 长期记忆创意库 -->
+            <div id="memory" class="page">
+                <section class="memory-section">
+                    <h2 class="section-title">创意记忆库</h2>
+                    <p class="section-subtitle">您的每一次思考都将成为宝贵的智慧财富</p>
+                    
+                    <!-- 统计信息 -->
+                    <div class="memory-stats">
+                        <div class="stat-card">
+                            <div class="stat-number" id="totalIdeas">0</div>
+                            <div class="stat-label">总创意数量</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="totalDiscussions">0</div>
+                            <div class="stat-label">讨论次数</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="totalExperts">0</div>
+                            <div class="stat-label">参与专家</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="qualityScore">0</div>
+                            <div class="stat-label">平均质量分</div>
+                        </div>
+                    </div>
+
+                    <!-- 创意记忆网格 -->
+                    <div class="memory-grid" id="memoryGrid">
+                        <div class="loading">
+                            还没有创意记忆<br>
+                            开始您的第一次AI讨论吧
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // 全局变量
+        let selectedTalents = [];
+        let discussionHistory = [];
+        let longTermMemory = JSON.parse(localStorage.getItem('talentTownMemory')) || [];
+        let apiConnected = false;
+        let isDiscussing = false;
+
+        // API配置
+        const API_BASE_URL = 'https://api.siliconflow.cn/v1/chat/completions';
+        let API_KEY = 'your-siliconflow-api-key';
+
+        // 默认专家团队
+        const defaultExperts = [
+            { 
+                name: 'Ryan', 
+                role: 'AI产品策略专家', 
+                specialty: '产品规划,用户体验,AI应用',
+                avatar: 'R',
+                description: '10年产品经验，专注AI产品创新和用户体验设计'
+            },
+            { 
+                name: 'Fenny', 
+                role: 'AI技术架构师', 
+                specialty: '机器学习,系统架构,数据科学',
+                avatar: 'F',
+                description: '资深AI技术专家，精通深度学习和大规模系统设计'
+            },
+            { 
+                name: 'Vincent', 
+                role: 'AI商业分析师', 
+                specialty: '商业模式,市场分析,策略规划',
+                avatar: 'V',
+                description: '商业战略顾问，专长AI驱动的商业创新和市场洞察'
+            },
+            { 
+                name: '小王', 
+                role: 'AI交互设计师', 
+                specialty: '用户界面,交互设计,人机交互',
+                avatar: '王',
+                description: 'AI界面设计专家，致力于创造直观的人机交互体验'
+            },
+            { 
+                name: 'Alex', 
+                role: 'AI伦理顾问', 
+                specialty: 'AI伦理,风险评估,合规性',
+                avatar: 'A',
+                description: 'AI伦理和安全专家，确保AI应用的责任性和可持续性'
+            }
+        ];
+
+        // 页面切换
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            document.getElementById(pageId).classList.add('active');
+            
+            const navItem = document.querySelector(`[onclick="showPage('${pageId}')"]`);
+            if (navItem && navItem.classList.contains('nav-item')) {
+                navItem.classList.add('active');
+            }
+
+            // 特殊页面逻辑
+            if (pageId === 'memory') {
+                updateMemoryStats();
+                displayMemoryItems();
+            }
+        }
+
+        // 开始工作流
+        function startWorkflow() {
+            showPage('workflow');
+            // 自动测试API连接
+            if (!apiConnected) {
+                setTimeout(testConnection, 500);
+            }
+        }
+
+        // 切换配置面板
+        function toggleConfig() {
+            const panel = document.getElementById('apiConfigPanel');
+            panel.classList.toggle('open');
+        }
+
+        // 测试API连接
+        async function testConnection() {
+            const apiKey = document.getElementById('apiKey').value.trim();
+            const statusDiv = document.getElementById('connectionStatus');
+            const statusIndicator = document.getElementById('apiStatusIndicator');
+            
+            if (!apiKey) {
+                statusDiv.innerHTML = '<div class="error-message">请输入API密钥</div>';
+                return;
+            }
+
+            API_KEY = apiKey;
+            statusDiv.innerHTML = '<div class="loading">正在测试连接...</div>';
+
+            try {
+                const response = await callAI([{
+                    role: "user", 
+                    content: "请回复'连接成功'确认API工作正常"
+                }]);
+
+                if (response) {
+                    statusDiv.innerHTML = '<div class="success-message">✅ API连接成功</div>';
+                    statusIndicator.classList.add('connected');
+                    apiConnected = true;
+                } else {
+                    throw new Error('API返回为空');
+                }
+            } catch (error) {
+                statusDiv.innerHTML = '<div class="error-message">❌ 连接失败: ' + error.message + '</div>';
+                statusIndicator.classList.remove('connected');
+                apiConnected = false;
+            }
+        }
+
+        // 调用AI API - 优化版提示词
+        async function callAI(messages, maxRetries = 3) {
+            const model = document.getElementById('modelSelect').value;
+            
+            for (let attempt = 0; attempt < maxRetries; attempt++) {
+                try {
+                    const response = await fetch(API_BASE_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${API_KEY}`,
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            model: model,
+                            messages: messages,
+                            temperature: 0.8,
+                            max_tokens: 3000,
+                            top_p: 0.9
+                        })
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json().catch(() => ({}));
+                        throw new Error(`HTTP ${response.status}: ${errorData.error?.message || 'Unknown error'}`);
+                    }
+
+                    const data = await response.json();
+                    return data.choices[0].message.content;
+                } catch (error) {
+                    console.error(`API调用失败 (尝试 ${attempt + 1}/${maxRetries}):`, error);
+                    if (attempt === maxRetries - 1) {
+                        throw error;
+                    }
+                    await new Promise(resolve => setTimeout(resolve, 1000 * (attempt + 1)));
+                }
+            }
+        }
+
+        // 初始化专家团队
+        function initializeExperts() {
+            const talentGrid = document.getElementById('talentGrid');
+            talentGrid.innerHTML = '';
+            
+            defaultExperts.forEach(expert => {
+                const expertCard = document.createElement('div');
+                expertCard.className = 'talent-card';
+                expertCard.onclick = () => toggleExpertSelection(expertCard, expert);
+                
+                expertCard.innerHTML = `
+                    <div class="talent-avatar">${expert.avatar}</div>
+                    <div class="talent-info">
+                        <div class="talent-name">${expert.name}</div>
+                        <div class="talent-role">${expert.role}</div>
+                    </div>
+                `;
+                
+                talentGrid.appendChild(expertCard);
+            });
+        }
+
+        // 切换专家选择
+        function toggleExpertSelection(card, expert) {
+            if (card.classList.contains('selected')) {
+                card.classList.remove('selected');
+                selectedTalents = selectedTalents.filter(t => t.name !== expert.name);
+            } else {
+                card.classList.add('selected');
+                selectedTalents.push(expert);
+            }
+        }
+
+        // 添加自定义专家
+        function addCustomTalent() {
+            const role = document.getElementById('customTalentRole').value.trim();
+            const name = document.getElementById('customTalentName').value.trim();
+            
+            if (!role || !name) {
+                alert('请输入专业角色和姓名');
+                return;
+            }
+
+            const customExpert = {
+                name: name,
+                role: role,
+                specialty: role,
+                avatar: name.charAt(0).toUpperCase(),
+                description: `${role}专家`,
+                isCustom: true
+            };
+
+            const talentGrid = document.getElementById('talentGrid');
+            const expertCard = document.createElement('div');
+            expertCard.className = 'talent-card';
+            expertCard.onclick = () => toggleExpertSelection(expertCard, customExpert);
+            
+            expertCard.innerHTML = `
+                <div class="talent-avatar">${customExpert.avatar}</div>
+                <div class="talent-info">
+                    <div class="talent-name">${customExpert.name}</div>
+                    <div class="talent-role">${customExpert.role}</div>
+                </div>
+            `;
+            
+            talentGrid.appendChild(expertCard);
+            
+            // 清空输入框
+            document.getElementById('customTalentRole').value = '';
+            document.getElementById('customTalentName').value = '';
+        }
+
+        // 开始智能讨论
+        async function startSmartDiscussion() {
+            const topic = document.getElementById('discussionTopic').value.trim();
+            if (!topic) {
+                alert('请输入讨论主题！');
+                return;
+            }
+            
+            if (selectedTalents.length === 0) {
+                alert('请至少选择一位专家！');
+                return;
+            }
+
+            if (!apiConnected) {
+                alert('请先配置并测试AI连接！');
+                toggleConfig();
+                return;
+            }
+
+            if (isDiscussing) {
+                return;
+            }
+
+            isDiscussing = true;
+            const discussBtn = document.getElementById('discussBtn');
+            const statusDiv = document.getElementById('discussionStatus');
+            const messagesDiv = document.getElementById('discussionMessages');
+            
+            discussBtn.disabled = true;
+            discussBtn.textContent = '🧠 AI分析中...';
+            statusDiv.textContent = '分析中';
+            statusDiv.classList.add('active');
+            
+            messagesDiv.innerHTML = '<div class="loading">AI专家正在深度分析您的话题...</div>';
+            discussionHistory = [];
+
+            try {
+                await conductIntelligentDiscussion(topic);
+                await generateAndSaveInsights(topic);
+            } catch (error) {
+                console.error('讨论失败:', error);
+                messagesDiv.innerHTML = '<div class="error-message">❌ 讨论失败，请检查网络连接</div>';
+            } finally {
+                isDiscussing = false;
+                discussBtn.disabled = false;
+                discussBtn.textContent = '🚀 开始AI智能分析';
+                statusDiv.textContent = '已完成';
+                statusDiv.classList.remove('active');
+            }
+        }
+
+        // 进行智能讨论 - 优化版
+        async function conductIntelligentDiscussion(topic) {
+            const messagesDiv = document.getElementById('discussionMessages');
+            messagesDiv.innerHTML = '';
+
+            // 为每个专家生成更专业的回应
+            for (let i = 0; i < selectedTalents.length; i++) {
+                const expert = selectedTalents[i];
+                
+                // 构建专业化的系统提示
+                const systemPrompt = `你是${expert.name}，一位${expert.role}。你的专业领域包括：${expert.specialty}。
+
+作为一位资深专家，你需要：
+1. 基于你的专业背景，对话题进行深入分析
+2. 提出具体可行的见解和建议
+3. 考虑实际应用场景和潜在挑战
+4. 与其他专家的观点形成有意义的对话
+
+请保持专业性，观点要有深度，表达要清晰易懂。回复长度控制在150-300字。`;
+
+                const contextPrompt = `
+讨论话题：${topic}
+
+${discussionHistory.length > 0 ? `之前的讨论：\n${discussionHistory.map(msg => `${msg.sender}: ${msg.content}`).join('\n')}\n` : ''}
+
+请以${expert.name}的身份，结合你的专业背景，对这个话题提出深入见解。`;
+
+                try {
+                    const response = await callAI([
+                        { role: "system", content: systemPrompt },
+                        { role: "user", content: contextPrompt }
+                    ]);
+
+                    addDiscussionMessage(expert.name, response, expert.role);
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                    
+                } catch (error) {
+                    console.error(`${expert.name} 回复失败:`, error);
+                    const fallbackMessage = `作为${expert.role}，我认为这个话题需要从${expert.specialty}的角度来深入分析，这将为解决方案提供重要的专业视角。`;
+                    addDiscussionMessage(expert.name, fallbackMessage, expert.role);
+                }
+            }
+        }
+
+        // 添加讨论消息
+        function addDiscussionMessage(sender, content, role) {
+            const messagesDiv = document.getElementById('discussionMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'discussion-message ai-generated';
+            
+            messageDiv.innerHTML = `
+                <div class="message-sender">
+                    ${sender}
+                    <span class="ai-badge">AI专家</span>
+                </div>
+                <div class="message-content">${content}</div>
+            `;
+            
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            
+            discussionHistory.push({
+                sender: sender,
+                content: content,
+                role: role,
+                timestamp: new Date()
+            });
+        }
+
+        // 生成并保存洞察 - 优化版
+        async function generateAndSaveInsights(topic) {
+            try {
+                const insightPrompt = `基于以下专家讨论，生成结构化的创意洞察报告：
+
+讨论主题：${topic}
+
+专家讨论记录：
+${discussionHistory.map(msg => `${msg.sender}(${msg.role}): ${msg.content}`).join('\n\n')}
+
+请生成3-5个高质量的创意洞察，每个洞察包含：
+1. 核心观点（简洁有力的标题）
+2. 详细分析（200-300字的深度分析）
+3. 实施建议（具体可行的步骤）
+4. 预期价值（商业或社会价值）
+
+请以JSON格式返回：
+[
+  {
+    "title": "洞察标题",
+    "analysis": "详细分析内容",
+    "implementation": "实施建议",
+    "value": "预期价值",
+    "quality_score": 85
+  }
+]
+
+要求洞察要有创新性、可行性和价值性。`;
+
+                const response = await callAI([{
+                    role: "user",
+                    content: insightPrompt
+                }]);
+
+                let insights;
+                try {
+                    const jsonMatch = response.match(/\[[\s\S]*\]/);
+                    if (jsonMatch) {
+                        insights = JSON.parse(jsonMatch[0]);
+                    } else {
+                        throw new Error('无法解析JSON');
+                    }
+                } catch (parseError) {
+                    // 备用洞察生成
+                    insights = [{
+                        title: `${topic} - 综合分析报告`,
+                        analysis: `基于专家团队的深度讨论，我们对"${topic}"进行了全方位分析。专家们从各自的专业角度提出了宝贵见解，形成了完整的解决方案框架。`,
+                        implementation: `建议分阶段实施：1）深入市场调研；2）技术方案设计；3）原型开发测试；4）迭代优化上线。`,
+                        value: `预期将在用户体验、技术创新和商业价值等方面带来显著提升。`,
+                        quality_score: 82
+                    }];
+                }
+
+                // 保存到长期记忆
+                insights.forEach(insight => {
+                    const memoryItem = {
+                        id: Date.now() + Math.random(),
+                        topic: topic,
+                        title: insight.title,
+                        content: insight.analysis,
+                        implementation: insight.implementation,
+                        value: insight.value,
+                        contributors: selectedTalents.map(t => t.name),
+                        expertRoles: selectedTalents.map(t => t.role),
+                        timestamp: new Date(),
+                        qualityScore: insight.quality_score || 80,
+                        tags: extractTags(topic, insight.analysis),
+                        discussionId: Date.now()
+                    };
+                    
+                    longTermMemory.unshift(memoryItem);
+                });
+
+                // 保存到本地存储
+                localStorage.setItem('talentTownMemory', JSON.stringify(longTermMemory));
+                
+                alert(`🎉 讨论完成！生成了 ${insights.length} 个高质量洞察，已保存到您的创意记忆库！`);
+
+            } catch (error) {
+                console.error('生成洞察失败:', error);
+                // 备用保存
+                const fallbackMemory = {
+                    id: Date.now(),
+                    topic: topic,
+                    title: `${topic} - 专家讨论总结`,
+                    content: `专家团队就"${topic}"进行了深入讨论，形成了多个有价值的观点和建议。`,
+                    contributors: selectedTalents.map(t => t.name),
+                    timestamp: new Date(),
+                    qualityScore: 75,
+                    tags: ['讨论总结'],
+                    discussionId: Date.now()
+                };
+                
+                longTermMemory.unshift(fallbackMemory);
+                localStorage.setItem('talentTownMemory', JSON.stringify(longTermMemory));
+                
+                alert('讨论完成！内容已保存到创意记忆库！');
+            }
+        }
+
+        // 提取标签
+        function extractTags(topic, content) {
+            const commonTags = ['AI', '创新', '产品', '技术', '商业', '设计', '用户体验', '数据', '策略', '市场'];
+            const tags = [];
+            
+            commonTags.forEach(tag => {
+                if (topic.includes(tag) || content.includes(tag)) {
+                    tags.push(tag);
+                }
+            });
+            
+            return tags.length > 0 ? tags : ['通用'];
+        }
+
+        // 清空讨论
+        function clearDiscussion() {
+            document.getElementById('discussionMessages').innerHTML = '<div class="loading">选择专家团队，输入讨论主题，开启AI智能对话</div>';
+            discussionHistory = [];
+            document.getElementById('discussionStatus').textContent = '等待开始';
+            document.getElementById('discussionStatus').classList.remove('active');
+        }
+
+        // 更新记忆统计
+        function updateMemoryStats() {
+            document.getElementById('totalIdeas').textContent = longTermMemory.length;
+            document.getElementById('totalDiscussions').textContent = new Set(longTermMemory.map(m => m.discussionId)).size;
+            
+            const allExperts = new Set();
+            longTermMemory.forEach(m => {
+                if (m.contributors) {
+                    m.contributors.forEach(c => allExperts.add(c));
+                }
+            });
+            document.getElementById('totalExperts').textContent = allExperts.size;
+            
+            const avgQuality = longTermMemory.length > 0 
+                ? Math.round(longTermMemory.reduce((sum, m) => sum + (m.qualityScore || 80), 0) / longTermMemory.length)
+                : 0;
+            document.getElementById('qualityScore').textContent = avgQuality;
+        }
+
+        // 显示记忆项目
+        function displayMemoryItems() {
+            const memoryGrid = document.getElementById('memoryGrid');
+            
+            if (longTermMemory.length === 0) {
+                memoryGrid.innerHTML = '<div class="loading">还没有创意记忆<br>开始您的第一次AI讨论吧</div>';
+                return;
+            }
+            
+            memoryGrid.innerHTML = '';
+            
+            longTermMemory.slice(0, 20).forEach(memory => {
+                const memoryDiv = document.createElement('div');
+                memoryDiv.className = 'memory-item';
+                
+                memoryDiv.innerHTML = `
+                    <div class="memory-meta">
+                        <span>${memory.timestamp.toLocaleString ? new Date(memory.timestamp).toLocaleString() : memory.timestamp}</span>
+                        <span class="memory-quality">质量分: ${memory.qualityScore || 80}</span>
+                    </div>
+                    <div class="memory-title">${memory.title}</div>
+                    <div class="memory-content">${memory.content.substring(0, 200)}${memory.content.length > 200 ? '...' : ''}</div>
+                    <div class="memory-tags">
+                        ${(memory.tags || ['通用']).map(tag => `<span class="memory-tag">${tag}</span>`).join('')}
+                    </div>
+                `;
+                
+                memoryGrid.appendChild(memoryDiv);
+            });
+        }
+
+        // 选择定价方案
+        function selectPlan(plan) {
+            const planNames = {
+                'explorer': '探索版',
+                'innovator': '创新版',
+                'enterprise': '企业版'
+            };
+            
+            alert(`您选择了${planNames[plan]}！\n\n我们将为您提供最优质的AI驱动创意服务。\n请联系我们的团队完成订阅流程。`);
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeExperts();
+            updateMemoryStats();
+            
+            // 预设API密钥
+            document.getElementById('apiKey').value = API_KEY;
+            
+            // 自动测试连接
+            setTimeout(testConnection, 1000);
+        });
+    </script>
+</body>
+</html>

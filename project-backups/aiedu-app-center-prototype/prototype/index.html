@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>应用中心原型</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#" aria-label="某某区/校人工智能教育教学平台">
+        <img src="../source/logo.jpg" alt="" />
+        <span>某某区/校人工智能教育教学平台</span>
+      </a>
+
+      <nav class="portal-nav" aria-label="portal-nav">
+        <a href="#">首页</a>
+        <span aria-hidden="true"></span>
+        <a href="#">课程中心</a>
+        <span aria-hidden="true"></span>
+        <a class="active" href="#">应用中心</a>
+        <span aria-hidden="true"></span>
+        <a href="#">赛事中心</a>
+        <span aria-hidden="true"></span>
+        <a href="#">作品广场</a>
+      </nav>
+
+      <div class="header-actions">
+        <button class="primary-action" type="button">
+          <span aria-hidden="true">+</span>
+          开始创作
+        </button>
+        <button class="ghost-action" type="button">登录</button>
+      </div>
+    </header>
+
+    <main class="apps-page">
+      <div class="page-bg" aria-hidden="true"></div>
+      <div class="apps-inner">
+        <h1 class="sr-only">应用中心</h1>
+        <div id="sections" class="sections" aria-live="polite">
+          <section class="section">
+            <h2>AI教学工具</h2>
+            <div class="card-grid skeleton-grid">
+              <div class="skeleton-card"></div>
+              <div class="skeleton-card"></div>
+              <div class="skeleton-card"></div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>好多AI | AI工坊 - Qwen-Image 2.0</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* 顶部导航栏 */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 24px;
+            background-color: #ffffff;
+            border-bottom: 1px solid #e9ecef;
+            height: 70px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 24px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #4080ff 0%, #60a5fa 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .back-btn {
+            padding: 8px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .back-btn:hover {
+            background-color: #f3f4f6;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .collect-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 20px;
+            background: white;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+
+        .collect-btn:hover {
+            background-color: #f3f4f6;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            background: #f3f4f6;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .user-info:hover {
+            background-color: #e5e7eb;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #60a5fa 0%, #34d399 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        /* 主容器 - 三栏布局 */
+        .main-container {
+            display: flex;
+            height: calc(100vh - 70px);
+        }
+
+        /* 左侧功能导航栏 */
+        .sidebar {
+            width: 80px;
+            background: white;
+            border-right: 1px solid #e9ecef;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 0;
+            gap: 32px;
+            overflow-y: auto;
+        }
+
+        .sidebar-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            color: #6b7280;
+            transition: all 0.2s;
+            width: 100%;
+            padding: 12px 0;
+            border-radius: 8px;
+        }
+
+        .sidebar-item.active {
+            color: #4080ff;
+            background-color: #eff6ff;
+        }
+
+        .sidebar-item:hover:not(.active) {
+            background-color: #f9fafb;
+        }
+
+        .sidebar-item svg {
+            width: 28px;
+            height: 28px;
+        }
+
+        .sidebar-item span {
+            font-size: 12px;
+        }
+
+        /* 中间编辑区 */
+        .editor-panel {
+            width: 360px;
+            background: white;
+            border-right: 1px solid #e9ecef;
+            padding: 20px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #d1d5db #f9fafb;
+        }
+
+        .editor-panel::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .editor-panel::-webkit-scrollbar-track {
+            background: #f9fafb;
+        }
+
+        .editor-panel::-webkit-scrollbar-thumb {
+            background-color: #d1d5db;
+            border-radius: 6px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 16px;
+            background-color: #4080ff;
+            border-radius: 2px;
+        }
+
+        /* 创意描述输入框 */
+        .desc-input-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .desc-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .tag {
+            background: #f3f4f6;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s;
+        }
+
+        .tag:hover {
+            background-color: #e5e7eb;
+        }
+
+        .tag-close {
+            cursor: pointer;
+            color: #6b7280;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .tag-close:hover {
+            color: #ef4444;
+        }
+
+        .desc-textarea {
+            width: 100%;
+            min-height: 100px;
+            border: 1px solid #d1d5db;
+            border-radius: 12px;
+            padding: 12px;
+            font-size: 15px;
+            resize: vertical;
+            outline: none;
+            transition: all 0.2s;
+            line-height: 1.5;
+        }
+
+        .desc-textarea:focus {
+            border-color: #4080ff;
+            box-shadow: 0 0 0 3px rgba(64, 128, 255, 0.1);
+        }
+
+        .desc-placeholder {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            color: #9ca3af;
+            pointer-events: none;
+            font-size: 15px;
+            line-height: 1.5;
+            transition: all 0.2s;
+        }
+
+        .input-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            font-size: 14px;
+            color: #6b7280;
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            background-color: #f3f4f6;
+            border-color: #b1b5bd;
+        }
+
+        .char-count {
+            margin-left: auto;
+            font-size: 14px;
+            color: #9ca3af;
+        }
+
+        .clear-btn {
+            color: #9ca3af;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .clear-btn:hover {
+            color: #ef4444;
+            background-color: #fef2f2;
+        }
+
+        /* 下拉选择框 */
+        .select-group {
+            margin-bottom: 16px;
+        }
+
+        .select-box {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 15px;
+            color: #333;
+            background: white;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.2s;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+        }
+
+        .select-box:focus {
+            border-color: #4080ff;
+            box-shadow: 0 0 0 3px rgba(64, 128, 255, 0.1);
+        }
+
+        .select-box option {
+            color: #333;
+            background: white;
+            padding: 8px;
+        }
+
+        /* 上传区域 */
+        .upload-box {
+            border: 2px dashed #d0d3d9;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            margin-bottom: 16px;
+            color: #9ca3af;
+            transition: all 0.2s;
+            background-color: #f9fafb;
+        }
+
+        .upload-box:hover {
+            border-color: #4080ff;
+            background-color: #eff6ff;
+            color: #4080ff;
+        }
+
+        .upload-box input {
+            display: none;
+        }
+
+        /* 底部按钮 */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .reset-btn {
+            flex: 1;
+            padding: 12px 10px;
+            border: 1px solid #4080ff;
+            border-radius: 8px;
+            background: white;
+            color: #4080ff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .reset-btn:hover {
+            background-color: #eff6ff;
+        }
+
+        .generate-btn {
+            flex: 2;
+            padding: 12px 10px;
+            border: none;
+            border-radius: 8px;
+            background: #e5e7eb;
+            color: #9ca3af;
+            font-size: 16px;
+            cursor: not-allowed;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .generate-btn.active {
+            background: #4080ff;
+            color: white;
+            cursor: pointer;
+        }
+
+        .generate-btn.active:hover {
+            background: #3b82f6;
+            box-shadow: 0 2px 8px rgba(64, 128, 255, 0.3);
+        }
+
+        /* 右侧预览区 */
+        .preview-panel {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #9ca3af;
+            background: white;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .empty-icon {
+            width: 64px;
+            height: 48px;
+            opacity: 0.5;
+            margin-bottom: 8px;
+        }
+
+        .empty-text {
+            font-size: 16px;
+            color: #6b7280;
+            max-width: 300px;
+        }
+
+        .result-img {
+            max-width: 100%;
+            max-height: 90%;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            object-fit: contain;
+        }
+
+        .result-img:hover {
+            box-shadow: 0 6px 30px rgba(0,0,0,0.12);
+            transform: translateY(-2px);
+        }
+
+        .loading {
+            color: #4080ff;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .loading::after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 2px solid #4080ff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* 功能面板切换 */
+        .function-panel {
+            display: none;
+        }
+
+        .function-panel.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 响应式适配 */
+        @media (max-width: 1024px) {
+            .editor-panel {
+                width: 320px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+                height: auto;
+                overflow-y: auto;
+            }
+            .sidebar {
+                width: 100%;
+                height: 70px;
+                flex-direction: row;
+                padding: 0 20px;
+                gap: 0;
+                justify-content: space-around;
+            }
+            .sidebar-item {
+                padding: 8px;
+            }
+            .sidebar-item span {
+                display: none;
+            }
+            .editor-panel {
+                width: 100%;
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid #e9ecef;
+                max-height: 60vh;
+            }
+            .preview-panel {
+                height: 400px;
+            }
+            body {
+                overflow-y: auto;
+            }
+            .header-left {
+                gap: 8px;
+            }
+            .logo span:nth-child(3), .logo span:nth-child(4) {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 8px 16px;
+            }
+            .collect-btn span {
+                display: none;
+            }
+            .user-info span {
+                display: none;
+            }
+            .editor-panel {
+                padding: 16px;
+            }
+            .action-buttons {
+                flex-direction: column;
+            }
+            .reset-btn, .generate-btn {
+                flex: none;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航 -->
+    <header class="header">
+        <div class="header-left">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+                        <line x1="9" y1="9" x2="9.01" y2="9"></line>
+                        <line x1="15" y1="9" x2="15.01" y2="9"></line>
+                    </svg>
+                </div>
+                <span>好多AI</span>
+                <span style="color: #9ca3af; font-size: 20px;">|</span>
+                <span style="font-size: 18px; font-weight: 500;">AI工坊</span>
+            </div>
+            <button class="back-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                返回
+            </button>
+        </div>
+        <div class="header-right">
+            <button class="collect-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+                <span>我的收藏</span>
+            </button>
+            <div class="user-info">
+                <div class="user-avatar">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </div>
+                <span>3,038</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主内容区 - 三栏布局 -->
+    <div class="main-container">
+        <!-- 左侧功能导航栏 -->
+        <aside class="sidebar">
+            <div class="sidebar-item active" data-target="generate">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                    <polyline points="21 15 16 10 5 21"></polyline>
+                </svg>
+                <span>AI生图</span>
+            </div>
+            <div class="sidebar-item" data-target="repair">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+                <span>图片修复</span>
+            </div>
+            <div class="sidebar-item" data-target="cutout">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9.5 14.5 3 21l4.5-6.5 6 6 4.5-6.5 6 6V3l-6.5 4.5L12 3 7.5 7.5 3 3z"></path>
+                </svg>
+                <span>智能抠图</span>
+            </div>
+            <div class="sidebar-item" data-target="bg">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l-5-5 5-5M15 12H3"></path>
+                </svg>
+                <span>更换背景</span>
+            </div>
+            <div class="sidebar-item" data-target="merge">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <rect x="9" y="9" width="6" height="6"></rect>
+                    <line x1="9" y1="3" x2="9.01" y2="3"></line>
+                    <line x1="15" y1="3" x2="15.01" y2="3"></line>
+                    <line x1="9" y1="21" x2="9.01" y2="21"></line>
+                    <line x1="15" y1="21" x2="15.01" y2="21"></line>
+                    <line x1="21" y1="9" x2="21" y2="9.01"></line>
+                    <line x1="3" y1="9" x2="3" y2="9.01"></line>
+                    <line x1="21" y1="15" x2="21" y2="15.01"></line>
+                    <line x1="3" y1="15" x2="3" y2="15.01"></line>
+                </svg>
+                <span>智能拼图</span>
+            </div>
+        </aside>
+
+        <!-- 中间编辑区 -->
+        <section class="editor-panel">
+            <!-- 1. AI生图面板 -->
+            <div class="function-panel active" id="generate">
+                <div class="section-title">创意描述</div>
+                <div class="desc-input-container">
+                    <div class="desc-tags">
+                 
+                    </div>
+                    <textarea class="desc-textarea" id="promptGenerate" maxlength="500" oninput="updateCharCount()"></textarea>
+                    <div class="desc-placeholder">请描述你想创作的画面，或点击语音按钮直接说出来</div>
+                
+                </div>
+
+                <div class="select-group">
+                    <select class="select-box">
+                        <option value="" selected>修饰词</option>
+                        <option value="高清">高清</option>
+                        <option value="4K">4K</option>
+                        <option value="8K">8K</option>
+                        <option value="超写实">超写实</option>
+                        <option value="赛博朋克">赛博朋克</option>
+                    </select>
+                </div>
+                <div class="select-group">
+                    <select class="select-box">
+                        <option value="" selected>主角</option>
+                        <option value="可爱少女">可爱少女</option>
+                        <option value="帅气男孩">帅气男孩</option>
+                        <option value="猫咪">猫咪</option>
+                        <option value="狗狗">狗狗</option>
+                        <option value="机器人">机器人</option>
+                    </select>
+                </div>
+                <div class="select-group">
+                    <select class="select-box">
+                        <option value="" selected>动作</option>
+                        <option value="跳舞">跳舞</option>
+                        <option value="奔跑">奔跑</option>
+                        <option value="微笑">微笑</option>
+                        <option value="挥手">挥手</option>
+                        <option value="思考">思考</option>
+                    </select>
+                </div>
+                <div class="select-group">
+                    <select class="select-box">
+                        <option value="" selected>场景</option>
+                        <option value="海边">海边</option>
+                        <option value="森林">森林</option>
+                        <option value="城市">城市</option>
+                        <option value="太空">太空</option>
+                        <option value="校园">校园</option>
+                    </select>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="reset-btn" id="resetGenerate">重置</button>
+                    <button class="generate-btn" id="btnGenerate">立即生成</button>
+                </div>
+            </div>
+
+            <!-- 2. 图片修复面板 -->
+            <div class="function-panel" id="repair">
+                <div class="section-title">图片修复 / 变清晰</div>
+                <p style="font-size:14px;color:#6b7280;line-height:1.7;margin-bottom:20px">
+                    AI 将模糊、低分辨率图片变清晰，支持最高 16 倍放大。
+                </p>
+                <button class="generate-btn active" onclick="window.open('https://bigjpg.com','_blank')">在新标签页打开 ↗</button>
+            </div>
+
+            <!-- 3. 智能抠图面板 -->
+            <div class="function-panel" id="cutout">
+                <div class="section-title">智能抠图</div>
+                <p style="font-size:14px;color:#6b7280;line-height:1.7;margin-bottom:20px">
+                    AI 自动识别主体，一键去除背景，支持人物、商品、动物等。
+                </p>
+                <button class="generate-btn active" onclick="window.open('https://www.koukoutu.com/removebgtool/all','_blank')">在新标签页打开 ↗</button>
+            </div>
+
+            <!-- 4. 更换背景面板 -->
+            <div class="function-panel" id="bg">
+                <div class="section-title">更换背景</div>
+                <p style="font-size:14px;color:#6b7280;line-height:1.7;margin-bottom:20px">
+                    去除原背景后替换为纯色、模糊或自定义背景。
+                </p>
+                <button class="generate-btn active" onclick="window.open('https://headshotmaster.io/zh/ai-background-changer','_blank')">在新标签页打开 ↗</button>
+            </div>
+
+            <!-- 5. 智能拼图面板 -->
+            <div class="function-panel" id="merge">
+                <div class="section-title">智能拼图</div>
+                <p style="font-size:14px;color:#6b7280;line-height:1.7;margin-bottom:20px">
+                    自由拼接多张图片，支持多种布局模板。
+                </p>
+                <button class="generate-btn active" onclick="window.open('https://mergeimage.org/zh','_blank')">在新标签页打开 ↗</button>
+            </div>
+        </section>
+
+        <!-- 右侧预览区 -->
+        <section class="preview-panel" id="previewPanel">
+            <div class="empty-state">
+                <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <div class="empty-text">暂无 AI 处理记录</div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // 配置信息
+        const API_KEY = "your-dashscope-api-key";
+        const API_URL = "http://localhost:3000/api/v1/services/aigc/multimodal-generation/generation";
+
+        // 元素获取
+        const sidebarItems = document.querySelectorAll('.sidebar-item');
+        const functionPanels = document.querySelectorAll('.function-panel');
+        const previewPanel = document.getElementById('previewPanel');
+        const promptGenerate = document.getElementById('promptGenerate');
+        const charCount = document.getElementById('charCount');
+        const clearBtn = document.getElementById('clearBtn');
+        const btnGenerate = document.getElementById('btnGenerate');
+
+        // 标签切换（左侧功能导航）
+        sidebarItems.forEach(item => {
+            item.addEventListener('click', () => {
+                // 切换侧边栏选中状态
+                sidebarItems.forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+                
+                // 切换中间编辑面板
+                const target = item.dataset.target;
+                functionPanels.forEach(panel => {
+                    panel.classList.remove('active');
+                });
+                document.getElementById(target).classList.add('active');
+
+                // iframe 功能：右侧预览区渲染
+                const iframeMap = {
+                    repair: 'https://bigjpg.com',
+                    cutout: 'https://www.koukoutu.com/removebgtool/all',
+                    bg:     'https://headshotmaster.io/zh/ai-background-changer',
+                    merge:  'https://mergeimage.org/zh'
+                };
+                if (iframeMap[target]) {
+                    previewPanel.innerHTML = `<iframe src="${iframeMap[target]}" style="width:100%;height:100%;border:none;border-radius:0"></iframe>`;
+                } else {
+                    resetPreview();
+                }
+            });
+        });
+
+        // 重置预览区
+        function resetPreview() {
+            previewPanel.innerHTML = `
+                <div class="empty-state">
+                    <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    <div class="empty-text">暂无 AI 处理记录</div>
+                </div>
+            `;
+        }
+
+        // 输入框占位符控制
+        promptGenerate.addEventListener('focus', () => {
+            if (promptGenerate.value === '') {
+                document.querySelector('.desc-placeholder').style.display = 'none';
+            }
+        });
+
+        promptGenerate.addEventListener('blur', () => {
+            if (promptGenerate.value === '') {
+                document.querySelector('.desc-placeholder').style.display = 'block';
+            }
+        });
+
+        // 字数统计
+        function updateCharCount() {
+            const count = promptGenerate.value.length;
+            if (charCount) charCount.textContent = `${count}/500`;
+            
+            // 激活生成按钮
+            if (count > 0) {
+                btnGenerate.classList.add('active');
+            } else {
+                btnGenerate.classList.remove('active');
+            }
+        }
+
+        // 清空按钮
+        if (clearBtn) clearBtn.addEventListener('click', () => {
+            promptGenerate.value = '';
+            updateCharCount();
+            document.querySelector('.desc-placeholder').style.display = 'block';
+        });
+
+        // 换背景输入框监听（面板已改为外部链接，保留空处理）
+
+        // 重置按钮事件
+        document.getElementById('resetGenerate').addEventListener('click', () => {
+            promptGenerate.value = '';
+            updateCharCount();
+            document.querySelector('.desc-placeholder').style.display = 'block';
+            document.querySelectorAll('.select-box').forEach(select => {
+                select.selectedIndex = 0;
+            });
+            resetPreview();
+        });
+
+        document.getElementById('resetRepair') && document.getElementById('resetRepair').addEventListener('click', resetPreview);
+        document.getElementById('resetCutout') && document.getElementById('resetCutout').addEventListener('click', resetPreview);
+        document.getElementById('resetBg') && document.getElementById('resetBg').addEventListener('click', resetPreview);
+        document.getElementById('resetMerge') && document.getElementById('resetMerge').addEventListener('click', resetPreview);
+
+        // ------------------------------
+        // 1. AI 生图核心功能
+        // ------------------------------
+        document.getElementById('btnGenerate').addEventListener('click', async () => {
+            const prompt = promptGenerate.value.trim();
+            if (!prompt) return;
+
+            // 加载状态
+            previewPanel.innerHTML = '<div class="loading">Qwen-Image-2.0 生成中...</div>';
+            btnGenerate.disabled = true;
+            btnGenerate.textContent = '生成中...';
+
+            try {
+                // 获取高级参数
+                const size = '1024*1024';
+                const negPrompt = "低分辨率，模糊，畸形，过饱和，文字扭曲，水印";
+
+                const res = await fetch(API_URL, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + API_KEY
+                    },
+                    body: JSON.stringify({
+                        "model": "qwen-image-2.0-pro",
+                        "input": {
+                            "messages": [{
+                                "role": "user",
+                                "content": [{ "text": prompt }]
+                            }]
+                        },
+                        "parameters": {
+                            "negative_prompt": negPrompt,
+                            "prompt_extend": true,
+                            "watermark": false,
+                            "size": size
+                        }
+                    })
+                });
+
+                if (!res.ok) {
+                    throw new Error(`HTTP error! status: ${res.status}, ${await res.text()}`);
+                }
+
+                const data = await res.json();
+                console.log('API response:', data);
+                
+                if (data.output && data.output.choices && data.output.choices[0].message.content[0].image) {
+                    const imgUrl = data.output.choices[0].message.content[0].image;
+                    previewPanel.innerHTML = `<img src="${imgUrl}" class="result-img" alt="生成的图片">`;
+                } else {
+                    previewPanel.innerHTML = `<div class="empty-text">生成失败：${JSON.stringify(data)}</div>`;
+                }
+            } catch (e) {
+                console.error('API request error:', e);
+                // 检查是否是CORS错误
+                if (e.message.includes('CORS')) {
+                    previewPanel.innerHTML = '<div class="empty-text">请求失败：跨域资源共享(CORS)错误。请使用支持CORS的API端点或设置代理服务器。</div>';
+                } else if (e.message.includes('401')) {
+                    previewPanel.innerHTML = '<div class="empty-text">请求失败：API密钥无效，请检查API密钥是否正确。</div>';
+                } else {
+                    previewPanel.innerHTML = `<div class="empty-text">请求失败：${e.message}</div>`;
+                }
+            } finally {
+                btnGenerate.disabled = false;
+                btnGenerate.textContent = '立即生成';
+            }
+        });
+
+        // ------------------------------
+        // 2-5. 已替换为外部工具链接（见面板按钮）
+        // ------------------------------
+
+        // 辅助功能：语音输入模拟
+        const voiceBtn = document.getElementById('voiceBtn');
+        if (voiceBtn) voiceBtn.addEventListener('click', () => {
+            alert('语音输入功能：请描述你想要生成的画面，例如"一只可爱的猫咪在草地上玩耍"');
+        });
+
+        // 辅助功能：智能扩写
+        const expandBtn = document.getElementById('expandBtn');
+        if (expandBtn) expandBtn.addEventListener('click', () => {
+            if (promptGenerate.value === '') {
+                alert('请先输入基础描述，再进行智能扩写');
+                return;
+            }
+            const expanded = promptGenerate.value + '，高清细节，光影自然，色彩鲜艳，构图精美，8K分辨率，细节拉满，质感真实';
+            promptGenerate.value = expanded;
+            updateCharCount();
+        });
+
+        // 标签关闭
+        const tagClose = document.querySelector('.tag-close');
+        if (tagClose) tagClose.addEventListener('click', (e) => {
+            e.target.parentElement.remove();
+        });
+
+        // 初始化 - 确保占位符显示正确
+        window.addEventListener('load', () => {
+            if (promptGenerate.value === '') {
+                document.querySelector('.desc-placeholder').style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

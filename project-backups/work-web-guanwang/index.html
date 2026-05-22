@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Q.AI - 比肩谷歌的AI生态</title>
+    <!-- shadcn/ui CSS via CDN -->
+    <link rel="stylesheet" href="https://ui.shadcn.com/themes/default.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: ["class"],
+            content: ["./index.html"],
+            theme: {
+                container: {
+                    center: true,
+                    padding: "2rem",
+                    screens: {
+                        "2xl": "1400px",
+                    },
+                },
+                extend: {
+                    colors: {
+                        border: "hsl(var(--border))",
+                        input: "hsl(var(--input))",
+                        ring: "hsl(var(--ring))",
+                        background: "hsl(var(--background))",
+                        foreground: "hsl(var(--foreground))",
+                        primary: {
+                            DEFAULT: "hsl(var(--primary))",
+                            foreground: "hsl(var(--primary-foreground))",
+                        },
+                        secondary: {
+                            DEFAULT: "hsl(var(--secondary))",
+                            foreground: "hsl(var(--secondary-foreground))",
+                        },
+                        muted: {
+                            DEFAULT: "hsl(var(--muted))",
+                            foreground: "hsl(var(--muted-foreground))",
+                        },
+                        accent: {
+                            DEFAULT: "hsl(var(--accent))",
+                            foreground: "hsl(var(--accent-foreground))",
+                        },
+                        card: {
+                            DEFAULT: "hsl(var(--card))",
+                            foreground: "hsl(var(--card-foreground))",
+                        },
+                    },
+                    borderRadius: {
+                        lg: "var(--radius)",
+                        md: "calc(var(--radius) - 2px)",
+                        sm: "calc(var(--radius) - 4px)",
+                    },
+                    keyframes: {
+                        "fade-in": {
+                            from: { opacity: 0, transform: "translateY(30px)" },
+                            to: { opacity: 1, transform: "translateY(0)" },
+                        },
+                        "scale-in": {
+                            from: { opacity: 0, transform: "scale(0.9)" },
+                            to: { opacity: 1, transform: "scale(1)" },
+                        },
+                    },
+                    animation: {
+                        "fade-in": "fade-in 0.8s ease-out forwards",
+                        "scale-in": "scale-in 0.6s ease-out forwards",
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        :root {
+            --background: 0 0% 100%;
+            --foreground: 222.2 84% 4.9%;
+            --card: 0 0% 100%;
+            --card-foreground: 222.2 84% 4.9%;
+            --primary: 222.2 47.4% 11.2%;
+            --primary-foreground: 210 40% 98%;
+            --secondary: 210 40% 96%;
+            --secondary-foreground: 222.2 84% 4.9%;
+            --muted: 210 40% 96%;
+            --muted-foreground: 215.4 16.3% 46.9%;
+            --accent: 210 40% 96%;
+            --accent-foreground: 222.2 84% 4.9%;
+            --border: 214.3 31.8% 91.4%;
+            --input: 214.3 31.8% 91.4%;
+            --ring: 222.2 84% 4.9%;
+            --radius: 0.5rem;
+        }
+
+        body {
+            background-color: hsl(var(--background));
+            color: hsl(var(--foreground));
+        }
+
+        .animate-delay-100 { animation-delay: 0.1s; }
+        .animate-delay-200 { animation-delay: 0.2s; }
+        .animate-delay-300 { animation-delay: 0.3s; }
+        .animate-delay-400 { animation-delay: 0.4s; }
+        .animate-delay-500 { animation-delay: 0.5s; }
+        .animate-delay-600 { animation-delay: 0.6s; }
+
+        .hero-gradient {
+            background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
+        }
+
+        /* 纯色块几何设计 */
+        .geometric-icon {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .geometric-icon:hover {
+            transform: scale(1.05);
+        }
+
+        /* 沉浸式交互 */
+        .card-hover {
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        /* 情感化细节 */
+        .pulse-subtle {
+            animation: pulse-subtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse-subtle {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.8;
+            }
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="min-h-screen bg-background font-sans antialiased">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div class="container flex h-16 items-center">
+            <div class="mr-4 flex">
+                <div class="mr-6 flex items-center space-x-2">
+                    <div class="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-sm font-bold text-primary-foreground">
+                        Q
+                    </div>
+                    <span class="hidden font-bold sm:inline-block text-xl">Q.AI</span>
+                </div>
+            </div>
+            <div class="flex flex-1 items-center justify-between space-x-2 md:justify-end">
+                <nav class="flex items-center space-x-6 text-sm font-medium">
+                    <a href="#ecosystem" class="transition-colors hover:text-foreground/80 text-foreground/60">生态</a>
+                    <a href="#research" class="transition-colors hover:text-foreground/80 text-foreground/60">研究</a>
+                    <a href="#education" class="transition-colors hover:text-foreground/80 text-foreground/60">教育</a>
+                    <a href="#about" class="transition-colors hover:text-foreground/80 text-foreground/60">关于</a>
+                </nav>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-16 pb-8 md:pb-12 md:pt-24 lg:pb-32">
+        <div class="container space-y-8 py-12 md:py-16 lg:py-20">
+            <div class="mx-auto flex max-w-[980px] flex-col items-center gap-4 text-center">
+                <div class="opacity-0 animate-fade-in">
+                    <h1 class="text-4xl font-light leading-tight tracking-tighter md:text-6xl lg:text-7xl">
+                        让天下没有<br />
+                        <span class="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent font-medium">
+                            难用的AI
+                        </span>
+                    </h1>
+                </div>
+                <div class="opacity-0 animate-fade-in animate-delay-200">
+                    <p class="max-w-[700px] text-lg text-muted-foreground sm:text-xl">
+                        构建比肩谷歌的AI生态系统<br />
+                        让人工智能触手可及，简单易用
+                    </p>
+                </div>
+                <div class="opacity-0 animate-fade-in animate-delay-400 space-x-4 pt-4">
+                    <button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8">
+                        探索生态
+                    </button>
+                    <button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-11 px-8">
+                        了解研究
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Ecosystem -->
+    <section id="ecosystem" class="py-16 bg-muted/30">
+        <div class="container">
+            <div class="mx-auto flex max-w-[980px] flex-col items-center gap-4 text-center mb-16">
+                <h2 class="text-3xl font-light leading-tight tracking-tighter md:text-4xl">
+                    产品生态矩阵
+                </h2>
+                <p class="max-w-[600px] text-muted-foreground sm:text-lg">
+                    全方位覆盖AI应用场景，打造完整的智能化产品链
+                </p>
+            </div>
+
+            <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                
+                <!-- AI Research -->
+                <div class="opacity-0 animate-scale-in animate-delay-100">
+                    <div class="group rounded-lg border bg-card p-6 text-card-foreground shadow-sm hover:shadow-lg transition-all duration-300">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
+                                <div class="w-6 h-6 rounded bg-primary"></div>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-medium">Q.AI Lab</h3>
+                                <p class="text-sm text-muted-foreground">AI研究实验室</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-muted-foreground mb-4">
+                            Multi-Agent、Context Management、Workflow、Memory Control等前沿AI技术研究
+                        </p>
+                        <div class="flex gap-2">
+                            <span class="inline-flex items-center rounded-md bg-secondary px-2 py-1 text-xs font-medium text-secondary-foreground">研究</span>
+                            <span class="inline-flex items-center rounded-md bg-secondary px-2 py-1 text-xs font-medium text-secondary-foreground">开源</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Education -->
+                <div class="opacity-0 animate-scale-in animate-delay-200">
+                    <div class="group rounded-lg border bg-card p-6 text-card-foreground shadow-sm hover:shadow-lg transition-all duration-300">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center">
+                                <div class="w-6 h-6 rounded-sm bg-blue-500"></div>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-medium">Q AI圈</h3>
+                                <p class="text-sm text-muted-foreground">AI教育平台</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-muted-foreground mb-4">
+                            系统化AI课程体系，从基础理论到实战应用，培养下一代AI专家
+                        </p>
+                        <div class="flex gap-2">
+                            <span class="inline-flex items-center rounded-md bg-blue-100 text-blue-800 px-2 py-1 text-xs font-medium">教育</span>
+                            <span class="inline-flex items-center rounded-md bg-blue-100 text-blue-800 px-2 py-1 text-xs font-medium">培训</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Tools -->
+                <div class="opacity-0 animate-scale-in animate-delay-300">
+                    <div class="group rounded-lg border bg-card p-6 text-card-foreground shadow-sm hover:shadow-lg transition-all duration-300">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-12 h-12 rounded-lg bg-green-100 flex items-center justify-center">
+                                <div class="w-6 h-6 rounded bg-green-500"></div>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-medium">AI工具链</h3>
+                                <p class="text-sm text-muted-foreground">智能生产力工具</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-muted-foreground mb-4">
+                            AI编程助手、智能写作、自动化工作流等生产力工具集合
+                        </p>
+                        <div class="flex gap-2">
+                            <span class="inline-flex items-center rounded-md bg-green-100 text-green-800 px-2 py-1 text-xs font-medium">工具</span>
+                            <span class="inline-flex items-center rounded-md bg-green-100 text-green-800 px-2 py-1 text-xs font-medium">效率</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content Platform -->
+                <div class="opacity-0 animate-scale-in animate-delay-400">
+                    <div class="group rounded-lg border bg-card p-6 text-card-foreground shadow-sm hover:shadow-lg transition-all duration-300">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-12 h-12 rounded-lg bg-purple-100 flex items-center justify-center">
+                                <div class="w-6 h-6 rounded bg-purple-500"></div>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-medium">内容生态</h3>
+                                <p class="text-sm text-muted-foreground">AI内容创作平台</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-muted-foreground mb-4">
+                            AI辅助内容创作、智能编辑、多媒体生成等内容生产工具
+                        </p>
+                        <div class="flex gap-2">
+                            <span class="inline-flex items-center rounded-md bg-purple-100 text-purple-800 px-2 py-1 text-xs font-medium">创作</span>
+                            <span class="inline-flex items-center rounded-md bg-purple-100 text-purple-800 px-2 py-1 text-xs font-medium">媒体</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- API Services -->
+                <div class="opacity-0 animate-scale-in animate-delay-500">
+                    <div class="group rounded-lg border bg-card p-6 text-card-foreground shadow-sm hover:shadow-lg transition-all duration-300">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-12 h-12 rounded-lg bg-orange-100 flex items-center justify-center">
+                                <div class="w-6 h-6 rounded bg-orange-500"></div>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-medium">API服务</h3>
+                                <p class="text-sm text-muted-foreground">AI能力开放平台</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-muted-foreground mb-4">
+                            提供标准化AI API服务，支持第三方开发者快速集成AI能力
+                        </p>
+                        <div class="flex gap-2">
+                            <span class="inline-flex items-center rounded-md bg-orange-100 text-orange-800 px-2 py-1 text-xs font-medium">API</span>
+                            <span class="inline-flex items-center rounded-md bg-orange-100 text-orange-800 px-2 py-1 text-xs font-medium">开放</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Enterprise Solutions -->
+                <div class="opacity-0 animate-scale-in animate-delay-600">
+                    <div class="group rounded-lg border bg-card p-6 text-card-foreground shadow-sm hover:shadow-lg transition-all duration-300">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-12 h-12 rounded-lg bg-slate-100 flex items-center justify-center">
+                                <div class="w-6 h-6 rounded bg-slate-600"></div>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-medium">企业解决方案</h3>
+                                <p class="text-sm text-muted-foreground">定制化AI服务</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-muted-foreground mb-4">
+                            为企业提供定制化AI解决方案，包括私有化部署、专业咨询等
+                        </p>
+                        <div class="flex gap-2">
+                            <span class="inline-flex items-center rounded-md bg-slate-100 text-slate-800 px-2 py-1 text-xs font-medium">企业</span>
+                            <span class="inline-flex items-center rounded-md bg-slate-100 text-slate-800 px-2 py-1 text-xs font-medium">定制</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Vision Statement -->
+    <section class="py-16">
+        <div class="container">
+            <div class="mx-auto max-w-4xl text-center space-y-8">
+                <div class="opacity-0 animate-fade-in">
+                    <h2 class="text-3xl font-light leading-tight tracking-tighter md:text-4xl mb-6">
+                        我们的使命
+                    </h2>
+                    <p class="text-lg text-muted-foreground leading-relaxed">
+                        让天下没有难用的AI。我们致力于打造最易用的AI产品，
+                        让每个人都能轻松享受人工智能带来的便利与价值。
+                    </p>
+                </div>
+                
+                <div class="opacity-0 animate-fade-in animate-delay-200 grid gap-8 md:grid-cols-3 pt-12">
+                    <div class="text-center">
+                        <div class="w-16 h-16 mx-auto rounded-full bg-primary/10 flex items-center justify-center mb-4">
+                            <div class="text-2xl">🔬</div>
+                        </div>
+                        <h3 class="text-lg font-medium mb-2">易用至上</h3>
+                        <p class="text-sm text-muted-foreground">
+                            以用户体验为核心，让AI工具简单易用
+                        </p>
+                    </div>
+                    
+                    <div class="text-center">
+                        <div class="w-16 h-16 mx-auto rounded-full bg-blue-100 flex items-center justify-center mb-4">
+                            <div class="text-2xl">🎓</div>
+                        </div>
+                        <h3 class="text-lg font-medium mb-2">普惠教育</h3>
+                        <p class="text-sm text-muted-foreground">
+                            降低AI学习门槛，让人人都能掌握AI
+                        </p>
+                    </div>
+                    
+                    <div class="text-center">
+                        <div class="w-16 h-16 mx-auto rounded-full bg-green-100 flex items-center justify-center mb-4">
+                            <div class="text-2xl">🚀</div>
+                        </div>
+                        <h3 class="text-lg font-medium mb-2">开放生态</h3>
+                        <p class="text-sm text-muted-foreground">
+                            构建开放平台，让AI能力触手可及
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t bg-muted/30 py-16">
+        <div class="container">
+            <div class="grid gap-8 md:grid-cols-4">
+                <div class="space-y-4">
+                    <div class="flex items-center space-x-2">
+                        <div class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-xs font-bold text-primary-foreground">
+                            Q
+                        </div>
+                        <span class="font-bold">Q.AI</span>
+                    </div>
+                    <p class="text-sm text-muted-foreground">
+                        让天下没有难用的AI
+                    </p>
+                </div>
+                
+                <div class="space-y-4">
+                    <h4 class="text-sm font-medium">产品</h4>
+                    <ul class="space-y-2 text-sm text-muted-foreground">
+                        <li><a href="#" class="hover:text-foreground transition-colors">Q.AI Lab</a></li>
+                        <li><a href="#" class="hover:text-foreground transition-colors">Q AI圈</a></li>
+                        <li><a href="#" class="hover:text-foreground transition-colors">AI工具链</a></li>
+                        <li><a href="#" class="hover:text-foreground transition-colors">API服务</a></li>
+                    </ul>
+                </div>
+                
+                <div class="space-y-4">
+                    <h4 class="text-sm font-medium">研究</h4>
+                    <ul class="space-y-2 text-sm text-muted-foreground">
+                        <li><a href="#" class="hover:text-foreground transition-colors">Multi-Agent</a></li>
+                        <li><a href="#" class="hover:text-foreground transition-colors">Context Management</a></li>
+                        <li><a href="#" class="hover:text-foreground transition-colors">Workflow</a></li>
+                        <li><a href="#" class="hover:text-foreground transition-colors">Memory Control</a></li>
+                    </ul>
+                </div>
+                
+                <div class="space-y-4">
+                    <h4 class="text-sm font-medium">关于我们</h4>
+                    <ul class="space-y-2 text-sm text-muted-foreground">
+                        <li><a href="#" class="hover:text-foreground transition-colors">公司介绍</a></li>
+                        <li><a href="#" class="hover:text-foreground transition-colors">团队</a></li>
+                        <li><a href="#" class="hover:text-foreground transition-colors">招聘</a></li>
+                        <li><a href="#" class="hover:text-foreground transition-colors">联系我们</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="mt-12 pt-8 border-t text-center text-sm text-muted-foreground">
+                <p>&copy; 2024 Q.AI. 版权所有 · 让天下没有难用的AI</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Page load animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const fadeElements = document.querySelectorAll('.animate-fade-in, .animate-scale-in');
+            fadeElements.forEach(element => {
+                element.classList.remove('opacity-0');
+            });
+        });
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+{
+  "miniprogramRoot": "./",
+  "projectname": "mbti_test",
+  "appid": "wx819fc42e38bc1292",
+  "setting": {
+    "es6": false,
+    "minified": false
+  }
+}

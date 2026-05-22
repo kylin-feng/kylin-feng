@@ -1,0 +1,84 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "AI写作助手 - 智能创作工具"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "AI写作助手应用"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "AI写作助手"
+    },
+    {
+      "name": "app_name",
+      "value": "AI写作助手"
+    },
+    {
+      "name": "ai_assistant",
+      "value": "AI助手"
+    },
+    {
+      "name": "writing_templates",
+      "value": "写作模板"
+    },
+    {
+      "name": "creative_writing",
+      "value": "创意写作"
+    },
+    {
+      "name": "business_email",
+      "value": "商务邮件"
+    },
+    {
+      "name": "academic_paper",
+      "value": "学术论文"
+    },
+    {
+      "name": "story_creation",
+      "value": "故事创作"
+    },
+    {
+      "name": "poetry_creation",
+      "value": "诗歌创作"
+    },
+    {
+      "name": "technical_doc",
+      "value": "技术文档"
+    },
+    {
+      "name": "ai_suggestion",
+      "value": "AI建议"
+    },
+    {
+      "name": "generate_suggestion",
+      "value": "生成建议"
+    },
+    {
+      "name": "apply_suggestion",
+      "value": "应用建议"
+    },
+    {
+      "name": "save_document",
+      "value": "保存文档"
+    },
+    {
+      "name": "export_document",
+      "value": "导出"
+    },
+    {
+      "name": "settings",
+      "value": "设置"
+    },
+    {
+      "name": "ai_thinking",
+      "value": "AI正在思考中..."
+    },
+    {
+      "name": "start_writing_hint",
+      "value": "开始您的创作...\n\n提示：输入一些关键词或句子，然后点击\"AI助手\"获取智能建议"
+    }
+  ]
+}

@@ -1,0 +1,338 @@
+.research-container {
+  min-height: 100vh;
+  background: hsl(var(--background));
+}
+
+/* Header */
+.research-header {
+  padding: 80rpx 0 60rpx;
+  background: linear-gradient(135deg, 
+    hsl(var(--background)) 0%, 
+    hsl(var(--muted)) 100%);
+  
+  .header-content {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+    
+    .header-title {
+      font-size: var(--font-size-3xl);
+      color: hsl(var(--foreground));
+      margin-bottom: var(--spacing-xs);
+    }
+    
+    .header-subtitle {
+      font-size: var(--font-size-lg);
+    }
+  }
+}
+
+.status-overview {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-xl);
+  flex-wrap: wrap;
+  
+  .status-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    
+    .status-dot {
+      width: 16rpx;
+      height: 16rpx;
+      border-radius: 50%;
+    }
+    
+    .status-text {
+      font-size: var(--font-size-sm);
+      color: hsl(var(--muted-foreground));
+    }
+  }
+}
+
+/* Research Content */
+.research-content {
+  padding: 60rpx 0;
+}
+
+.section-header {
+  text-align: center;
+  
+  .section-title {
+    font-size: var(--font-size-xl);
+    color: hsl(var(--foreground));
+    margin-bottom: var(--spacing-xs);
+  }
+  
+  .section-subtitle {
+    font-size: var(--font-size-base);
+  }
+}
+
+.research-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-lg);
+  
+  @media (min-width: 480px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.research-card {
+  padding: var(--spacing-lg);
+  position: relative;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  
+  &:hover {
+    box-shadow: 0 12rpx 48rpx rgba(0, 0, 0, 0.12);
+  }
+}
+
+.card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-md);
+  
+  .icon-container {
+    .research-icon {
+      width: 96rpx;
+      height: 96rpx;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.1);
+      
+      .icon-emoji {
+        font-size: 40rpx;
+      }
+    }
+  }
+  
+  .status-badge {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: 8rpx 16rpx;
+    background: hsl(var(--muted));
+    border-radius: 32rpx;
+    
+    .status-indicator {
+      width: 12rpx;
+      height: 12rpx;
+    }
+    
+    .status-label {
+      font-size: var(--font-size-xs);
+      color: hsl(var(--muted-foreground));
+    }
+  }
+}
+
+.card-content {
+  .area-title {
+    font-size: var(--font-size-lg);
+    color: hsl(var(--foreground));
+    margin-bottom: var(--spacing-xs);
+  }
+  
+  .area-subtitle {
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--spacing-xs);
+  }
+  
+  .area-description {
+    font-size: var(--font-size-sm);
+    line-height: 1.5;
+  }
+}
+
+/* Progress Section */
+.progress-section {
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-xs);
+    
+    .progress-label {
+      font-size: var(--font-size-xs);
+    }
+    
+    .progress-value {
+      font-size: var(--font-size-xs);
+      color: hsl(var(--foreground));
+    }
+  }
+  
+  .progress-bar {
+    height: 6rpx;
+    border-radius: 6rpx;
+    overflow: hidden;
+    
+    .progress-fill {
+      height: 100%;
+      border-radius: 6rpx;
+      transition: width var(--transition-slow);
+    }
+  }
+}
+
+/* Card Stats */
+.card-stats {
+  .stat-item {
+    text-align: center;
+    
+    .stat-number {
+      display: block;
+      font-size: var(--font-size-lg);
+      color: hsl(var(--foreground));
+      margin-bottom: 4rpx;
+    }
+    
+    .stat-label {
+      font-size: var(--font-size-xs);
+    }
+  }
+}
+
+/* Research Detail */
+.research-detail {
+  padding-bottom: 120rpx;
+  
+  .detail-card {
+    background: linear-gradient(135deg, 
+      hsl(var(--card)) 0%, 
+      hsl(var(--muted)) 100%);
+  }
+  
+  .detail-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+    
+    .detail-icon-container {
+      .detail-icon {
+        width: 120rpx;
+        height: 120rpx;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.12);
+        
+        .detail-emoji {
+          font-size: 48rpx;
+        }
+      }
+    }
+    
+    .detail-text {
+      flex: 1;
+      
+      .detail-title {
+        font-size: var(--font-size-xl);
+        color: hsl(var(--foreground));
+        margin-bottom: var(--spacing-xs);
+      }
+      
+      .detail-subtitle {
+        font-size: var(--font-size-base);
+      }
+    }
+  }
+  
+  .detail-content {
+    .content-section-title {
+      font-size: var(--font-size-lg);
+      color: hsl(var(--foreground));
+    }
+    
+    .content-items {
+      .content-item {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-md);
+        margin-bottom: var(--spacing-md);
+        
+        &:last-child {
+          margin-bottom: 0;
+        }
+        
+        .item-dot {
+          width: 12rpx;
+          height: 12rpx;
+          flex-shrink: 0;
+        }
+        
+        .item-text {
+          font-size: var(--font-size-base);
+          line-height: 1.5;
+        }
+      }
+    }
+  }
+  
+  .detail-actions {
+    display: flex;
+    gap: var(--spacing-md);
+    flex-wrap: wrap;
+    
+    .btn {
+      flex: 1;
+      min-width: 200rpx;
+    }
+  }
+}
+
+/* Animation Delays */
+.animate-scale-in {
+  &:nth-child(1) { animation-delay: 0.1s; }
+  &:nth-child(2) { animation-delay: 0.25s; }
+  &:nth-child(3) { animation-delay: 0.4s; }
+  &:nth-child(4) { animation-delay: 0.55s; }
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .research-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .status-overview {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-md);
+  }
+  
+  .detail-header {
+    flex-direction: column;
+    text-align: center;
+    
+    .detail-text {
+      .detail-title,
+      .detail-subtitle {
+        text-align: center;
+      }
+    }
+  }
+  
+  .detail-actions {
+    flex-direction: column;
+    
+    .btn {
+      width: 100%;
+    }
+  }
+  
+  .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+    
+    .status-badge {
+      align-self: flex-end;
+    }
+  }
+}

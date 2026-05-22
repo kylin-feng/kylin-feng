@@ -1,0 +1,1025 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>红色答题比赛</title>
+  <style>
+    :root {
+      --red-950: #4b0505;
+      --red-900: #680707;
+      --red-800: #8d0d0d;
+      --red-700: #b71414;
+      --red-600: #d6261f;
+      --red-100: #fff1eb;
+      --gold-500: #ffd15c;
+      --gold-300: #ffe5a0;
+      --ink: #241312;
+      --muted: #6e5650;
+      --paper: #fffaf5;
+      --line: #efd6c8;
+      --green: #207a43;
+      --green-soft: #e8f7ed;
+      --danger: #b11f1f;
+      --danger-soft: #fff0ee;
+      --shadow: 0 16px 40px rgba(88, 14, 10, .16);
+      font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", system-ui, -apple-system, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 8%, rgba(255, 209, 92, .28), transparent 24%),
+        linear-gradient(135deg, #fff8ee 0%, #ffe9df 38%, #fff8ef 100%);
+      min-height: 100vh;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .app {
+      width: min(1180px, 100%);
+      margin: 0 auto;
+      padding: 18px;
+    }
+
+    .top {
+      position: relative;
+      overflow: hidden;
+      min-height: 176px;
+      padding: 24px;
+      color: #fff;
+      background:
+        linear-gradient(120deg, rgba(104, 7, 7, .96), rgba(214, 38, 31, .94)),
+        url("data:image/svg+xml,%3Csvg width='240' height='180' viewBox='0 0 240 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffd15c' fill-opacity='.18'%3E%3Cpath d='M50 18l7.6 23.4h24.6L62.3 55.9l7.6 23.4L50 64.8 30.1 79.3l7.6-23.4-19.9-14.5h24.6z'/%3E%3Cpath d='M184 40l4.2 13h13.7l-11.1 8 4.2 13-11-8-11.1 8 4.2-13-11-8h13.7z'/%3E%3Cpath d='M154 106l5.8 17.8h18.7l-15.1 11 5.8 17.8-15.2-11-15.1 11 5.8-17.8-15.1-11h18.7z'/%3E%3C/g%3E%3C/svg%3E");
+      background-size: cover, 360px 270px;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .top::after {
+      content: "";
+      position: absolute;
+      right: -72px;
+      bottom: -110px;
+      width: 340px;
+      height: 220px;
+      background: rgba(255, 255, 255, .12);
+      transform: rotate(-18deg);
+      border-radius: 8px;
+    }
+
+    .brand {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: center;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(30px, 4vw, 52px);
+      line-height: 1.08;
+      letter-spacing: 0;
+      font-weight: 900;
+    }
+
+    .subtitle {
+      margin: 10px 0 0;
+      color: rgba(255, 255, 255, .88);
+      font-size: 17px;
+      line-height: 1.65;
+    }
+
+    .medal {
+      width: 112px;
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(145deg, #fff3bd, #ffc847);
+      color: var(--red-900);
+      border-radius: 50%;
+      border: 8px solid rgba(255, 255, 255, .42);
+      font-size: 48px;
+      font-weight: 900;
+      box-shadow: 0 12px 24px rgba(70, 5, 5, .25);
+    }
+
+    .groups {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .group-tab {
+      min-height: 58px;
+      border: 1px solid rgba(255, 255, 255, .35);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .14);
+      color: #fff;
+      text-align: left;
+      padding: 10px 12px;
+      cursor: pointer;
+      transition: transform .18s ease, background .18s ease, border-color .18s ease;
+    }
+
+    .group-tab:hover {
+      transform: translateY(-1px);
+      background: rgba(255, 255, 255, .22);
+    }
+
+    .group-tab.active {
+      background: #fff;
+      color: var(--red-900);
+      border-color: #fff;
+    }
+
+    .group-name {
+      display: block;
+      font-weight: 800;
+      font-size: 16px;
+      line-height: 1.25;
+    }
+
+    .group-count {
+      display: block;
+      margin-top: 5px;
+      font-size: 12px;
+      color: currentColor;
+      opacity: .76;
+    }
+
+    .home {
+      margin-top: 18px;
+    }
+
+    .home-panel {
+      background: rgba(255, 250, 245, .94);
+      border: 1px solid rgba(239, 214, 200, .88);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      padding: 22px;
+    }
+
+    .home-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .home-heading h2 {
+      margin: 0;
+      color: var(--red-900);
+      font-size: clamp(24px, 3vw, 34px);
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    .home-heading span {
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .group-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .group-card {
+      min-height: 168px;
+      border: 2px solid var(--line);
+      background: #fff;
+      border-radius: 8px;
+      padding: 16px;
+      text-align: left;
+      color: var(--ink);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 16px;
+      transition: border-color .18s ease, transform .18s ease, box-shadow .18s ease;
+    }
+
+    .group-card:hover {
+      border-color: var(--red-600);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(183, 20, 20, .12);
+    }
+
+    .group-card h3 {
+      margin: 0;
+      color: var(--red-900);
+      font-size: 23px;
+      line-height: 1.24;
+      letter-spacing: 0;
+    }
+
+    .group-card p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .card-foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .card-status {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      border-radius: 999px;
+      padding: 5px 9px;
+      background: var(--red-100);
+      color: var(--red-800);
+      border: 1px solid #ffd0c2;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .card-action {
+      color: var(--red-700);
+      font-weight: 900;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 300px;
+      gap: 18px;
+      margin-top: 18px;
+      align-items: start;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .panel,
+    .side {
+      background: rgba(255, 250, 245, .94);
+      border: 1px solid rgba(239, 214, 200, .88);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .panel {
+      min-height: 520px;
+      padding: 22px;
+    }
+
+    .side {
+      padding: 16px;
+      position: sticky;
+      top: 14px;
+    }
+
+    .status-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 32px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--red-100);
+      color: var(--red-800);
+      font-size: 14px;
+      font-weight: 800;
+      border: 1px solid #ffd0c2;
+    }
+
+    .status-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .question-title {
+      margin: 0;
+      font-size: clamp(24px, 3vw, 34px);
+      line-height: 1.42;
+      letter-spacing: 0;
+      font-weight: 900;
+    }
+
+    .options {
+      display: grid;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .option {
+      width: 100%;
+      min-height: 66px;
+      border: 2px solid var(--line);
+      background: #fff;
+      border-radius: 8px;
+      padding: 12px 14px;
+      display: grid;
+      grid-template-columns: 42px minmax(0, 1fr);
+      gap: 12px;
+      align-items: center;
+      text-align: left;
+      color: var(--ink);
+      cursor: pointer;
+      transition: border-color .18s ease, transform .18s ease, background .18s ease;
+    }
+
+    .option:hover {
+      border-color: #e84a3e;
+      transform: translateY(-1px);
+    }
+
+    .option.selected {
+      border-color: var(--red-600);
+      background: #fff4ee;
+    }
+
+    .option.correct {
+      border-color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .option.wrong {
+      border-color: var(--danger);
+      background: var(--danger-soft);
+    }
+
+    .option:disabled {
+      cursor: default;
+      transform: none;
+    }
+
+    .letter {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--red-100);
+      color: var(--red-800);
+      font-weight: 900;
+      border: 1px solid #ffd0c2;
+    }
+
+    .option.correct .letter {
+      background: var(--green);
+      color: #fff;
+      border-color: var(--green);
+    }
+
+    .option.wrong .letter {
+      background: var(--danger);
+      color: #fff;
+      border-color: var(--danger);
+    }
+
+    .option-text {
+      font-size: 18px;
+      line-height: 1.45;
+      overflow-wrap: anywhere;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .btn {
+      min-height: 44px;
+      border: 0;
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-weight: 850;
+      cursor: pointer;
+      transition: transform .18s ease, filter .18s ease, opacity .18s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn:disabled {
+      cursor: not-allowed;
+      opacity: .46;
+      transform: none;
+    }
+
+    .primary {
+      color: #fff;
+      background: linear-gradient(135deg, var(--red-700), var(--red-600));
+      box-shadow: 0 8px 18px rgba(183, 20, 20, .24);
+    }
+
+    .secondary {
+      color: var(--red-800);
+      background: #fff0e8;
+      border: 1px solid #ffcbb8;
+    }
+
+    .ghost {
+      color: var(--muted);
+      background: #fff;
+      border: 1px solid var(--line);
+    }
+
+    .feedback {
+      margin-top: 18px;
+      padding: 14px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: #fff;
+      line-height: 1.65;
+      display: none;
+    }
+
+    .feedback.show {
+      display: block;
+    }
+
+    .feedback.good {
+      border-color: #a9dfbb;
+      background: var(--green-soft);
+    }
+
+    .feedback.bad {
+      border-color: #ffc1b8;
+      background: var(--danger-soft);
+    }
+
+    .feedback-title {
+      margin: 0 0 6px;
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .feedback p {
+      margin: 0;
+      color: #49312b;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .stat {
+      min-height: 76px;
+      padding: 10px;
+      border-radius: 8px;
+      background: #fff;
+      border: 1px solid var(--line);
+    }
+
+    .stat strong {
+      display: block;
+      color: var(--red-800);
+      font-size: 25px;
+      line-height: 1.1;
+    }
+
+    .stat span {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.3;
+    }
+
+    .progress {
+      height: 10px;
+      border-radius: 999px;
+      background: #f5ded2;
+      overflow: hidden;
+      margin-bottom: 14px;
+    }
+
+    .bar {
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, var(--red-700), var(--gold-500));
+      border-radius: inherit;
+      transition: width .22s ease;
+    }
+
+    .map-title {
+      margin: 4px 0 10px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .question-map {
+      display: grid;
+      grid-template-columns: repeat(8, minmax(24px, 1fr));
+      gap: 5px;
+      max-height: 300px;
+      overflow: auto;
+      padding-right: 2px;
+    }
+
+    .dot {
+      height: 28px;
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      background: #fff;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1;
+      font-weight: 800;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .dot.current {
+      outline: 2px solid var(--red-600);
+      color: var(--red-700);
+    }
+
+    .dot.done-good {
+      background: var(--green);
+      color: #fff;
+      border-color: var(--green);
+    }
+
+    .dot.done-bad {
+      background: var(--danger);
+      color: #fff;
+      border-color: var(--danger);
+    }
+
+    .empty {
+      min-height: 420px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 28px;
+    }
+
+    .empty h2 {
+      margin: 0;
+      color: var(--red-800);
+      font-size: clamp(26px, 4vw, 40px);
+      line-height: 1.2;
+    }
+
+    .empty p {
+      margin: 12px auto 0;
+      max-width: 560px;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 17px;
+    }
+
+    @media (max-width: 900px) {
+      .brand,
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .medal {
+        display: none;
+      }
+
+      .groups {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .group-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .side {
+        position: static;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .app {
+        padding: 10px;
+      }
+
+      .top,
+      .panel,
+      .side {
+        padding: 16px;
+      }
+
+      .groups {
+        grid-template-columns: 1fr;
+      }
+
+      .group-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .option {
+        grid-template-columns: 36px minmax(0, 1fr);
+        min-height: 58px;
+      }
+
+      .letter {
+        width: 36px;
+        height: 36px;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .question-map {
+        grid-template-columns: repeat(6, minmax(24px, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <section class="top">
+      <div class="brand">
+        <div>
+          <h1>红色答题比赛</h1>
+          <p class="subtitle" id="bankSubtitle">请选择组别开始答题</p>
+        </div>
+        <div class="medal">★</div>
+      </div>
+    </section>
+
+    <section class="home" id="homePanel"></section>
+
+    <section class="layout hidden" id="quizLayout">
+      <div class="panel" id="quizPanel"></div>
+      <aside class="side">
+        <div class="stats">
+          <div class="stat"><strong id="doneCount">0</strong><span>已答</span></div>
+          <div class="stat"><strong id="rightCount">0</strong><span>正确</span></div>
+          <div class="stat"><strong id="scoreCount">0</strong><span>得分</span></div>
+        </div>
+        <div class="progress" aria-hidden="true"><div class="bar" id="progressBar"></div></div>
+        <div class="map-title">题号</div>
+        <div class="question-map" id="questionMap"></div>
+        <button class="btn ghost" id="resetBtn" type="button" style="width:100%; margin-top:14px;">重新开始</button>
+      </aside>
+    </section>
+  </main>
+
+  <script>
+    const FALLBACK_BANKS = {"lowerPrimary":{"name":"小学低年级组","subtitle":"小学 1-3 年级组题库，共 120 题","status":"ready","questions":[{"id":"S1","type":"single","label":"单选","title":"五星红旗是我国的（）","options":{"A":"国旗","B":"党旗"},"answer":["A"]},{"id":"S2","type":"single","label":"单选","title":"我国国旗的主体颜色是（）","options":{"A":"黄色","B":"红色"},"answer":["B"]},{"id":"S3","type":"single","label":"单选","title":"我国国旗上有几颗五角星（）","options":{"A":"5 颗","B":"6 颗"},"answer":["A"]},{"id":"S4","type":"single","label":"单选","title":"我国国旗上的大五角星代表（）","options":{"A":"中国共产党","B":"工人阶级"},"answer":["A"]},{"id":"S5","type":"single","label":"单选","title":"我国国旗上的四颗小五角星代表（）","options":{"A":"四个直辖市","B":"四个阶级"},"answer":["B"]},{"id":"S6","type":"single","label":"单选","title":"我国国徽上有哪些颜色（）","options":{"A":"红色和金色","B":"红色和蓝色"},"answer":["A"]},{"id":"S7","type":"single","label":"单选","title":"我国的国歌是（）","options":{"A":"《义勇军进行曲》","B":"《我的祖国》"},"answer":["A"]},{"id":"S8","type":"single","label":"单选","title":"我国的国庆节是哪一天（）","options":{"A":"5 月 1 日","B":"10 月 1 日"},"answer":["B"]},{"id":"S9","type":"single","label":"单选","title":"我党的建党节是哪一天（）","options":{"A":"7 月 1 日","B":"8 月 1 日"},"answer":["A"]},{"id":"S10","type":"single","label":"单选","title":"我军的建军节是哪一天（）","options":{"A":"8 月 1 日","B":"10 月 1 日"},"answer":["A"]},{"id":"S11","type":"single","label":"单选","title":"中国烈士纪念日是哪一天（）","options":{"A":"6 月 30 日","B":"9 月 30 日"},"answer":["B"]},{"id":"S12","type":"single","label":"单选","title":"伟大领袖“毛主席”指的是谁（）","options":{"A":"毛泽民","B":"毛泽东"},"answer":["B"]},{"id":"S13","type":"single","label":"单选","title":"敬爱的“周总理”指的是谁（）","options":{"A":"周恩来","B":"周树人"},"answer":["A"]},{"id":"S14","type":"single","label":"单选","title":"我们国家的简称是（）","options":{"A":"中国","B":"中华人民共和国"},"answer":["A"]},{"id":"S15","type":"single","label":"单选","title":"改革开放是哪一年开始的（）","options":{"A":"1949 年","B":"1978 年"},"answer":["B"]},{"id":"S16","type":"single","label":"单选","title":"我国的首都是哪里（）","options":{"A":"北京","B":"上海"},"answer":["A"]},{"id":"S17","type":"single","label":"单选","title":"少先队的创立者和领导者是（）","options":{"A":"中国共产党","B":"中国共产主义青年团"},"answer":["A"]},{"id":"S18","type":"single","label":"单选","title":"少先队队旗上有什么图案（）","options":{"A":"火炬","B":"火炬和五角星"},"answer":["B"]},{"id":"S19","type":"single","label":"单选","title":"《我们是共产主义接班人》是（）","options":{"A":"中国少年先锋队队歌","B":"中国共产主义青年团团歌"},"answer":["A"]},{"id":"S20","type":"single","label":"单选","title":"红军长征途中，翻越的第一座大雪山是（）","options":{"A":"夹金山","B":"泰山"},"answer":["A"]},{"id":"S21","type":"single","label":"单选","title":"中国人民抗日战争胜利纪念日是（）","options":{"A":"8 月 15 日","B":"9 月 3 日"},"answer":["B"]},{"id":"S22","type":"single","label":"单选","title":"抗美援朝战争是哪一年开始的（）","options":{"A":"1949 年","B":"1950 年"},"answer":["B"]},{"id":"S23","type":"single","label":"单选","title":"抗美援朝战争中，最著名的战役是（）","options":{"A":"上甘岭战役","B":"平型关战役"},"answer":["A"]},{"id":"S24","type":"single","label":"单选","title":"被称为“改革开放总设计师”的是（）","options":{"A":"邓小平","B":"江泽民"},"answer":["A"]},{"id":"S25","type":"single","label":"单选","title":"我国第一艘航空母舰是（ ）","options":{"A":"辽宁舰","B":"山东舰"},"answer":["A"]},{"id":"S26","type":"single","label":"单选","title":"“砍头不要紧，只要主义真。”这诗句是谁写的（）","options":{"A":"夏明翰","B":"方志敏"},"answer":["A"]},{"id":"S27","type":"single","label":"单选","title":"“生的伟大，死的光荣”是毛泽东主席为哪位英雄的题词（）","options":{"A":"刘胡兰","B":"赵一曼"},"answer":["A"]},{"id":"S28","type":"single","label":"单选","title":"“为了新中国，冲啊！”这是哪位英雄在舍身炸碉堡时喊出的口号（）","options":{"A":"黄继光","B":"董存瑞"},"answer":["B"]},{"id":"S29","type":"single","label":"单选","title":"在烈火中纹丝不动，壮烈牺牲的志愿军战士是（）","options":{"A":"王成","B":"邱少云"},"answer":["B"]},{"id":"S30","type":"single","label":"单选","title":"《没有共产党就没有新中国》是一首什么歌（）","options":{"A":"红歌","B":"儿歌"},"answer":["A"]},{"id":"S31","type":"single","label":"单选","title":"狼牙山五壮士的故事发生在哪场战争中（）","options":{"A":"抗日战争","B":"解放战争"},"answer":["A"]},{"id":"S32","type":"single","label":"单选","title":"“向雷锋同志学习”是哪位领导人提出的号召（）","options":{"A":"周恩来","B":"毛泽东"},"answer":["B"]},{"id":"S33","type":"single","label":"单选","title":"雷锋叔叔的职业是（）","options":{"A":"军人","B":"农民"},"answer":["A"]},{"id":"S34","type":"single","label":"单选","title":"被称为“铁人”的石油工人是（）","options":{"A":"王进喜","B":"时传祥"},"answer":["A"]},{"id":"S35","type":"single","label":"单选","title":"被誉为“县委书记的榜样”的是（）","options":{"A":"焦裕禄","B":"谷文昌"},"answer":["A"]},{"id":"S36","type":"single","label":"单选","title":"中国第一位进入太空的航天员是（）","options":{"A":"聂海胜","B":"杨利伟"},"answer":["B"]},{"id":"S37","type":"single","label":"单选","title":"抗日小英雄王二小的故事发生在（）","options":{"A":"华北地区","B":"东北地区"},"answer":["A"]},{"id":"S38","type":"single","label":"单选","title":"长征精神告诉我们什么道理（）","options":{"A":"不怕困难，坚持到底","B":"好好学习，天天向上"},"answer":["A"]},{"id":"S39","type":"single","label":"单选","title":"“红船精神”的核心内涵是什么（）","options":{"A":"开天辟地、敢为人先","B":"坚定信念、艰苦奋斗"},"answer":["A"]},{"id":"S40","type":"single","label":"单选","title":"我国第一颗人造地球卫星是（）","options":{"A":"神舟一号","B":"东方红一号"},"answer":["B"]},{"id":"S41","type":"single","label":"单选","title":"自己动手，丰衣足食反映的是下列哪种精神（）","options":{"A":"延安精神","B":"长征精神"},"answer":["A"]},{"id":"S42","type":"single","label":"单选","title":"以下体现雷锋精神的是（）","options":{"A":"助人为乐","B":"同甘共苦"},"answer":["A"]},{"id":"S43","type":"single","label":"单选","title":"毛主席讲的“毫不利己，专门利人”与谁有关（）","options":{"A":"斯大林","B":"白求恩"},"answer":["B"]},{"id":"S44","type":"single","label":"单选","title":"第一批纳入中国共产党人精神谱系的伟大精神有多少种（）","options":{"A":"100","B":"46"},"answer":["B"]},{"id":"S45","type":"single","label":"单选","title":"“红船精神”诞生于哪个地方（）","options":{"A":"上海","B":"浙江嘉兴"},"answer":["B"]},{"id":"S46","type":"single","label":"单选","title":"“延安精神”诞生于哪个时期（）","options":{"A":"土地革命战争时期","B":"抗日战争时期"},"answer":["B"]},{"id":"S47","type":"single","label":"单选","title":"“西柏坡精神”是在什么背景下形成的（）","options":{"A":"解放战争即将取得全国胜利","B":"新中国成立初期"},"answer":["A"]},{"id":"S48","type":"single","label":"单选","title":"实践证明，无论时代如何变迁，“雷锋精神”（）","options":{"A":"过时了","B":"永不过时"},"answer":["B"]},{"id":"S49","type":"single","label":"单选","title":"“井冈山精神”的诞生地在哪一个省（ ）","options":{"A":"江西","B":"湖南"},"answer":["A"]},{"id":"S50","type":"single","label":"单选","title":"我国的国徽上没有什么元素（）","options":{"A":"天安门","B":"熊猫"},"answer":["B"]},{"id":"S51","type":"single","label":"单选","title":"“红旗渠精神”诞生于哪个省（）","options":{"A":"山西","B":"河南"},"answer":["B"]},{"id":"S52","type":"single","label":"单选","title":"少先队的最高领导机构是（）","options":{"A":"学校","B":"中国少年先锋队全国工作委员会"},"answer":["B"]},{"id":"S53","type":"single","label":"单选","title":"毛泽东是中国共产党第几代领导核心（）","options":{"A":"第一代","B":"第二代"},"answer":["A"]},{"id":"S54","type":"single","label":"单选","title":"邓小平爷爷强调要尊重知识，尊重（）","options":{"A":"画家","B":"人才"},"answer":["B"]},{"id":"S55","type":"single","label":"单选","title":"我党现任总书记是（）","options":{"A":"习近平","B":"江泽民"},"answer":["A"]},{"id":"S56","type":"single","label":"单选","title":"我国现任国家主席是（）","options":{"A":"习近平","B":"李先念"},"answer":["A"]},{"id":"S57","type":"single","label":"单选","title":"毛主席领导中国人民打败了哪国侵略者（）","options":{"A":"德国","B":"日本"},"answer":["B"]},{"id":"S58","type":"single","label":"单选","title":"“好好学习，天天向上”是哪一位领导人的题词（）","options":{"A":"毛泽东","B":"邓小平"},"answer":["A"]},{"id":"S59","type":"single","label":"单选","title":"全民族抗日战争开始的标志是（）","options":{"A":"九一八事变","B":"七七事变"},"answer":["B"]},{"id":"S60","type":"single","label":"单选","title":"是谁提出“中国梦”的伟大构想（）","options":{"A":"习近平","B":"邓小平"},"answer":["A"]},{"id":"S61","type":"single","label":"单选","title":"少先队的口号不包括（）","options":{"A":"准备着，为共产主义事业而奋斗","B":"同一个世界，同一个梦想"},"answer":["B"]},{"id":"S62","type":"single","label":"单选","title":"邓小平爷爷提出“科技是第一生产力”，这句话强调国家发展要靠（）","options":{"A":"人民群众","B":"科学技术"},"answer":["B"]},{"id":"S63","type":"single","label":"单选","title":"习近平总书记寄语少年儿童：“从小学习做人、从小学习立志、从小学习（）”","options":{"A":"创造","B":"奋斗"},"answer":["A"]},{"id":"S64","type":"single","label":"单选","title":"习近平总书记希望少年儿童做到“三热爱”：热爱党、热爱祖国和（）","options":{"A":"热爱生活","B":"热爱人民"},"answer":["B"]},{"id":"S65","type":"single","label":"单选","title":"习近平总书记在庆祝中国共产党成立 100 周年大会上首次提出了什么精神（）","options":{"A":"伟大建党精神","B":"长征精神"},"answer":["A"]},{"id":"S66","type":"single","label":"单选","title":"习近平总书记提出，要“扣好人生（）粒扣子”","options":{"A":"第一","B":"第二"},"answer":["A"]},{"id":"S67","type":"single","label":"单选","title":"习近平总书记强调，社会主义核心价值观要从什么时候抓起（）","options":{"A":"从娃娃抓起","B":"从大人抓起"},"answer":["A"]},{"id":"S68","type":"single","label":"单选","title":"中国共产党的诞生地是（）","options":{"A":"上海和浙江嘉兴","B":"北京"},"answer":["A"]},{"id":"S69","type":"single","label":"单选","title":"被称为“中国革命的摇篮”的地方是（）","options":{"A":"井冈山","B":"延安"},"answer":["A"]},{"id":"S70","type":"single","label":"单选","title":"西柏坡位于哪个省（）","options":{"A":"河南","B":"河北"},"answer":["B"]},{"id":"S71","type":"single","label":"单选","title":"以下为革命圣地的是（）","options":{"A":"泰山","B":"延安"},"answer":["B"]},{"id":"S72","type":"single","label":"单选","title":"雷锋纪念馆位于哪个城市（）","options":{"A":"抚顺","B":"沈阳"},"answer":["A"]},{"id":"S73","type":"single","label":"单选","title":"深圳是中国改革开放的窗口，它位于哪个省（）","options":{"A":"广东","B":"福建"},"answer":["A"]},{"id":"S74","type":"single","label":"单选","title":"中国人民抗日战争纪念馆位于哪个城市（）","options":{"A":"北京","B":"南京"},"answer":["A"]},{"id":"S75","type":"single","label":"单选","title":"中央红军长征出发地位于哪个省（）","options":{"A":"福建","B":"江西"},"answer":["B"]},{"id":"S76","type":"single","label":"单选","title":"中国人民革命军事博物馆位于哪个城市（）","options":{"A":"北京","B":"上海"},"answer":["A"]},{"id":"S77","type":"single","label":"单选","title":"中国共产党的诞生地“一大会址”位于哪个城市（）","options":{"A":"重庆","B":"上海"},"answer":["B"]},{"id":"S78","type":"single","label":"单选","title":"社会主义核心价值观中，公民个人层面的价值准则是什么（）","options":{"A":"富强、民主、文明、和谐","B":"爱国、敬业、诚信、友善"},"answer":["B"]},{"id":"S79","type":"single","label":"单选","title":"2020 年，中国实现了什么目标（）","options":{"A":"全面建成小康社会","B":"基本实现社会主义现代化"},"answer":["A"]},{"id":"S80","type":"single","label":"单选","title":"2022 年，中国成功举办了第 24 届“冬奥会”，举办城市是（）","options":{"A":"北京和张家口","B":"北京和天津"},"answer":["A"]},{"id":"S81","type":"single","label":"单选","title":"“天问一号”实现了我国首次（）探测任务","options":{"A":"木星","B":"火星"},"answer":["B"]},{"id":"S82","type":"single","label":"单选","title":"“嫦娥五号”实现了我国首次（）采样返回任务","options":{"A":"月球","B":"火星"},"answer":["A"]},{"id":"S83","type":"single","label":"单选","title":"改革开放后，我国首先设立的经济特区不包括（）","options":{"A":"深圳","B":"北京"},"answer":["B"]},{"id":"S84","type":"single","label":"单选","title":"“北斗系统”是我国自主建设的什么系统（）","options":{"A":"全球卫星导航系统","B":"气象监测系统"},"answer":["A"]},{"id":"S85","type":"single","label":"单选","title":"社会主义核心价值观中，国家层面的价值目标不包括以下哪一项（）","options":{"A":"富强、民主、文明、和谐","B":"自豪、高兴、平等、公正"},"answer":["B"]},{"id":"S86","type":"single","label":"单选","title":"红色儿童绘本《闪闪的红星》中，主角潘冬子佩戴的 “红星” 象征着什么（）","options":{"A":"太阳的光芒","B":"中国共产党和红军"},"answer":["B"]},{"id":"S87","type":"single","label":"单选","title":"《歌唱祖国》是一首经典红色歌曲，其歌词中 “五星红旗迎风飘扬，胜利歌声多么响亮” 描绘的场景与下列哪项相关（）","options":{"A":"抗日战争胜利","B":"新中国成立"},"answer":["B"]},{"id":"S88","type":"single","label":"单选","title":"下列哪首歌曲是广为传唱的红色经典儿歌，歌词描绘了儿童团员站岗放哨的场景（）","options":{"A":"《歌唱二小放牛郎》","B":"《共产儿童团歌》"},"answer":["B"]},{"id":"S89","type":"single","label":"单选","title":"红色经典电影《小兵张嘎》中，嘎子的身份是（）","options":{"A":"八路军小侦察员","B":"新四军小侦察员"},"answer":["A"]},{"id":"S90","type":"single","label":"单选","title":"以下哪部是红色经典电影（）","options":{"A":"《哪吒闹海》","B":"《鸡毛信》"},"answer":["B"]},{"id":"M1","type":"multi","label":"多选","title":"中国共产党党旗上有什么图案（）","options":{"A":"镰刀","B":"斧头","C":"锤头"},"answer":["A","C"]},{"id":"M2","type":"multi","label":"多选","title":"以下哪些是中国共产党成立初期的领导人（）","options":{"A":"陈独秀","B":"李大钊","C":"毛泽东"},"answer":["A","B","C"]},{"id":"M3","type":"multi","label":"多选","title":"下列节日中，属于我国法定节日且与革命历史相关的是（ ）","options":{"A":"元旦","B":"国庆节","C":"建军节"},"answer":["B","C"]},{"id":"M4","type":"multi","label":"多选","title":"我国的国家象征包括（ ）","options":{"A":"国旗","B":"国徽","C":"国歌"},"answer":["A","B","C"]},{"id":"M5","type":"multi","label":"多选","title":"以下哪些是抗日战争时期的英雄（）","options":{"A":"狼牙山五壮士","B":"王二小","C":"董存瑞"},"answer":["A","B"]},{"id":"M6","type":"multi","label":"多选","title":"以下哪些是抗美援朝战争中的英雄（）","options":{"A":"黄继光","B":"邱少云","C":"杨根思"},"answer":["A","B","C"]},{"id":"M7","type":"multi","label":"多选","title":"以下哪些是社会主义建设时期的英雄模范（）","options":{"A":"雷锋","B":"焦裕禄","C":"王进喜"},"answer":["A","B","C"]},{"id":"M8","type":"multi","label":"多选","title":"以下哪些是“两弹一星”元勋（）","options":{"A":"钱学森","B":"邓稼先","C":"郭永怀"},"answer":["A","B","C"]},{"id":"M9","type":"multi","label":"多选","title":"作为小学生，传承红色精神可以做到（ ）","options":{"A":"学习英雄模范的优秀品质","B":"在学习和生活中不怕困难","C":"关心集体，帮助同学"},"answer":["A","B","C"]},{"id":"M10","type":"multi","label":"多选","title":"以下哪些精神属于中国共产党人精神谱系（）","options":{"A":"雷锋精神","B":"焦裕禄精神","C":"大庆精神（铁人精神）"},"answer":["A","B","C"]},{"id":"M11","type":"multi","label":"多选","title":"以下哪些精神属于改革开放以来形成的中国共产党人精神谱系（）","options":{"A":"特区精神","B":"抗洪精神","C":"抗震救灾精神"},"answer":["A","B","C"]},{"id":"M12","type":"multi","label":"多选","title":"以下哪些精神属于新时代形成的中国共产党人精神谱系（）","options":{"A":"脱贫攻坚精神","B":"探月精神","C":"抗疫精神"},"answer":["A","B","C"]},{"id":"M13","type":"multi","label":"多选","title":"习近平总书记希望青少年成为什么样的人（）","options":{"A":"有理想","B":"有本领","C":"有担当"},"answer":["A","B","C"]},{"id":"M14","type":"multi","label":"多选","title":"以下哪些是革命时期的儿童团组织（）","options":{"A":"劳动童子团","B":"共产主义儿童团","C":"抗日儿童团"},"answer":["A","B","C"]},{"id":"M15","type":"multi","label":"多选","title":"以下哪些是少先队员的作风（）","options":{"A":"诚实、勇敢","B":"活泼、团结","C":"严肃、冷漠"},"answer":["A","B"]},{"id":"M16","type":"multi","label":"多选","title":"雷锋“助人为乐”的事迹包括（）","options":{"A":"冒雨护送老人和小孩回家","B":"主动为灾区捐款","C":"帮助战友缝补衣物、洗被褥"},"answer":["A","B","C"]},{"id":"M17","type":"multi","label":"多选","title":"以下哪些是红军主力部队长征经过的地方（）","options":{"A":"雪山","B":"草地","C":"珠江"},"answer":["A","B"]},{"id":"M18","type":"multi","label":"多选","title":"作为新时代好少年，我们应该怎样传承红色文化（）","options":{"A":"学习英雄事迹","B":"参观红色场馆","C":"传唱红色歌曲"},"answer":["A","B","C"]},{"id":"M19","type":"multi","label":"多选","title":"下列哪些作品讲述了抗日战争时期的英雄故事（）","options":{"A":"《王二小》","B":"《小英雄雨来》","C":"《白雪公主》"},"answer":["A","B"]},{"id":"M20","type":"multi","label":"多选","title":"以下哪些是红色歌曲（）","options":{"A":"《没有共产党就没有新中国》","B":"《歌唱祖国》","C":"《东方红》"},"answer":["A","B","C"]},{"id":"J1","type":"judge","label":"判断","title":"红一方面军长征行程约一万五千里。","options":{"T":"正确","F":"错误"},"answer":["F"],"correction":"红一方面军长征行程约两万五千里。"},{"id":"J2","type":"judge","label":"判断","title":"中国共产党的党徽是镰刀和锤头组成的图案。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J3","type":"judge","label":"判断","title":"雷锋是抗日战争时期的英雄。","options":{"T":"正确","F":"错误"},"answer":["F"],"correction":"雷锋是社会主义建设时期的英雄模范。"},{"id":"J4","type":"judge","label":"判断","title":"习近平总书记说过：“幸福都是奋斗出来的。”","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J5","type":"judge","label":"判断","title":"北京天安门是中华人民共和国的象征之一。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J6","type":"judge","label":"判断","title":"社会主义核心价值观不包括自由、平等、公正、法治。","options":{"T":"正确","F":"错误"},"answer":["F"],"correction":"社会主义核心价值观包括富强、民主、文明、和谐，自由、平等、公正、法治，爱国、敬业、诚信、友善。"},{"id":"J7","type":"judge","label":"判断","title":"1997 年 7 月 1 日，香港回归祖国。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J8","type":"judge","label":"判断","title":"董存瑞在抗美援朝战争中牺牲。","options":{"T":"正确","F":"错误"},"answer":["F"],"correction":"董存瑞是在解放战争（1948 年解放隆化战斗）中牺牲。"},{"id":"J9","type":"judge","label":"判断","title":"参观革命纪念馆时不可以大声喧哗。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J10","type":"judge","label":"判断","title":"红领巾是红旗的一角，是革命先烈用鲜血染成的。","options":{"T":"正确","F":"错误"},"answer":["T"]}]},"upperPrimary":{"name":"小学高年级组","subtitle":"小学 4-6 年级组题库，共 150 题","status":"ready","questions":[{"id":"S1","type":"single","label":"单选","title":"中国共产党第一次全国代表大会召开的时间是（）","options":{"A":"1921 年 7 月 1 日","B":"1921 年 7 月 23 日","C":"1922 年 7 月 1 日","D":"1922 年 7 月 23 日"},"answer":["B"]},{"id":"S2","type":"single","label":"单选","title":"中国共产党第一次全国代表大会最后一天转移到哪里举行（）","options":{"A":"北京","B":"广州","C":"武汉","D":"浙江嘉兴南湖"},"answer":["D"]},{"id":"S3","type":"single","label":"单选","title":"标志着中国共产党开始独立领导革命战争、创建人民军队的事件是（）","options":{"A":"武昌起义","B":"南昌起义","C":"广州起义","D":"秋收起义"},"answer":["B"]},{"id":"S4","type":"single","label":"单选","title":"红军长征胜利结束的时间是哪一年（）","options":{"A":"1934 年","B":"1935 年","C":"1936 年","D":"1937 年"},"answer":["C"]},{"id":"S5","type":"single","label":"单选","title":"遵义会议召开于哪一年（）","options":{"A":"1934 年","B":"1935 年","C":"1936 年","D":"1937 年"},"answer":["B"]},{"id":"S6","type":"single","label":"单选","title":"中国共产党第一次全国代表大会选举谁担任中央局书记（）","options":{"A":"李大钊","B":"毛泽东","C":"陈独秀","D":"董必武"},"answer":["C"]},{"id":"S7","type":"single","label":"单选","title":"抗日战争哪一年开始（）","options":{"A":"1931 年","B":"1937 年","C":"1945 年","D":"1949 年"},"answer":["A"]},{"id":"S8","type":"single","label":"单选","title":"“七七事变”标志着什么（）","options":{"A":"抗日民族统一战线正式形成","B":"抗日战争进入相持阶段","C":"抗日战争全面爆发","D":"中国局部抗战开始"},"answer":["C"]},{"id":"S9","type":"single","label":"单选","title":"中国共产党在抗日战争中发挥的作用是（）","options":{"A":"中流砥柱","B":"辅助作用","C":"次要作用","D":"无关作用"},"answer":["A"]},{"id":"S10","type":"single","label":"单选","title":"解放战争中的三大战役不包括以下哪一项（）","options":{"A":"辽沈战役","B":"淮海战役","C":"平津战役","D":"渡江战役"},"answer":["D"]},{"id":"S11","type":"single","label":"单选","title":"毛泽东领导的农民武装起义是以下哪一项（）","options":{"A":"武昌起义","B":"南昌起义","C":"广州起义","D":"秋收起义"},"answer":["D"]},{"id":"S12","type":"single","label":"单选","title":"抗美援朝战争是哪一年开始的（）","options":{"A":"1949 年","B":"1950 年","C":"1951 年","D":"1952 年"},"answer":["B"]},{"id":"S13","type":"single","label":"单选","title":"“一五”计划的主要任务是（）","options":{"A":"优先发展重工业","B":"优先发展轻工业","C":"优先发展农业","D":"优先发展服务业"},"answer":["A"]},{"id":"S14","type":"single","label":"单选","title":"改革开放是哪一年开始的（）","options":{"A":"1949 年","B":"1978 年","C":"1992 年","D":"2001 年"},"answer":["B"]},{"id":"S15","type":"single","label":"单选","title":"被称为“改革开放总设计师”的是（）","options":{"A":"毛泽东","B":"周恩来","C":"邓小平","D":"江泽民"},"answer":["C"]},{"id":"S16","type":"single","label":"单选","title":"中国共产党第十九次全国代表大会提出，中国特色社会主义进入了什么时期（）","options":{"A":"新时代","B":"新时期","C":"新阶段","D":"新纪元"},"answer":["A"]},{"id":"S17","type":"single","label":"单选","title":"1945 年，中国共产党在延安召开的第七次全国代表大会，将什么思想确立为党的指导思想并写入党章（）","options":{"A":"三民主义","B":"邓小平理论","C":"毛泽东思想","D":"科学发展观"},"answer":["C"]},{"id":"S18","type":"single","label":"单选","title":"“枪杆子里出政权”是哪位领导人提出的（）","options":{"A":"毛泽东","B":"周恩来","C":"朱德","D":"刘少奇"},"answer":["A"]},{"id":"S19","type":"single","label":"单选","title":"红军长征中，四渡赤水是谁指挥的（）","options":{"A":"毛泽东","B":"周恩来","C":"朱德","D":"刘伯承"},"answer":["A"]},{"id":"S20","type":"single","label":"单选","title":"1954 年颁布的第一部《中华人民共和国宪法》确立了我国的根本政治制度是（）","options":{"A":"基层群众自治制度","B":"中国共产党领导的多党合作和政治协商制度","C":"民族区域自治制度","D":"人民代表大会制度"},"answer":["D"]},{"id":"S21","type":"single","label":"单选","title":"“中国梦”的核心内容是实现中华民族伟大复兴，这一理念是由谁提出的（）","options":{"A":"毛泽东","B":"邓小平","C":"江泽民","D":"习近平"},"answer":["D"]},{"id":"S22","type":"single","label":"单选","title":"“革命者光明磊落、视死如归，只有站着死，决不跪下！”这是哪位革命先烈在英勇就义前留下的铮铮誓言（）","options":{"A":"陈独秀","B":"陈延年","C":"李大钊","D":"瞿秋白"},"answer":["B"]},{"id":"S23","type":"single","label":"单选","title":"“生的伟大，死的光荣”是毛主席为哪位英雄的题词（）","options":{"A":"江姐","B":"赵一曼","C":"刘胡兰","D":"杨开慧"},"answer":["C"]},{"id":"S24","type":"single","label":"单选","title":"用自己的胸膛堵住敌人枪口的英雄是谁（）","options":{"A":"邱少云","B":"黄继光","C":"董存瑞","D":"杨根思"},"answer":["B"]},{"id":"S25","type":"single","label":"单选","title":"“为了新中国，冲啊！”这是哪位英雄在舍身炸碉堡时喊出的口号（）","options":{"A":"黄继光","B":"邱少云","C":"董存瑞","D":"雷锋"},"answer":["C"]},{"id":"S26","type":"single","label":"单选","title":"在烈火中纹丝不动，壮烈牺牲的志愿军战士是（）","options":{"A":"黄继光","B":"邱少云","C":"董存瑞","D":"杨根思"},"answer":["B"]},{"id":"S27","type":"single","label":"单选","title":"贺龙元帅是中国人民解放军的创建人之一，他早年“两把菜刀闹革命”的故事广为流传。在抗日战争中，他指挥了哪场著名战役（）","options":{"A":"平型关大捷","B":"雁门关伏击战","C":"台儿庄战役","D":"百团大战"},"answer":["B"]},{"id":"S28","type":"single","label":"单选","title":"狼牙山五壮士的故事发生在哪场战争中（）","options":{"A":"抗日战争","B":"解放战争","C":"抗美援朝战争","D":"北伐战争"},"answer":["A"]},{"id":"S29","type":"single","label":"单选","title":"“向雷锋同志学习”是哪位领导人提出的号召（）","options":{"A":"刘少奇","B":"周恩来","C":"毛泽东","D":"朱德"},"answer":["C"]},{"id":"S30","type":"single","label":"单选","title":"被誉为“杂交水稻之父”的科学家，他曾说：“我毕生的梦想就是让所有人远离饥饿。”这位科学家是（）","options":{"A":"钱学森","B":"邓稼先","C":"袁隆平","D":"李四光"},"answer":["C"]},{"id":"S31","type":"single","label":"单选","title":"航天员杨利伟是中国第一位进入太空的航天员，他乘坐的飞船是（）","options":{"A":"神舟六号","B":"神舟五号","C":"神舟七号","D":"神舟九号"},"answer":["B"]},{"id":"S32","type":"single","label":"单选","title":"抗日小英雄王二小把敌人带进了八路军的埋伏圈，最后牺牲了。他的故事发生在（）","options":{"A":"华北地区","B":"东北地区","C":"华东地区","D":"华南地区"},"answer":["A"]},{"id":"S33","type":"single","label":"单选","title":"写下“恨不抗日死，留作今日羞。国破尚如此，我何惜此头”就义诗的是哪位抗日将领（）","options":{"A":"杨靖宇","B":"张自忠","C":"吉鸿昌","D":"赵尚志"},"answer":["C"]},{"id":"S34","type":"single","label":"单选","title":"有一位被誉为“卫星之父”的科学家，他获得了“共和国勋章”，为我国航天事业作出了卓越贡献。他是（）","options":{"A":"钱学森","B":"孙家栋","C":"王希季","D":"任新民"},"answer":["B"]},{"id":"S35","type":"single","label":"单选","title":"长征精神告诉我们什么道理（）","options":{"A":"好好学习，天天向上","B":"不怕困难，坚持到底","C":"团结同学，互相帮助","D":"热爱劳动，勤俭节约"},"answer":["B"]},{"id":"S36","type":"single","label":"单选","title":"有一位科学家，他隐姓埋名 28 年，为祖国的核武器研制事业奉献了一生。他临终前说：“不要让人家把我们落得太远……”他的事迹体现的是哪一伟大精神（）","options":{"A":"雷锋精神","B":"焦裕禄精神","C":"“两弹一星”精神","D":"女排精神"},"answer":["C"]},{"id":"S37","type":"single","label":"单选","title":"“坚定执着追理想、实事求是闯新路、艰苦奋斗攻难关、依靠群众求胜利。”这是对哪一种精神内涵的概括（）","options":{"A":"井冈山精神","B":"长征精神","C":"延安精神","D":"照金精神"},"answer":["A"]},{"id":"S38","type":"single","label":"单选","title":"有一部绘本叫《萍萍的纺车》，讲述了一个女娃娃用小纺车参加大生产运动的故事。《萍萍的纺车》能帮助小朋友理解哪一伟大精神（）","options":{"A":"长征精神","B":"抗战精神","C":"延安精神","D":"井冈山精神"},"answer":["C"]},{"id":"S39","type":"single","label":"单选","title":"“天下兴亡、匹夫有责的爱国情怀；视死如归、宁死不屈的民族气节；不畏强暴、血战到底的英雄气概；百折不挠、坚忍不拔的必胜信念。”这是对哪一伟大精神的概括（）","options":{"A":"长征精神","B":"抗战精神","C":"红岩精神","D":"抗美援朝精神"},"answer":["B"]},{"id":"S40","type":"single","label":"单选","title":"“亲民爱民、艰苦奋斗、科学求实、迎难而上、无私奉献。”这是对哪位共产党人崇高精神的集中概括（）","options":{"A":"雷锋","B":"焦裕禄","C":"王进喜","D":"孔繁森"},"answer":["B"]},{"id":"S41","type":"single","label":"单选","title":"2020 年，我国正式宣布全国 832 个贫困县全部脱贫摘帽，创造了人类减贫史上的奇迹。在这一伟大实践中形成的伟大精神是（）","options":{"A":"改革开放精神","B":"脱贫攻坚精神","C":"特区精神","D":"“三牛”精神"},"answer":["B"]},{"id":"S42","type":"single","label":"单选","title":"“敢闯敢试、敢为人先、埋头苦干”是对哪种精神的描述（）","options":{"A":"特区精神","B":"大庆精神（铁人精神）","C":"抗洪精神","D":"抗震救灾精神"},"answer":["A"]},{"id":"S43","type":"single","label":"单选","title":"西柏坡精神的核心是（）","options":{"A":"艰苦奋斗","B":"谦虚谨慎","C":"“两个务必”","D":"敢于斗争"},"answer":["C"]},{"id":"S44","type":"single","label":"单选","title":"“自力更生、艰苦创业、团结协作、无私奉献”是对哪种精神的概括（）","options":{"A":"北大荒精神","B":"大庆精神（铁人精神）","C":"“两路”精神","D":"红旗渠精神"},"answer":["D"]},{"id":"S45","type":"single","label":"单选","title":"“爱国、创业、求实、奉献”是对哪种精神的概括（）","options":{"A":"大庆精神（铁人精神）","B":"科学家精神","C":"雷锋精神","D":"焦裕禄精神"},"answer":["A"]},{"id":"S46","type":"single","label":"单选","title":"“红军不怕远征难，万水千山只等闲。”这句诗描写的伟大征程铸就了哪一种伟大精神（）","options":{"A":"井冈山精神","B":"延安精神","C":"长征精神","D":"抗战精神"},"answer":["C"]},{"id":"S47","type":"single","label":"单选","title":"“忠诚于党的坚定信念、顽强斗争的英雄气概、扎根群众的工作作风”是对哪种精神的概括（）","options":{"A":"长征精神","B":"照金精神","C":"延安精神","D":"西柏坡精神"},"answer":["B"]},{"id":"S48","type":"single","label":"单选","title":"“两个务必”是指“务必使同志们继续地保持谦虚、谨慎、不骄、不躁的作风，务必使同志们继续地保持艰苦奋斗的作风”。这是毛泽东同志在哪次会议上提出的（）这铸就了哪一伟大精神（）","options":{"A":"遵义会议——长征精神","B":"七届二中全会——西柏坡精神","C":"瓦窑堡会议——抗战精神","D":"洛川会议——延安精神"},"answer":["B"]},{"id":"S49","type":"single","label":"单选","title":"“服务人民、助人为乐”这是哪一伟大精神的具体体现（）","options":{"A":"张思德精神","B":"焦裕禄精神","C":"雷锋精神","D":"王杰精神"},"answer":["C"]},{"id":"S50","type":"single","label":"单选","title":"有一部绘本叫《一棵树的骄傲》，讲述塞罕坝上一棵近 200 岁的“功勋树”的故事。通过这棵树“开口说话”，让小朋友了解塞罕坝三代人把荒漠变林海的奇迹。这本书帮助小朋友理解哪一伟大精神（）","options":{"A":"北大荒精神","B":"红旗渠精神","C":"塞罕坝精神","D":"大庆精神（铁人精神）"},"answer":["C"]},{"id":"S51","type":"single","label":"单选","title":"“特别能吃苦、特别能战斗、特别能攻关、特别能奉献”是对哪种精神的概括（）","options":{"A":"载人航天精神","B":"“两弹一星”精神","C":"探月精神","D":"新时代北斗精神"},"answer":["A"]},{"id":"S52","type":"single","label":"单选","title":"“追逐梦想、勇于探索、协同攻坚、合作共赢”是对哪种精神的概括（）","options":{"A":"探月精神","B":"载人航天精神","C":"新时代北斗精神","D":"科学家精神"},"answer":["A"]},{"id":"S53","type":"single","label":"单选","title":"“井冈山精神”传承着中国共产党人的初心和使命，集中体现中国共产党人的（）","options":{"A":"政治觉悟","B":"意志品质","C":"思想道德和工作作风","D":"以上都是"},"answer":["D"]},{"id":"S54","type":"single","label":"单选","title":"“坚定正确的政治方向，解放思想、实事求是的思想路线，全心全意为人民服务的根本宗旨，自力更生、艰苦奋斗的创业精神”是对以下哪种精神的概括（）","options":{"A":"延安精神","B":"井冈山精神","C":"长征精神","D":"西柏坡精神"},"answer":["A"]},{"id":"S55","type":"single","label":"单选","title":"电影《地雷战》是哪个时期的战斗故事（）","options":{"A":"土地革命战争时期","B":"抗日战争时期","C":"解放战争时期","D":"抗美援朝战争时期"},"answer":["B"]},{"id":"S56","type":"single","label":"单选","title":"“刚柔相济、锲而不舍的政治智慧，‘出淤泥不染，同流不合污’的政治品格，以诚相待、团结多数的宽广胸怀，善处逆境、宁难不苟的英雄气概”是对哪种精神的概括（）","options":{"A":"红岩精神","B":"红船精神","C":"井冈山精神","D":"延安精神"},"answer":["A"]},{"id":"S57","type":"single","label":"单选","title":"“自主创新、开放融合、万众一心、追求卓越”是对哪种精神的概括（）","options":{"A":"新时代北斗精神","B":"载人航天精神","C":"探月精神","D":"科学家精神"},"answer":["A"]},{"id":"S58","type":"single","label":"单选","title":"“红船精神”诞生于哪个地方（）","options":{"A":"上海","B":"浙江嘉兴","C":"北京","D":"广州"},"answer":["B"]},{"id":"S59","type":"single","label":"单选","title":"“打得一拳开，免得百拳来。”这场战争彻底告别了几百年来西方侵略者只要在东方一个海岸上架起几尊大炮就可霸占一个国家的屈辱时代。在这场波澜壮阔的战争中锻造的伟大精神是（ ）","options":{"A":"抗战精神","B":"抗美援朝精神","C":"东北抗联精神","D":"爱国主义精神"},"answer":["B"]},{"id":"S60","type":"single","label":"单选","title":"2025 年，中国矿业大学马克思主义学院宣讲团走进徐州经十路小学，通过《松花江上》《义勇军进行曲》《保卫黄河》等经典歌曲，为同学们讲述抗战历史。这种将红色旋律与历史故事结合的形式，重点弘扬的是哪一伟大精神（）","options":{"A":"长征精神","B":"抗战精神","C":"抗美援朝精神","D":"延安精神"},"answer":["B"]},{"id":"S61","type":"single","label":"单选","title":"“雷锋精神”是在哪一年被广泛宣传的（）","options":{"A":"1960 年","B":"1962 年","C":"1963 年","D":"1970 年"},"answer":["C"]},{"id":"S62","type":"single","label":"单选","title":"1964 年 10 月 16 日，我国第一颗原子弹成功爆炸；1967 年 6 月 17 日，第一颗氢弹成功爆炸；1970 年 4 月 24 日，“东方红”人造地球卫星成功送上太空。支撑这一系列伟大成就的精神力量是（ ）","options":{"A":"大庆精神（铁人精神）","B":"“两弹一星”精神","C":"载人航天精神","D":"科学家精神"},"answer":["B"]},{"id":"S63","type":"single","label":"单选","title":"“特区精神”主要体现了什么（）","options":{"A":"敢闯敢试、敢为人先","B":"艰苦奋斗、无私奉献","C":"团结协作、顽强拼搏","D":"自力更生、艰苦创业"},"answer":["A"]},{"id":"S64","type":"single","label":"单选","title":"“上下同心、尽锐出战、精准务实、开拓创新、攻坚克难、不负人民。”这是对哪一伟大精神的概括（）","options":{"A":"改革开放精神","B":"脱贫攻坚精神","C":"科学家精神","D":"劳模精神（劳动精神、工匠精神）"},"answer":["B"]},{"id":"S65","type":"single","label":"单选","title":"有一部绘本叫《北斗星，亮晶晶》，是由作家叶梅创作，通过“星星串”“巨人眼”等生动的比喻，向小朋友讲述北斗导航系统的故事，能帮助理小朋友解哪一伟大精神（）","options":{"A":"载人航天精神","B":"“两弹一星”精神","C":"新时代北斗精神","D":"探月精神"},"answer":["C"]},{"id":"S66","type":"single","label":"单选","title":"2025 年是中国人民抗日战争暨世界反法西斯战争胜利 80 周年，也是王杰同志牺牲 60 周年。王杰精神的核心内涵是（）","options":{"A":"全心全意为人民服务","B":"一不怕苦、二不怕死","C":"自力更生、艰苦奋斗","D":"爱国、创业、求实、奉献"},"answer":["B"]},{"id":"S67","type":"single","label":"单选","title":"“红旗渠精神”诞生于哪个省（）","options":{"A":"河南","B":"河北","C":"山西","D":"陕西"},"answer":["A"]},{"id":"S68","type":"single","label":"单选","title":"习近平总书记教导我们要做“新时代好少年”，应该怎样做（）","options":{"A":"不认真学习","B":"不热爱劳动","C":"热爱党、热爱祖国、热爱人民","D":"不尊重老师"},"answer":["C"]},{"id":"S69","type":"single","label":"单选","title":"习近平总书记提出，要“扣好人生（）粒扣子”","options":{"A":"第一","B":"第二","C":"第三","D":"第四"},"answer":["A"]},{"id":"S70","type":"single","label":"单选","title":"毛泽东同志十分关心青少年的成长，他提出青少年应该做到德智体全面发展。下列选项中，属于毛泽东提出的“三好”要求是（）","options":{"A":"身体好、学习好、工作好","B":"品德好、学习好、身体好","C":"思想好、学习好、劳动好","D":"品德好、身体好、劳动好"},"answer":["A"]},{"id":"S71","type":"single","label":"单选","title":"周恩来总理在少年时代就立下了远大志向。12 岁时，面对国家积贫积弱的状况，他说出了一句名言。这句名言是（）","options":{"A":"“为中华之崛起而读书”","B":"“为中国人民谋幸福”","C":"“为民族复兴而奋斗”","D":"“为国家富强而学习”"},"answer":["A"]},{"id":"S72","type":"single","label":"单选","title":"毛泽东同志年少时就胸怀大志，他在离开家乡求学时写下诗句“孩儿立志出乡关”，下一句是（）","options":{"A":"“学不成名誓不还”","B":"“不破楼兰终不还”","C":"“愿以此身长报国”","D":"“人生无处不青山”"},"answer":["A"]},{"id":"S73","type":"single","label":"单选","title":"习近平总书记提出我们永远不要忘记老区，永远不要忘记老区人民，要一如既往支持老区建设，下面举措不符合习近平总书记要求的是（）","options":{"A":"关心老红军、“五老”同志和军烈属的生活","B":"经常听取他们的意见和建议","C":"请他们言传身教，确保革命传统和优良作风薪火相传","D":"对老区不关心、不解决实际问题"},"answer":["D"]},{"id":"S74","type":"single","label":"单选","title":"习近平总书记指出：“历史是最好的教科书。”学习党史、新中国史可以帮助我们（）","options":{"A":"如何预测未来","B":"总结历史经验、把握历史规律，增强开拓前进的勇气和力量","C":"如何取得个人成功","D":"怎样写历史文章"},"answer":["B"]},{"id":"S75","type":"single","label":"单选","title":"习近平总书记指出：“江山就是人民，人民就是江山。”这句话主要体现了什么思想（）","options":{"A":"以经济建设为中心","B":"以人民为中心","C":"以法治建设为中心","D":"以文化建设为中心"},"answer":["B"]},{"id":"S76","type":"single","label":"单选","title":"习近平总书记提出的“四个自信”不包括以下哪一项（）","options":{"A":"道路自信","B":"理论自信","C":"制度自信","D":"军事自信"},"answer":["D"]},{"id":"S77","type":"single","label":"单选","title":"毛泽东同志在《政治周报》发刊词中写道：“为什么要革命？为了使中华民族得到解放，为了实现人民的统治，为了使人民（）”","options":{"A":"得到幸福","B":"得到自由","C":"得到经济的幸福","D":"得到平等"},"answer":["C"]},{"id":"S78","type":"single","label":"单选","title":"习近平总书记寄语少年儿童：“从小学习做人、从小学习立志、从小学习（）。”","options":{"A":"创造","B":"奋斗","C":"奉献","D":"创新"},"answer":["A"]},{"id":"S79","type":"single","label":"单选","title":"习近平总书记提出当今时代，社会思想观念和价值取向日趋活跃，主流的和非主流的同时并存，先进的和落后的相互交织，社会思潮纷纭激荡。他还说过，思想舆论领域大致有红色、黑色、灰色“三个地带”。以下哪个是我们的主阵地（）","options":{"A":"红色地带","B":"黑色地带","C":"灰色地带","D":"以上都不是"},"answer":["A"]},{"id":"S80","type":"single","label":"单选","title":"习近平总书记在庆祝中国共产党成立 100 周年大会上首次提出了什么精神（）","options":{"A":"红船精神","B":"长征精神","C":"延安精神","D":"伟大建党精神"},"answer":["D"]},{"id":"S81","type":"single","label":"单选","title":"习近平总书记对青少年说：“你们是未来的主力军、生力军。”他还希望青少年要“德智体美劳”怎样发展（）","options":{"A":"优先发展","B":"全面发展","C":"重点发展","D":"平衡发展"},"answer":["B"]},{"id":"S82","type":"single","label":"单选","title":"习近平总书记强调：“要讲好党的故事、革命的故事、英雄的故事，把红色基因传承下去。”这主要是为了（）","options":{"A":"教育引导青少年树立正确的世界观、人生观、价值观","B":"增加旅游收入","C":"丰富文艺创作","D":"提高文化软实力"},"answer":["A"]},{"id":"S83","type":"single","label":"单选","title":"开国大典是在以下哪个地方举行（）","options":{"A":"上海一大会址","B":"北京天安门","C":"延安宝塔山","D":"井冈山"},"answer":["B"]},{"id":"S84","type":"single","label":"单选","title":"中国共产党的诞生地是（）","options":{"A":"广州","B":"北京","C":"上海和浙江嘉兴","D":"武汉"},"answer":["C"]},{"id":"S85","type":"single","label":"单选","title":"被称为“中国革命的摇篮”的地方是（）","options":{"A":"西柏坡","B":"延安","C":"井冈山","D":"瑞金"},"answer":["C"]},{"id":"S86","type":"single","label":"单选","title":"西柏坡位于哪个省（）","options":{"A":"山西","B":"河南","C":"山东","D":"河北"},"answer":["D"]},{"id":"S87","type":"single","label":"单选","title":"雷锋纪念馆位于哪个城市（）","options":{"A":"沈阳","B":"抚顺","C":"大连","D":"长春"},"answer":["B"]},{"id":"S88","type":"single","label":"单选","title":"1929 年 1 月井冈山失守后，敌人在大井进行反复烧杀，大部分房屋被烧毁，但在大井毛泽东旧居留下了三件原物。这三件原物是（）","options":{"A":"一张桌子、一把椅子、一盏油灯","B":"一堵残墙、一块读书石、两棵“常青树”","C":"一口水井、一座磨盘、一棵老槐树","D":"一间教室、一块黑板、一支粉笔"},"answer":["B"]},{"id":"S89","type":"single","label":"单选","title":"中国人民抗日战争纪念馆位于哪个城市（）","options":{"A":"北京","B":"南京","C":"沈阳","D":"上海"},"answer":["A"]},{"id":"S90","type":"single","label":"单选","title":"在江西瑞金中央革命根据地纪念馆，可以了解到哪一重要历史时期的内容（）","options":{"A":"井冈山革命根据地时期","B":"中央革命根据地（中央苏区）时期","C":"延安时期","D":"西柏坡时期"},"answer":["B"]},{"id":"S91","type":"single","label":"单选","title":"北京大学是中国近代史上传播马克思主义和民主科学进步思想的重要场所。1919 年 5 月 4 日，北大学生从哪里出发到天安门，爆发了五四运动（）","options":{"A":"从北大红楼出发","B":"从清华园出发","C":"从京师大学堂出发","D":"从东交民巷出发"},"answer":["A"]},{"id":"S92","type":"single","label":"单选","title":"中国人民革命军事博物馆位于哪个城市（）","options":{"A":"北京","B":"上海","C":"南京","D":"广州"},"answer":["A"]},{"id":"S93","type":"single","label":"单选","title":"在脱贫攻坚这场没有硝烟的“战斗”中，涌现出许多像黄文秀这样的英雄，他们身上共同体现出的最宝贵品质是（ ）","options":{"A":"追求个人荣誉","B":"舍小家为大家、无私奉献","C":"追求安逸的生活","D":"只关心自己的利益"},"answer":["B"]},{"id":"S94","type":"single","label":"单选","title":"张桂梅老师扎根贫困山区教育一线 40 多年，创办了全国第一所免费女子高中，帮助近 2000 名女孩走出大山。她身上哪种品质最值得我们学习（）","options":{"A":"勇于探索的科学精神","B":"爱岗敬业、无私奉献的精神","C":"敢闯敢试的创新精神","D":"自力更生的奋斗精神"},"answer":["B"]},{"id":"S95","type":"single","label":"单选","title":"下列哪一项是我国在 2025 年取得的科技成就（）","options":{"A":"成功发射天问二号探测器","B":"建成港珠澳大桥","C":"完成国产大飞机 C919 的首次试飞","D":"首次实现载人登月"},"answer":["A"]},{"id":"S96","type":"single","label":"单选","title":"2022 年，随着神舟十五号载人飞船发射成功，我国建成了属于自己的“太空之家”，航天员可以在里面长期驻留并开展科学实验。这个“太空之家”的名字是（）","options":{"A":"北斗卫星","B":"嫦娥探月舱","C":"天宫空间站","D":"天问火星车"},"answer":["C"]},{"id":"S97","type":"single","label":"单选","title":"2021 年，我国深空探测工程取得重大突破，天问一号探测器成功着陆在哪个星球上，开展表面巡视探测（）","options":{"A":"月球","B":"火星","C":"金星","D":"木星"},"answer":["B"]},{"id":"S98","type":"single","label":"单选","title":"中国空间站是我国航天事业的重大成就。关于我国的空间站，下列说法正确的是（）","options":{"A":"空间站只能供航天员居住，没有其他用途","B":"空间站内可以培育水稻种子、蔬菜种子","C":"空间站与小学生无关，不用关注","D":"空间站是其他国家帮我们建造的"},"answer":["B"]},{"id":"S99","type":"single","label":"单选","title":"下列哪一项能让我们为祖国感到自豪（）①二十四节气成为人类非物质文化遗产②中国高铁走向世界③我国有独立的空间站","options":{"A":"①②","B":"②③","C":"①②③","D":"①③"},"answer":["C"]},{"id":"S100","type":"single","label":"单选","title":"2023 年，中国提出的“全球文明倡议”核心是（）","options":{"A":"共同倡导尊重世界文明多样性","B":"共同倡导弘扬全人类共同价值","C":"共同倡导重视文明传承和创新","D":"以上都是"},"answer":["D"]},{"id":"S101","type":"single","label":"单选","title":"《义勇军进行曲》的曲作者是谁（）","options":{"A":"聂耳","B":"冼星海","C":"田汉","D":"贺绿汀"},"answer":["A"]},{"id":"S102","type":"single","label":"单选","title":"歌曲《没有共产党就没有新中国》的创作者是谁（）","options":{"A":"王莘","B":"曹火星","C":"贺绿汀","D":"冼星海"},"answer":["B"]},{"id":"S103","type":"single","label":"单选","title":"《英雄赞歌》这首歌是哪部电影的插曲（）","options":{"A":"《地道战》","B":"《地雷战》","C":"《英雄儿女》","D":"《上甘岭》"},"answer":["C"]},{"id":"S104","type":"single","label":"单选","title":"《闪闪的红星》电影中的小主人公是谁（）","options":{"A":"王二小","B":"小兵张嘎","C":"潘冬子","D":"海娃"},"answer":["C"]},{"id":"S105","type":"single","label":"单选","title":"《让我们荡起双桨》是哪部电影的插曲（）","options":{"A":"《祖国的花朵》","B":"《花儿朵朵》","C":"《青春之歌》","D":"《早春二月》"},"answer":["A"]},{"id":"M1","type":"multi","label":"多选","title":"南昌起义的历史意义包括（ ）","options":{"A":"标志着中国共产党独立创建人民军队、领导革命战争和武装夺取政权的开始","B":"打响了武装反抗国民党反动派的第一枪","C":"标志着中国共产党创建人民军队的开始","D":"标志着第一次国共合作正式形成"},"answer":["A","B","C"]},{"id":"M2","type":"multi","label":"多选","title":"以下哪些战役属于解放战争时期的三大战役（）","options":{"A":"辽沈战役","B":"淮海战役","C":"平津战役","D":"渡江战役"},"answer":["A","B","C"]},{"id":"M3","type":"multi","label":"多选","title":"红军长征胜利结束的标志是三大主力在哪些地方会师（）","options":{"A":"甘肃会宁","B":"江西瑞金","C":"将台堡","D":"陕西延安"},"answer":["A","C"]},{"id":"M4","type":"multi","label":"多选","title":"抗日战争时期，中国共产党领导的八路军在华北地区发动的重大战役有（ ）","options":{"A":"平型关大捷","B":"雁门关伏击战","C":"台儿庄战役","D":"百团大战"},"answer":["A","B","D"]},{"id":"M5","type":"multi","label":"多选","title":"以下哪些属于“一五”计划期间的重点建设项目（）","options":{"A":"长春第一汽车制造厂","B":"鞍山钢铁公司","C":"武汉长江大桥","D":"南京长江大桥"},"answer":["A","B","C"]},{"id":"M6","type":"multi","label":"多选","title":"中国共产党的初心和使命是（ ）","options":{"A":"为中国人民谋幸福","B":"为中华民族谋复兴","C":"消灭地主","D":"世界和平"},"answer":["A","B"]},{"id":"M7","type":"multi","label":"多选","title":"以下哪些是抗日战争时期的英雄（）","options":{"A":"狼牙山五壮士","B":"王二小","C":"董存瑞","D":"黄继光"},"answer":["A","B"]},{"id":"M8","type":"multi","label":"多选","title":"刘胡兰是著名的革命烈士，毛泽东同志为她题词“生的伟大，死的光荣”。下列关于刘胡兰的表述，正确的有（ ）","options":{"A":"她出生于山西省文水县云周西村一个贫苦农民家庭","B":"她 13 岁时就积极参加村里的抗日儿童团，为八路军站岗、放哨、送情报","C":"她于 1946 年 6 月被正式批准为中共候补党员，当时年仅 14 岁","D":"她在敌人面前说“怕死不当共产党”，最后从容躺在铡刀下牺牲"},"answer":["A","B","C","D"]},{"id":"M9","type":"multi","label":"多选","title":"以下哪些是社会主义建设时期的英雄模范（）","options":{"A":"董存瑞","B":"焦裕禄","C":"王进喜","D":"雷锋"},"answer":["B","C","D"]},{"id":"M10","type":"multi","label":"多选","title":"以下哪些是“两弹一星”元勋（）","options":{"A":"袁隆平","B":"邓稼先","C":"戚继光","D":"钱学森"},"answer":["B","D"]},{"id":"M11","type":"multi","label":"多选","title":"杨靖宇是著名的抗日民族英雄，东北抗日联军的主要创建者和领导人之一。下列关于杨靖宇的表述，正确的有（ ）","options":{"A":"他率领东北军民与日寇血战于白山黑水之间","B":"他在冰天雪地、弹尽粮绝的情况下孤身与敌人周旋","C":"牺牲后，日军剖开他的胃部，发现只有枯草、树皮和棉絮","D":"他被誉为“抗日民族英雄”"},"answer":["A","B","C","D"]},{"id":"M12","type":"multi","label":"多选","title":"长征精神包括以下哪些内容（）","options":{"A":"追求自由","B":"勇往直前","C":"团结互助","D":"不怕牺牲"},"answer":["B","C","D"]},{"id":"M13","type":"multi","label":"多选","title":"井冈山精神的内涵包括（）","options":{"A":"坚定执着追理想","B":"实事求是闯新路","C":"艰苦奋斗攻难关","D":"依靠群众求胜利"},"answer":["A","B","C","D"]},{"id":"M14","type":"multi","label":"多选","title":"雷锋是伟大的共产主义战士，雷锋精神被列入第一批中国共产党人精神谱系。下列选项中，属于雷锋精神核心内涵的有（ ）","options":{"A":"信念的能量","B":"大爱的胸怀","C":"忘我的精神","D":"进取的锐气"},"answer":["A","B","C","D"]},{"id":"M15","type":"multi","label":"多选","title":"焦裕禄同志在河南省兰考县担任县委书记期间，带领群众治理“三害”，形成了伟大的焦裕禄精神。下列选项中，属于焦裕禄精神核心内涵的有（ ）","options":{"A":"亲民爱民","B":"艰苦奋斗","C":"科学求实","D":"迎难而上"},"answer":["A","B","C","D"]},{"id":"M16","type":"multi","label":"多选","title":"“两弹一星”精神是社会主义革命和建设时期形成的伟大精神。下列选项中，属于“两弹一星”精神核心内涵的有（ ）","options":{"A":"团结友爱、扶贫济困","B":"自力更生、艰苦奋斗","C":"大力协同、勇于登攀","D":"热爱祖国、无私奉献"},"answer":["B","C","D"]},{"id":"M17","type":"multi","label":"多选","title":"以下哪些是红船精神的内涵（）","options":{"A":"开天辟地、敢为人先","B":"坚定理想、百折不挠","C":"立党为公、忠诚为民","D":"自力更生、艰苦奋斗"},"answer":["A","B","C"]},{"id":"M18","type":"multi","label":"多选","title":"下列选项中，属于航天领域伟大精神的有（ ）","options":{"A":"“两弹一星”精神","B":"载人航天精神","C":"探月精神","D":"新时代北斗精神"},"answer":["A","B","C","D"]},{"id":"M19","type":"multi","label":"多选","title":"习近平总书记希望青少年成为什么样的人（）","options":{"A":"有胆量","B":"有本领","C":"有理想","D":"有担当"},"answer":["B","C","D"]},{"id":"M20","type":"multi","label":"多选","title":"习近平总书记对青少年的寄语包括（）","options":{"A":"要从小学习思考","B":"要从小学习立志","C":"要从小学习创造","D":"要从小学习做人"},"answer":["B","C","D"]},{"id":"M21","type":"multi","label":"多选","title":"毛泽东同志非常关心少年儿童成长，曾多次为少年儿童题词。下列选项中，属于毛泽东同志对少年儿童的著名题词或寄语的有（ ）","options":{"A":"立志做有理想、有道德、有知识、有体力的人","B":"好好学习","C":"星星火炬，代代相传","D":"天天向上"},"answer":["B","D"]},{"id":"M22","type":"multi","label":"多选","title":"周恩来总理在少年时代就立下了远大志向。下列关于周恩来总理少年立志的表述，正确的有（ ）","options":{"A":"他立下了“为中华之崛起而读书”的志向","B":"这句话是他在 12 岁时回答老师提问时说的","C":"这个志向激励了他一生，也激励了无数中国青少年","D":"他说这句话只适合成年人"},"answer":["A","B","C"]},{"id":"M23","type":"multi","label":"多选","title":"以下哪些是革命圣地（）","options":{"A":"井冈山","B":"延安","C":"黄山","D":"泰山"},"answer":["A","B"]},{"id":"M24","type":"multi","label":"多选","title":"以下哪些是红军长征经过的地方（）","options":{"A":"雪山","B":"草地","C":"大渡河","D":"淮河"},"answer":["A","B","C"]},{"id":"M25","type":"multi","label":"多选","title":"以下哪些是著名的革命纪念馆（）","options":{"A":"中国人民抗日战争纪念馆","B":"井冈山革命博物馆","C":"延安革命纪念馆","D":"上海自然博物馆"},"answer":["A","B","C"]},{"id":"M26","type":"multi","label":"多选","title":"下列关于我国航天成就的表述，正确的有（ ）","options":{"A":"2025 年，天问二号探测器成功着陆火星乌托邦平原南部，开展火星表面巡视探测","B":"1970 年“东方红一号”卫星发射成功，开启了中国航天事业的新纪元","C":"从“东方红一号”到“神舟二十号”，55 年间中国航天事业取得了举世瞩目的成就","D":"我国航天事业的快速发展，激励着青少年学习弘扬科学家精神和载人航天精神"},"answer":["B","C","D"]},{"id":"M27","type":"multi","label":"多选","title":"下列哪些是电影《英雄儿女》中的人物（ ）","options":{"A":"潘冬子","B":"王芳","C":"董存瑞","D":"王成"},"answer":["B","D"]},{"id":"M28","type":"multi","label":"多选","title":"以下哪些是中国在新时代取得的重大科技成就（）","options":{"A":"嫦娥探月","B":"天问探火","C":"北斗组网","D":"神舟飞天"},"answer":["A","B","C","D"]},{"id":"M29","type":"multi","label":"多选","title":"以下哪些是红色歌曲（）","options":{"A":"《小苹果》","B":"《歌唱祖国》","C":"《让我们荡起双桨》","D":"《没有共产党就没有新中国》"},"answer":["B","C","D"]},{"id":"M30","type":"multi","label":"多选","title":"《雷锋的故事》讲述了伟大的共产主义战士雷锋的一生。下列关于雷锋及其精神的表述，正确的有（ ）","options":{"A":"雷锋被誉为“永不生锈的螺丝钉”，全心全意为人民服务","B":"毛泽东主席题词“向雷锋同志学习”，号召全国人民学习雷锋","C":"雷锋精神的核心内涵包括服务人民、助人为乐的奉献精神","D":"雷锋的事迹发生在抗日战争时期"},"answer":["A","B","C"]},{"id":"J1","type":"judge","label":"判断","title":"中国共产党第一次全国代表大会上，毛泽东被选为中央局书记。","options":{"T":"正确","F":"错误"},"answer":["F"],"correction":"中共一大选举陈独秀为中央局书记。"},{"id":"J2","type":"judge","label":"判断","title":"中国共产党创建的第一个农村革命根据地是延安革命根据地。","options":{"T":"正确","F":"错误"},"answer":["F"],"correction":"中国共产党创建的第一个农村革命根据地是井冈山革命根据地。"},{"id":"J3","type":"judge","label":"判断","title":"五四运动是中国旧民主主义革命的开端。","options":{"T":"正确","F":"错误"},"answer":["F"],"correction":"五四运动是中国新民主主义革命的开端。"},{"id":"J4","type":"judge","label":"判断","title":"雷锋是社会主义建设时期的英雄。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J5","type":"judge","label":"判断","title":"黄 继 光 在 抗 美 援 朝 战 场上，用自己的胸膛堵住敌人的机枪射口，为战友开辟了前进道路，壮烈牺牲。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J6","type":"judge","label":"判断","title":"红旗渠精神的核心内涵是“自力更生、艰苦创业、团结协作、无私奉献”，这一精神形成于全面建设社会主义时期。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J7","type":"judge","label":"判断","title":"红船精神发源地是上海。","options":{"T":"正确","F":"错误"},"answer":["F"],"correction":"红船精神发源地是浙江嘉兴南湖。"},{"id":"J8","type":"judge","label":"判断","title":"周恩来总理在少年时代立下了“为中华之崛起而读书”的远大志向，这句话是他 12 岁时在课堂上回答老师提问时说的。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J9","type":"judge","label":"判断","title":"习近平总书记寄语少年儿童“从小学习做人、从小学习立志、从小学习创造。”","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J10","type":"judge","label":"判断","title":"井冈山革命博物馆位于江西省井冈山市，主要展示红军长征时期的历史。","options":{"T":"正确","F":"错误"},"answer":["F"],"correction":"井冈山革命博物馆主要展示井冈山革命斗争历史。"},{"id":"J11","type":"judge","label":"判断","title":"北大红楼是五四运动的重要发源地。1919 年 5 月 4日，北京大学等高校学生从红楼出发，前往天安门游行集会，轰轰烈烈的五四运动就此爆发。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J12","type":"judge","label":"判断","title":"2025 年 4 月，我国成功发射了“神舟二十号”载人飞船，这是我国航天事业的又一次重大成就。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J13","type":"judge","label":"判断","title":"北斗导航系统是我国自主创新研发成功的重大成果，体现了我国科技实力的跃升。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J14","type":"judge","label":"判断","title":"中华人民共和国国歌《义勇军进行曲》的曲作者是聂耳，词作者是田汉。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J15","type":"judge","label":"判断","title":"《闪闪的红星》讲述的是解放战争时期的故事。","options":{"T":"正确","F":"错误"},"answer":["F"],"correction":"《闪闪的红星》故事背景为土地革命战争时期。"}]},"junior":{"name":"初中组","subtitle":"初中组题库，共 200 题","status":"ready","questions":[{"id":"S1","type":"single","label":"单选","title":"中国共产党的成立是中国历史上开天辟地的大事变。中国共产党成立初期，非常重视青年工作。1922 年 1 月，在北京创办了面向青年的刊物是（ ）","options":{"A":"《中国青年》","B":"《少年中国》","C":"《先驱》半月刊","D":"《青年杂志》"},"answer":["C"]},{"id":"S2","type":"single","label":"单选","title":"标志着中国共产党开始独立领导革命战争、创建人民军队的历史事件是（ ）","options":{"A":"武昌起义","B":"南昌起义","C":"广州起义","D":"秋收起义"},"answer":["B"]},{"id":"S3","type":"single","label":"单选","title":"红军长征途中，成为中国共产党历史上生死攸关转折点的会议是（ ）","options":{"A":"八七会议","B":"古田会议","C":"遵义会议","D":"瓦窑堡会议"},"answer":["C"]},{"id":"S4","type":"single","label":"单选","title":"“把全国人民和中华民族的根本利益看得高于一切，坚定革命的理想和信念，坚信正义事业必然胜利”，这是哪一伟大精神的核心内涵（ ）","options":{"A":"建党精神","B":"长征精神","C":"抗战精神","D":"红岩精神"},"answer":["B"]},{"id":"S5","type":"single","label":"单选","title":"抗日战争时期，八路军在华北地区主动出击日军、取得重大胜利的战役是（ ）","options":{"A":"台儿庄大捷","B":"平型关大捷","C":"百团大战","D":"雁门关伏击战"},"answer":["C"]},{"id":"S6","type":"single","label":"单选","title":"将毛泽东思想确立为党的指导思想并写入党章，使全党达到空前统一和团结的会议是（ ）","options":{"A":"遵义会议","B":"六届六中全会","C":"中共七大","D":"七届二中全会"},"answer":["C"]},{"id":"S7","type":"single","label":"单选","title":"1927 年，中国共产党在南昌起义后，探索出的中国革命正确道路是（ ）","options":{"A":"发动城市工人武装起义","B":"农村包围城市、武装夺取政权","C":"依靠国民党左派进行革命","D":"开展议会斗争争取权力"},"answer":["B"]},{"id":"S8","type":"single","label":"单选","title":"标志着中国人民抗日战争取得完全胜利，成为中华民族由衰败到振兴转折点的事件是（ ）","options":{"A":"日本宣布无条件投降","B":"百团大战的胜利","C":"平型关大捷","D":"中共七大的召开"},"answer":["A"]},{"id":"S9","type":"single","label":"单选","title":"标志着中国人民“站起来”、成为国家主人的历史事件是（ ）","options":{"A":"抗日战争的胜利","B":"解放战争的胜利","C":"中华人民共和国的成立","D":"中国人民政治协商会议的召开"},"answer":["C"]},{"id":"S10","type":"single","label":"单选","title":"1951 年，祖国大陆获得统一的标志性事件是（ ）","options":{"A":"新疆和平解放","B":"西藏和平解放","C":"海南岛解放","D":"台湾光复"},"answer":["B"]},{"id":"S11","type":"single","label":"单选","title":"1950 年至 1953 年，新中国为保家卫国、维护亚洲和平而进行的战争是（ ）","options":{"A":"抗日战争","B":"解放战争","C":"抗美援朝战争","D":"中越边境自卫反击战"},"answer":["C"]},{"id":"S12","type":"single","label":"单选","title":"新中国成立初期，使约 3 亿无地少地农民获得土地，彻底摧毁封建土地制度的运动是（）","options":{"A":"农业合作化运动","B":"土地改革运动","C":"人民公社化运动","D":"家庭联产承包责任制"},"answer":["B"]},{"id":"S13","type":"single","label":"单选","title":"1954 年，第一届全国人民代表大会第一次会议颁布的、确立人民代表大会制度为我国根本政治制度的法律文件是（ ）","options":{"A":"《中国人民政治协商会议共同纲领》","B":"《中华人民共和国宪法》","C":"《中华人民共和国土地改革法》","D":"《中华人民共和国婚姻法》"},"answer":["B"]},{"id":"S14","type":"single","label":"单选","title":"1956 年，毛泽东提出中国共产党与民主党派关系的基本方针是（）","options":{"A":"“长期共存、互相监督”","B":"“肝胆相照、荣辱与共”","C":"“团结—批评—团结”","D":"“百花齐放、百家争鸣”"},"answer":["A"]},{"id":"S15","type":"single","label":"单选","title":"标志着中国进入改革开放和社会主义现代化建设新时期，实现伟大历史转折的会议是（ ）","options":{"A":"中共十一届三中全会","B":"中共十二大","C":"中共十三大","D":"中共十四大"},"answer":["A"]},{"id":"S16","type":"single","label":"单选","title":"我国社会主义初级阶段的基本路线中，立国之本是（）","options":{"A":"改革开放","B":"以经济建设为中心","C":"坚持四项基本原则","D":"坚持科学发展观"},"answer":["C"]},{"id":"S17","type":"single","label":"单选","title":"党的十九大报告指出，经过长期努力，中国特色社会主义进入了新时代，这是我国发展新的（ ）","options":{"A":"历史时期","B":"历史方位","C":"历史阶段","D":"历史特点"},"answer":["B"]},{"id":"S18","type":"single","label":"单选","title":"党的十八大以来，我们党贯彻的发展思想是（）","options":{"A":"以和谐为中心","B":"以稳定为中心","C":"以人民为中心","D":"以改革为中心"},"answer":["C"]},{"id":"S19","type":"single","label":"单选","title":"社会主义核心价值观中社会层面的价值取向是（ ）","options":{"A":"富强、民主、文明、和谐","B":"自由、平等、公正、法治","C":"文明、和谐、公正、诚信","D":"爱国、敬业、诚信、友善"},"answer":["B"]},{"id":"S20","type":"single","label":"单选","title":"习近平总书记指出：“江山就是人民，人民就是江山。”这一重要论述所体现的中国共产党的根本宗旨是（ ）","options":{"A":"实现共产主义","B":"全心全意为人民服务","C":"坚持改革开放","D":"发展社会主义市场经济"},"answer":["B"]},{"id":"S21","type":"single","label":"单选","title":"“敌人只能砍下我们的头颅，决不能动摇我们的信仰！因为我们信仰的主义，乃是宇宙的真理！”这句铮铮誓言出自哪位革命先烈（ ）","options":{"A":"叶挺","B":"方志敏","C":"瞿秋白","D":"恽代英"},"answer":["B"]},{"id":"S22","type":"single","label":"单选","title":"“清贫，洁白朴素的生活，正是我们革命者能够战胜许多困难的地方！”这句话出自哪位共产党人（ ）","options":{"A":"方志敏","B":"刘志丹","C":"赵世炎","D":"陈延年"},"answer":["A"]},{"id":"S23","type":"single","label":"单选","title":"1944 年 9 月 8 日，毛泽东在一位普通战士的追悼会上发表了《为人民服务》的演讲。这位战士是（）","options":{"A":"白求恩","B":"张思德","C":"雷锋","D":"董存瑞"},"answer":["B"]},{"id":"S24","type":"single","label":"单选","title":"1935 年 2 月，在福建长汀突围战斗中，一位中共一大代表、中国共产党创始人之一为不拖累战友，高呼“为苏维埃流尽最后一滴血”纵身跳崖。他是（ ）","options":{"A":"董必武","B":"陈潭秋","C":"何叔衡","D":"邓恩铭"},"answer":["C"]},{"id":"S25","type":"single","label":"单选","title":"下列哪一位英雄人物的事迹，最直接体现了“为解放战争英勇献身、不畏牺牲”的精神（）","options":{"A":"张自忠","B":"董存瑞","C":"黄继光","D":"邱少云"},"answer":["B"]},{"id":"S26","type":"single","label":"单选","title":"毛泽东曾评价一位烈士的狱中遗作“是一个共产党员革命意志、情操和高尚人格的写照，是不朽之作”。这位烈士是（ ）","options":{"A":"方志敏","B":"李大钊","C":"夏明翰","D":"恽代英"},"answer":["A"]},{"id":"S27","type":"single","label":"单选","title":"“对国家的忠就是对父母最大的孝。”这句感人至深的话语出自哪位时代楷模（）","options":{"A":"邓稼先","B":"钱学森","C":"黄旭华","D":"孙家栋"},"answer":["C"]},{"id":"S28","type":"single","label":"单选","title":"在山东临沂已经传唱了 70 余年的《沂蒙山小调》，唱出了巍巍蒙山、滔滔沂水，更唱响了（）的沂蒙精神。","options":{"A":"水乳交融，生死与共","B":"独立自主，自力更生","C":"不畏艰险，勇于拼搏","D":"开拓创新，积极进取"},"answer":["A"]},{"id":"S29","type":"single","label":"单选","title":"“如果祖国需要，我愿贡献一切！”这是哪位“两弹一星”元勋、核潜艇第一任总设计师的誓言（）","options":{"A":"于敏","B":"彭士禄","C":"黄纬禄","D":"赵仁恺"},"answer":["B"]},{"id":"S30","type":"single","label":"单选","title":"“我们当时两手空空，没有任何设备，甚至连办公的地方都没有……迈开双腿，绝不等待。”这段话反映了哪位科学家在研制核潜艇时攻坚克难的精神（ ）","options":{"A":"黄旭华","B":"钱三强","C":"王淦昌","D":"郭永怀"},"answer":["A"]},{"id":"S31","type":"single","label":"单选","title":"标志着抗美援朝战争结束的事件是什么（）","options":{"A":"朝鲜宣布停火","B":"美军撤出朝鲜半岛","C":"签订《朝鲜停战协定》","D":"志愿军全部回国"},"answer":["C"]},{"id":"S32","type":"single","label":"单选","title":"“这世界上不缺乏专家，不缺乏权威，缺乏的是一个‘人’，一个肯把自己给出去的人。”这句关于医者仁心的名言出自哪位医学家（ ）","options":{"A":"钟南山","B":"吴孟超","C":"林巧稚","D":"张孝骞"},"answer":["B"]},{"id":"S33","type":"single","label":"单选","title":"下列哪项精神属于第一批中国共产党人精神谱系，并且以一位普通战士的名字命名（）","options":{"A":"抗战精神","B":"雷锋精神","C":"长征精神","D":"红岩精神"},"answer":["B"]},{"id":"S34","type":"single","label":"单选","title":"下列哪项精神属于第一批中国共产党人精神谱系，且体现“全心全意为人民服务”的核心内涵（ ）","options":{"A":"长征精神","B":"抗战精神","C":"红岩精神","D":"雷锋精神"},"answer":["D"]},{"id":"S35","type":"single","label":"单选","title":"被誉为“人民的公仆”，在兰考县担任县委书记期间带领群众治理“三害”（内涝、风沙、盐碱）的模范人物是（）","options":{"A":"焦裕禄","B":"谷文昌","C":"杨善洲","D":"孔繁森"},"answer":["A"]},{"id":"S36","type":"single","label":"单选","title":"“开天辟地、敢为人先的首创精神，坚定理想、百折不挠的奋斗精神，立党为公、忠诚为民的奉献精神。”这是对哪一伟大精神的精准概括（ ）","options":{"A":"井冈山精神","B":"红船精神","C":"长征精神","D":"延安精神"},"answer":["B"]},{"id":"S37","type":"single","label":"单选","title":"在红军生死存亡的危急关头，1935 年 1 月召开的某次会议事实上确立了毛泽东在党中央和红军的领导地位（）","options":{"A":"遵义会议","B":"古田会议","C":"延安整风","D":"七届二中全会"},"answer":["A"]},{"id":"S38","type":"single","label":"单选","title":"“坚定信念、实事求是、独立自主、敢闯新路、民主团结”，这五个关键词所描述的是哪一重要会议铸就的精神（ ）","options":{"A":"八七会议","B":"古田会议","C":"遵义会议","D":"瓦窑堡会议"},"answer":["C"]},{"id":"S39","type":"single","label":"单选","title":"毛泽东指出：“我说陕北是两点，一个落脚点，一个出发点。”这里的“出发点”指的是抗日战争的出发点。在全面抗战爆发的壮阔进程中，形成了彰显“天下兴亡、匹夫有责的爱国情怀，视死如归、宁死不屈的民族气节”的伟大精神。这是（）","options":{"A":"红岩精神","B":"抗战精神","C":"太行精神（吕梁精神）","D":"东北抗联精神"},"answer":["B"]},{"id":"S40","type":"single","label":"单选","title":"抗美援朝精神包括：爱国主义精神、革命英雄主义精神、革命乐观主义精神、革命忠诚精神和（ ）","options":{"A":"国际主义精神","B":"集体主义精神","C":"艰苦奋斗精神","D":"科学求实精神"},"answer":["A"]},{"id":"S41","type":"single","label":"单选","title":"沂蒙精神鲜明特征是（）","options":{"A":"万众一心、众志成城","B":"精益求精、追求卓越","C":"水乳交融、生死与共","D":"追逐梦想、勇于探索"},"answer":["C"]},{"id":"S42","type":"single","label":"单选","title":"“打得一拳开，免得百拳来。”这场战争彻底告别了几百年来西方侵略者只要在东方一个海岸上架起几尊大炮就可霸占一个国家的屈辱时代。在这场波澜壮阔的战争中锻造的伟大精神是（ ）","options":{"A":"抗战精神","B":"抗美援朝精神","C":"保家卫国精神","D":"爱国主义精神"},"answer":["B"]},{"id":"S43","type":"single","label":"单选","title":"“热爱祖国、无私奉献，自力更生、艰苦奋斗，大力协同、勇于登攀。”这是对哪一伟大精神的凝练概括（）","options":{"A":"载人航天精神","B":"新时代北斗精神","C":"“两弹一星”精神","D":"科学家精神"},"answer":["C"]},{"id":"S44","type":"single","label":"单选","title":"“改革开放精神”的内涵不包括（）","options":{"A":"解放思想、实事求是","B":"淡泊名利、甘于奉献","C":"敢闯敢试、勇于创新","D":"互利合作、命运与共"},"answer":["B"]},{"id":"S45","type":"single","label":"单选","title":"“亲民爱民、艰苦奋斗、科学求实、迎难而上、无私奉献”，这是对哪位共产党人崇高精神的集中概括（）","options":{"A":"雷锋","B":"焦裕禄","C":"孔繁森","D":"王进喜"},"answer":["B"]},{"id":"S46","type":"single","label":"单选","title":"在社会主义建设时期，河南林县人民为改变“十年九旱、水贵如油”的苦难历史，苦战 10 年，硬是用双手和锤头铁锨在太行山的悬崖绝壁上修成了“人间奇迹”。这一壮举铸就的精神是（ ）","options":{"A":"北大荒精神","B":"红旗渠精神","C":"塞罕坝精神","D":"太行精神（吕梁精神）"},"answer":["B"]},{"id":"S47","type":"single","label":"单选","title":"“宁肯少活二十年，拼命也要拿下大油田！”这句豪迈誓言体现了以哪位人物为代表的艰苦奋斗精神（）","options":{"A":"焦裕禄","B":"雷锋","C":"王进喜","D":"王杰"},"answer":["C"]},{"id":"S48","type":"single","label":"单选","title":"1955 年，国务院作出交通大学迁往西安的决定，交大首批师生胸怀大局、听党指挥，从上海西迁至西安。在 60 多年的奋斗历程中形成的“胸怀大局、无私奉献、弘扬传统、艰苦创业”的精神是（ ）","options":{"A":"北大荒精神","B":"西迁精神","C":"老西藏精神（孔繁森精神）","D":"兵团精神"},"answer":["B"]},{"id":"S49","type":"single","label":"单选","title":"1950 年，志愿军将士在长津湖战役中，在零下 40 摄氏度的极寒天气下，坚守阵地直至冻成“冰雕连”。这体现了伟大抗美援朝精神中的哪一方面（）","options":{"A":"爱国主义精神","B":"革命英雄主义精神","C":"革命乐观主义精神","D":"国际主义精神"},"answer":["B"]},{"id":"S50","type":"single","label":"单选","title":"“时间就是金钱，效率就是生命。”这句诞生于深圳蛇口工业区的口号，集中体现了哪一伟大精神（ ）","options":{"A":"改革开放精神","B":"特区精神","C":"拓荒牛精神","D":"创新精神"},"answer":["B"]},{"id":"S51","type":"single","label":"单选","title":"1998 年，面对百年不遇的特大洪水，数十万军民在长江、嫩江、松花江流域与洪水展开殊死搏斗，形成了“万众一心、众志成城，不怕困难、顽强拼搏，坚韧不拔、敢于胜利”的伟大精神。这是（）","options":{"A":"抗震救灾精神","B":"抗洪精神","C":"抗击“非典”精神","D":"抗疫精神"},"answer":["B"]},{"id":"S52","type":"single","label":"单选","title":"2003 年 10 月 15 日，我国首位航天员杨利伟搭乘“神舟五号”飞船进入太空，实现了中华民族千年飞天梦想。支撑这一伟大壮举的精神是（ ）","options":{"A":"“两弹一星”精神","B":"载人航天精神","C":"新时代北斗精神","D":"探月精神"},"answer":["B"]},{"id":"S53","type":"single","label":"单选","title":"“祖国至上、团结协作、顽强拼搏、永不言败”，这是对哪一精神的高度概括（ ）","options":{"A":"体育精神","B":"女排精神","C":"奋斗精神","D":"拼搏精神"},"answer":["B"]},{"id":"S54","type":"single","label":"单选","title":"“上下同心、尽锐出战、精准务实、开拓创新、攻坚克难、不负人民”，这是对哪一伟大精神的核心概括（）","options":{"A":"抗战精神","B":"脱贫攻坚精神","C":"新时代奋斗精神","D":"共同富裕精神"},"answer":["B"]},{"id":"S55","type":"single","label":"单选","title":"“刚柔相济、锲而不舍的政治智慧，‘出淤泥不染，同流不合污’的政治品格，以诚相待、团结多数的宽广胸怀，善处逆境、宁难不苟的英雄气概”是对哪种精神的概括（）","options":{"A":"红岩精神","B":"红船精神","C":"井冈山精神","D":"延安精神"},"answer":["A"]},{"id":"S56","type":"single","label":"单选","title":"“自主创新、开放融合、万众一心、追求卓越”，这是 2020 年 7 月31 日正式开通的北斗三号全球卫星导航系统所铸就的伟大精神。它是（）","options":{"A":"载人航天精神","B":"“两弹一星”精神","C":"新时代北斗精神","D":"探月精神"},"answer":["C"]},{"id":"S57","type":"single","label":"单选","title":"下列哪一精神是习近平总书记提出的，旨在倡导无私奉献、服务人民的时代精神，其内涵包括“为民服务孺子牛、创新发展拓荒牛、艰苦奋斗老黄牛”（ ）","options":{"A":"劳模精神","B":"“三牛”精神","C":"工匠精神","D":"奋斗精神"},"answer":["B"]},{"id":"S58","type":"single","label":"单选","title":"以下关于精神谱系的表述，正确的是（ ）","options":{"A":"伟大建党精神是中国共产党的精神之源","B":"延安精神是改革开放时期形成的","C":"雷锋精神诞生于新民主主义革命时期","D":"脱贫攻坚精神是社会主义革命和建设时期形成的"},"answer":["A"]},{"id":"S59","type":"single","label":"单选","title":"将下列中国共产党人精神谱系按照历史时期先后顺序排列：①特区精神 ②长征精神 ③探月精神 ④焦裕禄精神。正确的顺序是（ ）","options":{"A":"②④①③","B":"①②③④","C":"②①④③","D":"④②①③"},"answer":["A"]},{"id":"S60","type":"single","label":"单选","title":"下列哪一伟大精神的核心内涵强调“把全国人民和中华民族的根本利益看得高于一切，坚定革命的理想和信念，坚信正义事业必然胜利”（ ）","options":{"A":"抗战精神","B":"建党精神","C":"长征精神","D":"井冈山精神"},"answer":["C"]},{"id":"S61","type":"single","label":"单选","title":"抗震救灾精神的内涵不包括（ ）","options":{"A":"万众一心、众志成城","B":"解放思想、实事求是","C":"不畏艰险、百折不挠","D":"以人为本、尊重科学"},"answer":["B"]},{"id":"S62","type":"single","label":"单选","title":"毛泽东同志提出的党的根本宗旨是（）","options":{"A":"全心全意为人民服务","B":"实现共产主义","C":"解放和发展生产力","D":"坚持改革开放"},"answer":["A"]},{"id":"S63","type":"single","label":"单选","title":"毛泽东同志在七届二中全会提出的 “两个务必” 核心是（）","options":{"A":"谦虚谨慎不骄不躁、艰苦奋斗","B":"理论联系实际、密切联系群众","C":"解放思想、实事求是","D":"自力更生、艰苦奋斗"},"answer":["A"]},{"id":"S64","type":"single","label":"单选","title":"毛泽东同志《为人民服务》一文是为纪念谁而作（）","options":{"A":"雷锋","B":"白求恩","C":"刘胡兰","D":"张思德"},"answer":["D"]},{"id":"S65","type":"single","label":"单选","title":"毛泽东同志诗词“红军不怕远征难”赞颂的是（）","options":{"A":"长征精神","B":"抗战精神","C":"延安精神","D":"抗美援朝精神"},"answer":["A"]},{"id":"S66","type":"single","label":"单选","title":"邓小平同志指出，中国发展的精神动力是懂得（）","options":{"A":"中国历史尤其是近现代史与党史","B":"世界历史发展规律","C":"市场经济运行规则","D":"西方民主制度"},"answer":["A"]},{"id":"S67","type":"single","label":"单选","title":"邓小平同志强调，要用（）教育青年、教育人民","options":{"A":"实践","B":"理论","C":"榜样","D":"历史"},"answer":["D"]},{"id":"S68","type":"single","label":"单选","title":"邓小平同志提出社会主义的最终目标是实现（）","options":{"A":"共同富裕","B":"平均主义","C":"个人致富","D":"贫富差距"},"answer":["A"]},{"id":"S69","type":"single","label":"单选","title":"邓小平同志深情表白“我是中国人民的儿子”，体现的核心情怀是（）","options":{"A":"崇尚科学与技术","B":"热爱祖国与人民","C":"重视法治与民主","D":"坚持改革与开放"},"answer":["B"]},{"id":"S70","type":"single","label":"单选","title":"邓小平南方谈话发表于（）","options":{"A":"1978 年","B":"1992 年","C":"1997 年","D":"2001 年"},"answer":["B"]},{"id":"S71","type":"single","label":"单选","title":"牺牲在脱贫攻坚一线的“时代楷模”青年驻村第一书记是（）","options":{"A":"雷锋","B":"焦裕禄","C":"黄文秀","D":"王进喜"},"answer":["C"]},{"id":"S72","type":"single","label":"单选","title":"我国脱贫攻坚战取得全面胜利的年份是（）","options":{"A":"2020 年","B":"2021 年","C":"2019 年","D":"2022 年"},"answer":["B"]},{"id":"S73","type":"single","label":"单选","title":"讴歌改革开放伟大历程的经典歌曲是（）","options":{"A":"《春天的故事》","B":"《黄河大合唱》","C":"《我为祖国献石油》","D":"《歌唱祖国》"},"answer":["A"]},{"id":"S74","type":"single","label":"单选","title":"践行“人民楷模”精神，扎根牧区为民服务的模范是（）","options":{"A":"焦裕禄","B":"廷·巴特尔","C":"黄文秀","D":"张桂梅"},"answer":["B"]},{"id":"S75","type":"single","label":"单选","title":"载人航天精神突出表现为（）","options":{"A":"自力更生、艰苦奋斗","B":"特别能吃苦、特别能战斗、特别能攻关、特别能奉献","C":"万众一心、众志成城","D":"尊重自然、绿色发展"},"answer":["B"]},{"id":"S76","type":"single","label":"单选","title":"在江苏句容茅山新四军纪念馆中，陈列着一支钢笔与 4 枚子弹。它们的主人 14 岁背起竹筒枪参军，23 岁为掩护主力突围壮烈牺牲，被陈毅司令员誉为“政治工作模范”。这位烈士是（ ）","options":{"A":"彭雪枫","B":"肖国生","C":"赵尚志","D":"杨靖宇"},"answer":["B"]},{"id":"S77","type":"single","label":"单选","title":"某纪念馆内珍藏着一份特殊的入党誓词。它的主人贺页朵是江西永新县的农民，1931 年入党，1934 年因伤无法跟随红军长征，冒着生命危险将誓词藏在榨油坊屋檐下，直到 1951 年亲手交给党组织。这份誓词原件收藏地（ ）","options":{"A":"井冈山革命博物馆","B":"南昌八一起义纪念馆","C":"中国共产党第一次全国代表大会纪念馆","D":"中国国家博物馆"},"answer":["D"]},{"id":"S78","type":"single","label":"单选","title":"“文物不言，自有春秋。走进抗战纪念场馆，赵一曼写给儿子的绝笔信、赵尚志主笔的《东北红星壁报》、彭雪枫使用过的印章——一件件抗战文物，虽历经岁月洗礼，仍给人以心灵的震撼和启迪。”抗战文物的生命力源于它们（ ）①凝结着革命文化，成为中华民族共同的精神标识②承载着伟大的抗战精神，能激发人们的爱国热情③见证了抗战的光辉历史，引领先进文化的前进方向④铭刻着革命先烈的信念，彰显历久弥新的育人价值","options":{"A":"①③","B":"①④","C":"②③","D":"②④"},"answer":["D"]},{"id":"S79","type":"single","label":"单选","title":"“四渡赤水、巧渡金沙江、飞夺泸定桥……遵义会议后，中央红军成功突破国民党军队围追堵截，书写了波澜壮阔的革命篇章。”下列哪座纪念馆是为纪念这次“伟大转折”而建立的（ ）","options":{"A":"井冈山革命博物馆","B":"遵义会议纪念馆","C":"延安革命纪念馆","D":"西柏坡纪念馆"},"answer":["B"]},{"id":"S80","type":"single","label":"单选","title":"在张家口察哈尔烈士陵园，烈士纪念碑镌刻着中国共产党领导下的抗日英烈名录；晋察冀军区司令部旧址留存的革命文件记录着党团结群众、抗击侵略的方针政策。这些革命文物的价值在于（ ）","options":{"A":"见证历史、传承精神、教育后人","B":"发展旅游、增加收入、促进经济","C":"收藏展示、学术研究、考古发现","D":"美化环境、城市建设、文化娱乐"},"answer":["A"]},{"id":"S81","type":"single","label":"单选","title":"某校开展“物述史，根铸魂——革命文物中的党史故事”主题活动。活动中展示了一件特殊的文物——1949 年 1 月 22 日傅作义在《关于和平解决北平问题的协议》上签字的文件。这件文物与哪次战役直接相关（ ）","options":{"A":"辽沈战役","B":"淮海战役","C":"平津战役","D":"渡江战役"},"answer":["C"]},{"id":"S82","type":"single","label":"单选","title":"下列纪念馆与对应历史事件搭配正确的是（ ）","options":{"A":"井冈山会师纪念馆——南昌起义","B":"中共一大会址纪念馆——中国共产党成立","C":"八路军太行纪念馆——红军长征","D":"西柏坡纪念馆——抗日战争胜利"},"answer":["B"]},{"id":"S83","type":"single","label":"单选","title":"一位同学参观中国共产党历史展览馆后，记录下以下展品：①《中华人民共和国土地改革法》受到广大农民拥护的照片；②邱少云获授的朝鲜民主主义人民共和国一级国旗勋章；③中国第一批解放牌汽车在长春一汽试制成功的照片；④邓小平为深圳经济特区的题词。其中，属于抗美援朝战争时期文物的是（ ）","options":{"A":"①","B":"②","C":"③","D":"④"},"answer":["B"]},{"id":"S84","type":"single","label":"单选","title":"习近平总书记指出：“从党的一大会址到党的各个重要革命根据地，从土地革命、抗日战争、解放战争纪念地点到社会主义革命和建设、改革开放重要纪念场所等，每到一地，重温那一段段峥嵘岁月，回顾党一路走过的艰难历程，灵魂都受到一次震撼，精神都受到一次洗礼。”这段话强调了红色资源的哪一重要作用（ ）","options":{"A":"促进经济发展","B":"增进国际交流","C":"赓续红色血脉、传承红色基因","D":"推动科技创新"},"answer":["C"]},{"id":"S85","type":"single","label":"单选","title":"2025 年是遵义会议召开 90 周年。90 年前，长征途中召开的遵义会议，在最危急关头挽救了党、挽救了红军、挽救了中国革命。今天，某高校师生重走长征路，来到遵义革命老区开展“听红色故事，做时代新人”的主题调研活动。这一活动旨在（ ）①弘扬遵义会议精神，筑牢青年学生的信仰之基②继承革命文化，确立红色文化的社会价值③汲取历史智慧，坚定“跟党走”的政治自觉④参与实践教学，丰富中国共产党人精神谱系","options":{"A":"①②","B":"①③","C":"②③","D":"③④"},"answer":["B"]},{"id":"S86","type":"single","label":"单选","title":"2025 年，井冈山革命博物馆推出了一款以八角楼油灯为原型的毛绒玩偶，轻按即可发出暖光。这款文创产品的设计理念是（ ）","options":{"A":"将革命文物转化为高端收藏品","B":"让红色精神从展板文字化作掌心温度与日常陪伴","C":"替代传统的红色教育方式","D":"增加博物馆的经济收入"},"answer":["B"]},{"id":"S87","type":"single","label":"单选","title":"2019 年，长篇小说《红岩》入选“新中国 70 年 70 部长篇小说典藏”，这部红色文学作品的作者是（）","options":{"A":"鲁迅","B":"郭沫若","C":"罗广斌、杨益言","D":"冰心"},"answer":["C"]},{"id":"S88","type":"single","label":"单选","title":"某中学语文组在开展红色经典整本书阅读时，设计了“寻找书中的同龄人”“信仰之问”讨论、情景剧表演等系列活动。这一做法的核心目的是（ ）","options":{"A":"提高学生的语文考试成绩","B":"让红色经典从“必读书目”变成“心灵读本”","C":"完成教学大纲规定的教学任务","D":"丰富学生的课外活动形式"},"answer":["B"]},{"id":"S89","type":"single","label":"单选","title":"延安精神的主要内容不包括以下哪一项（）","options":{"A":"自力更生、艰苦奋斗","B":"实事求是、理论联系实际","C":"全心全意为人民服务","D":"解放思想、改革创新"},"answer":["D"]},{"id":"S90","type":"single","label":"单选","title":"新时代北斗精神是（）","options":{"A":"谦虚谨慎、艰苦奋斗","B":"英勇斗争、不怕牺牲","C":"自主创新、开放融合、万众一心、追求卓越","D":"依靠群众、发动群众"},"answer":["C"]},{"id":"S91","type":"single","label":"单选","title":"河北西柏坡研学实践教育基地开设了一堂名为“永不消逝的电波”的研学课，让学生通过认识电码符号、分组破译“情报”，沉浸式体验收发电报。这堂课程最直接的作用是（ ）","options":{"A":"普及无线电通信技术知识","B":"让红色历史在孩子们心里“活”起来","C":"培养青少年信息处理能力","D":"提升学生的团队协作能力"},"answer":["B"]},{"id":"S92","type":"single","label":"单选","title":"塞罕坝精神的核心是（）","options":{"A":"人民至上、生命至上","B":"大胆改革、扩大开放","C":"牢记使命、艰苦创业、绿色发展","D":"精准脱贫、共建共享"},"answer":["C"]},{"id":"S93","type":"single","label":"单选","title":"习近平总书记强调“红色江山来之不易，守好江山责任重大”，要求青少年（）","options":{"A":"赓续红色血脉、立志强国复兴","B":"只关心个人前途","C":"淡化历史记忆","D":"追求物质享受"},"answer":["A"]},{"id":"S94","type":"single","label":"单选","title":"习近平总书记寄语青少年：“人生的扣子从一开始就要扣好”，意在强调（）","options":{"A":"树立正确价值观","B":"注重穿衣整洁","C":"提高学习成绩","D":"锻炼强健体魄"},"answer":["A"]},{"id":"S95","type":"single","label":"单选","title":"习近平总书记指出“传承红色基因，根本在于坚定理想信念”，理想信念指的是（）","options":{"A":"对个人财富的追求","B":"对马克思主义的信仰、对中国特色社会主义的信念","C":"对西方模式的崇拜","D":"对传统封建思想的固守"},"answer":["B"]},{"id":"S96","type":"single","label":"单选","title":"“为什么我的眼里常含泪水？因为我对这土地爱得深沉……”这两句感人至深的诗句出自哪位诗人的作品（ ）","options":{"A":"艾青","B":"郭沫若","C":"臧克家","D":"贺敬之"},"answer":["A"]},{"id":"S97","type":"single","label":"单选","title":"“为人进出的门紧锁着，为狗爬走的洞敞开着，一个声音高叫着：爬出来吧，给你自由！”这首《囚歌》是哪位革命先烈在狱中写下的不朽诗篇（ ）","options":{"A":"方志敏","B":"夏明翰","C":"叶挺","D":"恽代英"},"answer":["C"]},{"id":"S98","type":"single","label":"单选","title":"“红米饭，南瓜汤，秋茄子，味好香，餐餐吃得精打光。干稻草来软又黄，金丝被儿盖身上，不怕北风和大雪，暖暖和和入梦乡。”这首红军歌谣生动反映了什么时期红军的艰苦生活和乐观精神（ ）","options":{"A":"红军长征时期","B":"井冈山斗争时期","C":"抗日战争时期","D":"解放战争时期"},"answer":["B"]},{"id":"S99","type":"single","label":"单选","title":"电影《英雄儿女》中，志愿军战士王成在阵地上高喊“为了胜利，向我开炮！”后壮烈牺牲。这一经典片段改编自哪部红色文学名著（ ）","options":{"A":"《红岩》","B":"《林海雪原》","C":"《谁是最可爱的人》","D":"《团圆》"},"answer":["D"]},{"id":"S100","type":"single","label":"单选","title":"埃德加·斯诺在《红星照耀中国》中记录了大量红军领袖和普通战士的真实故事。下列哪一最具标志性的革命精神内涵是这部纪实文学作品最核心的呈现（ ）","options":{"A":"开天辟地的首创精神","B":"坚定信念、百折不挠的长征精神","C":"亲民爱民、艰苦奋斗的奉献精神","D":"自力更生、艰苦创业的奋斗精神"},"answer":["B"]},{"id":"M1","type":"multi","label":"多选","title":"遵义会议后，中共中央成立的全权负责军事指挥的“三人团”包括（）","options":{"A":"毛泽东","B":"周恩来","C":"王稼祥","D":"博古"},"answer":["A","B","C"]},{"id":"M2","type":"multi","label":"多选","title":"下列事件，发生在土地革命战争时期的有（）","options":{"A":"南昌起义","B":"秋收起义","C":"遵义会议","D":"卢沟桥事变"},"answer":["A","B","C"]},{"id":"M3","type":"multi","label":"多选","title":"抗日民族统一战线的阶级构成包括（）","options":{"A":"工人阶级","B":"农民阶级","C":"城市小资产阶级","D":"民族资产阶级"},"answer":["A","B","C","D"]},{"id":"M4","type":"multi","label":"多选","title":"解放战争时期，具有战略决战意义的三大战役是（）","options":{"A":"辽沈战役","B":"淮海战役","C":"平津战役","D":"渡江战役"},"answer":["A","B","C"]},{"id":"M5","type":"multi","label":"多选","title":"下列会议，与确立党对军队绝对领导相关的有（）","options":{"A":"古田会议","B":"三湾改编","C":"遵义会议","D":"八七会议"},"answer":["A","B"]},{"id":"M6","type":"multi","label":"多选","title":"下列属于中共在抗战时期提出的口号有（）","options":{"A":"坚持抗战，反对投降","B":"坚持团结，反对分裂","C":"坚持进步，反对倒退","D":"自己动手，丰衣足食"},"answer":["A","B","C","D"]},{"id":"M7","type":"multi","label":"多选","title":"新民主主义革命胜利的历史经验包括（）","options":{"A":"坚持党的领导","B":"建立统一战线","C":"开展武装斗争","D":"紧密依靠群众"},"answer":["A","B","C","D"]},{"id":"M8","type":"multi","label":"多选","title":"下列英雄人物中，在抗日战争中为国捐躯的有（）","options":{"A":"左权","B":"彭雪枫","C":"杨靖宇","D":"董存瑞"},"answer":["A","B","C"]},{"id":"M9","type":"multi","label":"多选","title":"下列先烈中，属于中共早期无产阶级革命家的有（）","options":{"A":"李大钊","B":"瞿秋白","C":"蔡和森","D":"向警予"},"answer":["A","B","C","D"]},{"id":"M10","type":"multi","label":"多选","title":"下列人物中，被评为“100 位为新中国成立作出突出贡献的英雄模范”的有（）","options":{"A":"杨靖宇","B":"赵一曼","C":"方志敏","D":"刘胡兰"},"answer":["A","B","C","D"]},{"id":"M11","type":"multi","label":"多选","title":"中国共产党人精神谱系的源头是贯穿百年奋斗的精神主线，其组成部分深刻影响了后续各类革命精神的形成。下列选项中，属于这一源头精神组成部分的有（）","options":{"A":"坚持真理、坚守理想","B":"践行初心、担当使命","C":"不怕牺牲、英勇斗争","D":"对党忠诚、不负人民"},"answer":["A","B","C","D"]},{"id":"M12","type":"multi","label":"多选","title":"长征精神是中国共产党人精神谱系的重要组成部分，它突出体现了中国共产党人的哪些品格（）","options":{"A":"革命理想高于天","B":"不畏艰难、不怕牺牲","C":"独立自主、实事求是","D":"顾全大局、严守纪律"},"answer":["A","B","C","D"]},{"id":"M13","type":"multi","label":"多选","title":"西柏坡时期是中国革命从胜利走向新的胜利的关键阶段，凝结而成的西柏坡精神包含“两个务必”“两个敢于”等重要内涵，其中的“两个敢于”具体指（）","options":{"A":"敢于斗争","B":"敢于胜利","C":"敢于改革","D":"敢于创新"},"answer":["A","B"]},{"id":"M14","type":"multi","label":"多选","title":"五四精神对当代青年的启示包括（）","options":{"A":"热爱祖国","B":"追求进步","C":"勇于探索","D":"担当责任"},"answer":["A","B","C","D"]},{"id":"M15","type":"multi","label":"多选","title":"沂蒙精神体现的党群关系是（）","options":{"A":"党为人民","B":"人民爱党","C":"军民一家","D":"水乳交融"},"answer":["A","B","C","D"]},{"id":"M16","type":"multi","label":"多选","title":"红岩精神集中反映了革命者在狱中展现出的（）","options":{"A":"坚定信念","B":"坚贞不屈","C":"团结斗争","D":"勇往直前"},"answer":["A","B","C"]},{"id":"M17","type":"multi","label":"多选","title":"习近平总书记多次强调，要从党的历史中汲取（）","options":{"A":"信仰力量","B":"精神食粮","C":"斗争智慧","D":"历史经验"},"answer":["A","C","D"]},{"id":"M18","type":"multi","label":"多选","title":"下列地点中，属于红军长征重要节点的有（）","options":{"A":"湘江","B":"赤水","C":"泸定桥","D":"好汉坡"},"answer":["A","B","C"]},{"id":"M19","type":"multi","label":"多选","title":"张桂梅扎根贫困山区教育一线 40 余年，创办全国第一所免费女子高中，用生命托起大山女孩的梦想，展现了共产党人无私奉献的赤诚初心。学习张桂梅事迹，我们要（ ）","options":{"A":"珍惜学习机会，用知识改变命运，回报社会","B":"学习张桂梅的奉献精神，在班级和社区中乐于助人、服务集体","C":"认为青少年应以个人发展和享受生活为主，无需过早承担社会责任","D":"积极参与宣传张桂梅等时代楷模的故事，传承弘扬红色文化"},"answer":["A","B","D"]},{"id":"M20","type":"multi","label":"多选","title":"学校开展红色教育，可以采用的沉浸式活动形式有（）","options":{"A":"红色情景剧展演","B":"重走长征路研学","C":"红色故事演讲比赛","D":"红色主题辩论赛"},"answer":["A","B","C","D"]},{"id":"M21","type":"multi","label":"多选","title":"青少年传承红色文化，可以从以下哪些方面做起（）","options":{"A":"认真学习党史","B":"参观革命纪念场所","C":"讲好红色故事","D":"安于现状"},"answer":["A","B","C"]},{"id":"M22","type":"multi","label":"多选","title":"在网络时代，青少年正确传播红色文化以下哪些做法是正确的（）","options":{"A":"尊重历史事实","B":"拒绝恶搞与娱乐化","C":"主动辟谣历史虚无主义","D":"创作正能量短视频"},"answer":["A","B","C","D"]},{"id":"M23","type":"multi","label":"多选","title":"下列属于红色经典文学作品的有（）","options":{"A":"《红岩》","B":"《青春之歌》","C":"《林海雪原》","D":"《围城》"},"answer":["A","B","C"]},{"id":"M24","type":"multi","label":"多选","title":"下列作品中，以抗战为背景的红色文艺作品有（）","options":{"A":"《黄河大合唱》","B":"《小兵张嘎》","C":"《铁道游击队》","D":"《平原游击队》"},"answer":["A","B","C","D"]},{"id":"M25","type":"multi","label":"多选","title":"新中国成立初期，党面临的主要任务有（）","options":{"A":"巩固新生政权","B":"恢复国民经济","C":"完成土地改革","D":"推进改革开放"},"answer":["A","B","C"]},{"id":"M26","type":"multi","label":"多选","title":"我国在改革开放以前取得的重要成就以下有哪些（）","options":{"A":"建立独立工业体系","B":"培育成功杂交水稻","C":"建成南京长江大桥","D":"实施乡村振兴战略"},"answer":["A","B","C"]},{"id":"M27","type":"multi","label":"多选","title":"下列属于我国第一部宪法（1954 年）确立的原则有（）","options":{"A":"社会主义原则","B":"人民民主原则","C":"三权分立原则","D":"民主集中制原则"},"answer":["A","B","D"]},{"id":"M28","type":"multi","label":"多选","title":"下列模范人物，属于 20 世纪五六十年代典型代表的有（）","options":{"A":"王进喜","B":"雷锋","C":"焦裕禄","D":"孔繁森"},"answer":["A","B","C"]},{"id":"M29","type":"multi","label":"多选","title":"下列科学家，为新中国国防科技事业作出巨大贡献的有（）","options":{"A":"邓稼先","B":"钱学森","C":"钱三强","D":"袁隆平"},"answer":["A","B","C"]},{"id":"M30","type":"multi","label":"多选","title":"抗美援朝精神中体现的国际主义精神表现在（）","options":{"A":"援助友好邻邦","B":"维护世界和平","C":"扩大本国势力范围","D":"输出革命模式"},"answer":["A","B"]},{"id":"M31","type":"multi","label":"多选","title":"“两弹一星”精神彰显了中国人民的（）","options":{"A":"志气","B":"骨气","C":"底气","D":"傲气"},"answer":["A","B","C"]},{"id":"M32","type":"multi","label":"多选","title":"雷锋精神在新时代的价值体现在（）","options":{"A":"爱岗敬业","B":"助人为乐","C":"甘于奉献","D":"艰苦奋斗"},"answer":["A","B","C","D"]},{"id":"M33","type":"multi","label":"多选","title":"下列属于毛泽东同志在社会主义建设时期的重要论述或题词有（）","options":{"A":"虚心使人进步，骄傲使人落后","B":"向雷锋同志学习","C":"自力更生、艰苦奋斗","D":"改革开放胆子要大一些"},"answer":["A","B","C"]},{"id":"M34","type":"multi","label":"多选","title":"下列场馆，集中展现社会主义建设时期奋斗史的有（）","options":{"A":"红旗渠纪念馆","B":"大庆石油科技馆","C":"深圳改革开放展览馆","D":"兰考焦裕禄纪念馆"},"answer":["A","B","D"]},{"id":"M35","type":"multi","label":"多选","title":"传承艰苦奋斗精神，青少年在日常生活中可以做到（）","options":{"A":"主动帮助同学","B":"不攀比消费","C":"勤奋刻苦学习","D":"节约粮食水电"},"answer":["B","C","D"]},{"id":"M36","type":"multi","label":"多选","title":"下列歌曲，创作于社会主义建设时期的有（）","options":{"A":"《歌唱祖国》","B":"《学习雷锋好榜样》","C":"《我为祖国献石油》","D":"《我们走在大路上》"},"answer":["A","B","C","D"]},{"id":"M37","type":"multi","label":"多选","title":"改革开放以来，我国逐步形成的对外开放格局是（）","options":{"A":"经济特区","B":"沿海开放城市","C":"沿海经济开放区","D":"内地"},"answer":["A","B","C","D"]},{"id":"M38","type":"multi","label":"多选","title":"下列事件，标志我国综合国力大幅提升的有（）","options":{"A":"北京奥运会举办","B":"神舟系列飞船发射","C":"加入世界贸易组织","D":"三大改造完成"},"answer":["A","B","C"]},{"id":"M39","type":"multi","label":"多选","title":"下列人物，属于改革开放以来涌现的时代楷模的有（）","options":{"A":"孔繁森","B":"雷锋","C":"杨利伟","D":"钱学森"},"answer":["A","C"]},{"id":"M40","type":"multi","label":"多选","title":"女排精神激励国人的核心内涵是（）","options":{"A":"顽强拼搏","B":"永不言弃","C":"团结协作","D":"为国争光"},"answer":["A","B","C","D"]},{"id":"M41","type":"multi","label":"多选","title":"载人航天精神体现了新时代科技工作者的（）","options":{"A":"攻坚克难","B":"勇于登攀","C":"团结协作","D":"淡泊名利"},"answer":["A","B","C","D"]},{"id":"M42","type":"multi","label":"多选","title":"从抗洪抢险到抗震救灾，中国人民用行动诠释了团结与担当，所铸就的两大抗灾精神，在精神内涵和价值追求上高度契合，共同体现了（）","options":{"A":"万众一心","B":"众志成城","C":"服务人民","D":"守望相助"},"answer":["A","B","D"]},{"id":"M43","type":"multi","label":"多选","title":"红色文化与现代教育融合的创新路径有（）","options":{"A":"建设数字红色博物馆","B":"开发红色研学课程","C":"打造红色校园文化","D":"利用 VR 开展体验教学"},"answer":["A","B","C","D"]},{"id":"M44","type":"multi","label":"多选","title":"下列影视作品，反映改革开放历程的有（）","options":{"A":"《大江大河》","B":"《历史转折中的邓小平》","C":"《山海情》（部分）","D":"《焦裕禄》"},"answer":["A","B"]},{"id":"M45","type":"multi","label":"多选","title":"新时代“四个伟大”包括（）","options":{"A":"伟大斗争","B":"伟大工程","C":"伟大事业","D":"伟大梦想"},"answer":["A","B","C","D"]},{"id":"M46","type":"multi","label":"多选","title":"新时代我国提出的新发展理念包括（）","options":{"A":"创新","B":"协调","C":"绿色","D":"开放、共享"},"answer":["A","B","C","D"]},{"id":"M47","type":"multi","label":"多选","title":"下列属于新时代国家重大战略的有（）","options":{"A":"农村包围城市","B":"京津冀协同发展","C":"长三角一体化","D":"粤港澳大湾区建设"},"answer":["B","C","D"]},{"id":"M48","type":"multi","label":"多选","title":"全面建成小康社会的历史性成就体现在（）","options":{"A":"现行标准下农村贫困人口全部脱贫","B":"建成世界最大社会保障体系","C":"生态文明建设成效显著","D":"国防和军队现代化水平提升"},"answer":["A","B","C","D"]},{"id":"M49","type":"multi","label":"多选","title":"下列模范人物，牺牲在脱贫攻坚一线的有（）","options":{"A":"黄文秀","B":"黄诗燕","C":"王进喜","D":"焦裕禄"},"answer":["A","B"]},{"id":"M50","type":"multi","label":"多选","title":"下列人物荣获“共和国勋章”的有（）","options":{"A":"钟南山","B":"袁隆平","C":"张富清","D":"屠呦呦"},"answer":["A","B","C","D"]},{"id":"M51","type":"multi","label":"多选","title":"科学家精神的内涵包括（）","options":{"A":"爱国、创新","B":"求实、奉献","C":"精准、务实","D":"协同、育人"},"answer":["A","B","D"]},{"id":"M52","type":"multi","label":"多选","title":"改革开放精神的内涵包括（）","options":{"A":"开拓创新","B":"勇于担当","C":"开放包容","D":"兼容并蓄"},"answer":["A","B","C","D"]},{"id":"M53","type":"multi","label":"多选","title":"新时代北斗精神、探月精神共同体现了（）","options":{"A":"自主创新","B":"追求卓越","C":"协同攻坚","D":"开放合作"},"answer":["A","B","C","D"]},{"id":"M54","type":"multi","label":"多选","title":"伟大建党精神在新时代的实践要求包括（）","options":{"A":"坚定理想信念","B":"牢记初心使命","C":"勇于自我革命","D":"坚持人民至上"},"answer":["A","B","C","D"]},{"id":"M55","type":"multi","label":"多选","title":"习近平总书记强调，青年要成为（）的时代新人","options":{"A":"有理想","B":"敢担当","C":"能吃苦","D":"肯奋斗"},"answer":["A","B","C","D"]},{"id":"M56","type":"multi","label":"多选","title":"毛泽东同志为人民英雄纪念碑题词中纪念的历史阶段包括（）","options":{"A":"三年以来（解放战争）","B":"三十年以来（五四运动后）","C":"1840 年鸦片战争以来","D":"改革开放以来"},"answer":["A","B","C"]},{"id":"M57","type":"multi","label":"多选","title":"爱国主义教育载体有（）","options":{"A":"书店","B":"纪念馆","C":"烈士陵园","D":"党史馆"},"answer":["B","C","D"]},{"id":"M58","type":"multi","label":"多选","title":"红色文化进校园是培育青少年爱国情怀、赓续红色血脉的重要举措，能让红色基因融入校园生活，下列属于校园中可开展的红色文化教育活动的有（）","options":{"A":"主题班会","B":"红色读书分享会","C":"红色书画展","D":"寻访老党员"},"answer":["A","B","C","D"]},{"id":"M59","type":"multi","label":"多选","title":"传承红色基因，需要正确处理的关系有（）","options":{"A":"历史与现实","B":"传统与时代","C":"传承与创新","D":"学习与践行"},"answer":["A","B","C","D"]},{"id":"M60","type":"multi","label":"多选","title":"进入新时代，讴歌党史、新中国史、改革开放史、社会主义发展史的主旋律影视创作紧扣时代脉搏，守正创新，佳作不断涌现。《觉醒年代》《跨过鸭绿江》《功勋》《大决战》等多部兼具思想性、艺术性、观赏性的主旋律影视作品脱颖而出。主旋律影视作品（）","options":{"A":"弘扬了中国精神，彰显了文化担当","B":"利于讲好中国故事，展现中国风貌","C":"传承红色基因，彰显信仰力量","D":"是以改革创新为核心的民族精神的具体体现"},"answer":["A","B","C"]},{"id":"J1","type":"judge","label":"判断","title":"1921 年 7 月，中国共产党第一次全国代表大会在上海召开，标志着中国共产党的诞生。这次会议通过了第一部《中国共产党章程》。","options":{"T":"正确","F":"错误"},"answer":["F"],"correction":"中共一大：1921 年 7 月召开，确定党的名称等，通过的是党纲，不是党章。中共二大：1922 年召开，制定了第一部《中国共产党章程》。"},{"id":"J2","type":"judge","label":"判断","title":"1927 年 8 月 1 日，南昌起义打响了武装反抗国民党反动派的第一枪，标志着中国共产党独立领导革命战争、创建人民军队的开始。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J3","type":"judge","label":"判断","title":"遵义会议事实上确立了毛泽东在党和红军中的领导地位，是中国共产党历史上一个生死攸关的转折点。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J4","type":"judge","label":"判断","title":"1949 年 9 月召开的第一届中国人民政治协商会议，通过了《中华人民共和国宪法》，起到了临时宪法的作用。","options":{"T":"正确","F":"错误"},"answer":["F"],"correction":"1949 年 9 月第一届中国人民政治协商会议，通过的是《中国人民政治协商会议共同纲领》。《中华人民共和国宪法》是 1954 年第一届全国人大一次会议通过的。"},{"id":"J5","type":"judge","label":"判断","title":"1951 年，中央人民政府与西藏地方政府达成《关于和平解放西藏办法的协议》，标志着西藏和平解放，祖国大陆获得统一。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J6","type":"judge","label":"判断","title":"中共八大明确指出当前党和人民的主要任务是集中力量发展社会生产力，实现国家工业化。这是探索建设社会主义道路的良好开端。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J7","type":"judge","label":"判断","title":"1978 年召开的党的十一届三中全会，作出了把党和国家工作中心转移到经济建设上来、实行改革开放的历史性决策。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J8","type":"judge","label":"判断","title":"1997 年，中共十五大首次提出了“邓小平理论”这一科学概念，并将其确立为党的指导思想写入党章。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J9","type":"judge","label":"判断","title":"方志敏烈士在狱中写下了《可爱的中国》《清贫》等不朽篇章。他在《清贫》中写道：“清贫，洁白朴素的生活，正是我们革命者能够战胜许多困难的地方！”","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J10","type":"judge","label":"判断","title":"夏明翰在就义前写下的就义诗全文为：“砍头不要紧，只要主义真。杀了夏明翰，","options":{"T":"正确","F":"错误"},"answer":["F"],"correction":"夏明翰出生于 1900 年 2 月，1928 年 3月就义，牺牲时实际年龄为 28 岁。还有后来人！”这首诗表达了共产党人视死如归的革命气节。夏明翰牺牲于 1928 年，时年 30 岁。"},{"id":"J11","type":"judge","label":"判断","title":"1948 年 5 月 25 日，董存瑞在解放隆化的战斗中舍身炸碉堡，壮烈牺牲。他牺牲前高喊：“为了新中国，冲啊！”","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J12","type":"judge","label":"判断","title":"中国核潜艇之父黄旭华曾说过：“对国家的忠诚就是对父母最大的孝。”他隐姓埋名 30 年研制核潜艇，为新中国核潜艇事业作出了巨大贡献。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J13","type":"judge","label":"判断","title":"雷锋同志于 1963 年因公殉职，年仅 22 岁。1963 年 3 月5 日，毛泽东同志题词“向雷锋同志学习”，此后每年 3月 5 日成为“学雷锋纪念日”。","options":{"T":"正确","F":"错误"},"answer":["F"],"correction":"雷锋同志于 1962 年 8 月 15 日因公殉职。"},{"id":"J14","type":"judge","label":"判断","title":"邓稼先是中国核武器研制工作的开拓者和奠基者，被誉为“两弹元勋”。他曾在接受核武器研制任务时说：“如果做好了这件事，我这一辈子就活得很值得，就是为它死了也值得。”","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J15","type":"judge","label":"判断","title":"伟大建党精神是中国共产党人精神谱系的重要组成部分，其内涵包括“坚持真理、坚守理想，践行初心、担当使命，不怕牺牲、英勇斗争，对党忠诚、不负人民”。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J16","type":"judge","label":"判断","title":"井冈山精神的核心内涵包括“解放思想、实事求是、敢闯敢试、勇于创新”，这一精神形成于改革开放新时期。","options":{"T":"正确","F":"错误"},"answer":["F"],"correction":"井冈山精神的核心内涵：“坚定执着追理想、实事求是闯新路、艰苦奋斗攻难关、依靠群众求胜利”。这一精神形成于土地革命战争时期。"},{"id":"J17","type":"judge","label":"判断","title":"长征精神强调“把全国人民和中华民族的根本利益看得高于一切，坚定革命的理想和信念，坚信正义事业必然胜利”。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J18","type":"judge","label":"判断","title":"延安精神的核心内涵包括“坚定正确的政治方向、解放思想实事求是的思想路线、全心全意为人民服务的根本宗旨、自力更生、艰苦奋斗的创业精神”。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J19","type":"judge","label":"判断","title":"“两弹一星”精神的核心内涵是“热爱祖国、无私奉献，自力更生、艰苦奋斗，大力协同、勇于登攀”。这一精神形成于 20 世纪五六十年代我国研制原子弹、导弹和人造地球卫星的时期。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J20","type":"judge","label":"判断","title":"焦裕禄精神的核心内涵是“亲民爱民、艰苦奋斗、科学求实、迎难而上、无私奉献”。焦裕禄同志在河南省兰考县担任县委书记期间，带领群众治理“三害”（内涝、风沙、盐碱），因积劳成疾病逝于工作岗位上。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J21","type":"judge","label":"判断","title":"大庆精神（铁人精神）的核心内涵是“爱国、创业、求实、奉献”，其代表人物王进喜曾说过“有条件要上，没有条件创造条件也要上”。这一精神形成于改革开放新时期。","options":{"T":"正确","F":"错误"},"answer":["F"],"correction":"大庆精神（铁人精神）形成于 20 世纪60 年代初的大庆石油会战时期，属于社会主义革命和建设时期。"},{"id":"J22","type":"judge","label":"判断","title":"特区精神的核心是敢闯敢试、敢为人先、埋头苦干。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J23","type":"judge","label":"判断","title":"脱贫攻坚精神的核心内涵是“上下同心、尽锐出战、精准务实、开拓创新、攻坚克难、不负人民”。这一精神形成于新时代脱贫攻坚伟大斗争中。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J24","type":"judge","label":"判断","title":"红船精神诞生于上海。","options":{"T":"正确","F":"错误"},"answer":["F"],"correction":"“红船精神”诞生地是浙江嘉兴南湖。"},{"id":"J25","type":"judge","label":"判断","title":"习近平总书记指出：“红色基因就是要传承。中华民族从站起来、富起来到强起来，经历了多少坎坷，创造了多少奇迹，要让后代牢记，我们要不忘初心，永远不可迷失了方向和道路。”","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J26","type":"judge","label":"判断","title":"习近平总书记强调，革命博物馆、纪念馆、党史馆、烈士陵园等是党和国家红色基因库。要讲好党的故事、革命的故事、根据地的故事、英雄和烈士的故事，加强革命传统教育、爱国主义教育、青少年思想道德教育，把红色基因传承好，确保红色江山永不变色。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J27","type":"judge","label":"判断","title":"习近平总书记寄语少年儿童：“你们今天是小树苗，将来要长成参天大树，中华民族伟大复兴的中国梦将在你们身上实现。希望同学们把红色基因传承好，好好学习知识和本领，努力成长为德智体美劳全面发展的社会主义建设者和接班人。”","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J28","type":"judge","label":"判断","title":"习近平总书记指出：“要抓好青少年学习教育，着力讲好党的故事、革命的故事、英雄的故事，厚植爱党、爱国、爱社会主义的情感，让红色基因、革命薪火代代传承。”这一重要论述强调青少年教育要注重知识灌输，不需要加强情感培育。","options":{"T":"正确","F":"错误"},"answer":["F"],"correction":"总书记讲话从未否定情感培育。青少年教育是知识传递与价值引领的统一，知识灌输与情感培育相辅相成。"},{"id":"J29","type":"judge","label":"判断","title":"习近平总书记强调要“大力传承和弘扬我党我军优良传统，让红色基因代代相传，让新风正气更加充盈”。这是他在 2026 年 3 月出席十四届全国人大四次会议解放军和武警部队代表团全体会议时提出的重要要求。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J30","type":"judge","label":"判断","title":"习近平总书记指出：“一个人可以有很多志向，但人生最重要的志向应该同祖国和人民联系在一起。”这是他在 2015 年会见中国少年先锋队第七次全国代表大会全体代表时，对少年儿童树立远大理想的殷切期望，要求青少年把个人志向与国家发展紧密结合。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J31","type":"judge","label":"判断","title":"中共一大会址纪念馆由中共一大会址、宣誓大厅、新建展馆等部分组成，展览聚焦中国共产党从萌芽到成立、从孕育到诞生的历史进程。这里见证了中国共产党第一次全国代表大会的召开。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J32","type":"judge","label":"判断","title":"中国人民抗日战争纪念馆是全国唯一一座全面反映中国人民抗日战争历史的大型综合性专题纪念馆，位于北京市丰台区卢沟桥畔。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J33","type":"judge","label":"判断","title":"遵义会议纪念馆是为纪念中国共产党历史上具有伟大历史意义的遵义会议而建立的。遵义会议事实上确立了毛泽东在党和红军中的领导地位，是中国共产党历史上一个生死攸关的转折点。毛泽东曾在此担任农民运动讲习所所长。","options":{"T":"正确","F":"错误"},"answer":["F"],"correction":"1926 年，毛泽东曾在广州担任第六届农民运动讲习所所长。"},{"id":"J34","type":"judge","label":"判断","title":"北大红楼是中国近代史上李大钊、陈独秀、毛泽东最早传播马克思主义和民主与科学进步思想的重要场所，具有重要历史价值。1919 年 5月 4 日，北京大学等高校学生从红楼出发,前往天安门游行集会，轰轰烈烈的五四运动就此爆发。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J35","type":"judge","label":"判断","title":"2026 年 3 月，上海市黄浦区在全国率先探索“红色周一”创新模式，将中共一大纪念馆的“周一闭馆日”变为“红色课堂日”，组织中小学生走进党的诞生地实景上课，实现了“场景即课堂、展品即教材”的教学革新。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J36","type":"judge","label":"判断","title":"北京四中学生原创戏剧《红星照耀中国》完全由学生独立完成创作，没有任何专业团队指导。该剧在校内首演后，登上了国家大剧院的舞台，荣获第九届全国“金画眉”戏剧展三项大奖。","options":{"T":"正确","F":"错误"},"answer":["F"],"correction":"北京四中学生原创戏剧《红星照耀中国》，是在中央戏剧学院教授王亚娜团队的全程指导下完成的。"},{"id":"J37","type":"judge","label":"判断","title":"北京市丰台区在红色文化传播中探索“内容年轻化、技术沉浸化、传播矩阵化”的新路径，通过“一首歌唱响一座城”活动，组织青少年在卢沟桥、宛平城等红色地标沉浸式演唱《如愿》，相关短视频上线 95 小时全网播放量突破 1 亿次，微博话题登上全国热搜总榜第 3 位。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J38","type":"judge","label":"判断","title":"为了让红色文化更吸引初中","options":{"T":"正确","F":"错误"},"answer":["F"],"correction":"红色文化传承必须尊重历史事实和英生，可以将革命英雄事迹改编成夸张的武侠或玄幻故事，只要结尾加上“向英雄致敬”就行。雄人物的真实形象。"},{"id":"J39","type":"judge","label":"判断","title":"中华人民共和国国歌《义勇军进行曲》由田汉作词、聂耳作曲，创作于抗日战争时期，原为电影《风云儿女》的主题歌。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J40","type":"judge","label":"判断","title":"“红军不怕远征难，万水千山只等闲”出自毛泽东的著名诗篇《七律·长征》。这首诗写于长征胜利之后，生动概括了长征的艰难历程和红军战士的英雄气概。","options":{"T":"正确","F":"错误"},"answer":["T"]}]},"senior":{"name":"高中组","subtitle":"高中组（含中职）题库，共 200 题","status":"ready","questions":[{"id":"S1","type":"single","label":"单选","title":"中国共产党第一次全国代表大会正式开幕的时间和地点是（）","options":{"A":"1921 年 7 月 1 日，南京","B":"1921 年 7 月 23 日，上海","C":"1921 年 7 月 21 日，北京","D":"1922 年 7 月 23 日，上海"},"answer":["B"]},{"id":"S2","type":"single","label":"单选","title":"确立毛泽东同志在党中央和红军领导地位，成为党的历史生死攸关转折点的会议是（）","options":{"A":"中共一大","B":"八七会议","C":"遵义会议","D":"洛川会议"},"answer":["C"]},{"id":"S3","type":"single","label":"单选","title":"“枪杆子里面出政权”重要论断提出于（）","options":{"A":"遵义会议","B":"八七会议","C":"古田会议","D":"瓦窑堡会议"},"answer":["B"]},{"id":"S4","type":"single","label":"单选","title":"标志中国共产党独立领导革命战争、创建人民军队和武装夺取政权的事件是（）","options":{"A":"秋收起义","B":"三湾改编","C":"广州起义","D":"南昌起义"},"answer":["D"]},{"id":"S5","type":"single","label":"单选","title":"红军长征起止时间是（）","options":{"A":"1934 年 10 月—1936 年 10 月","B":"1935 年 10 月—1936 年 10 月","C":"1934 年 10 月—1935 年 10 月","D":"1936 年 10 月—1937 年 10 月"},"answer":["A"]},{"id":"S6","type":"single","label":"单选","title":"中共历史上第一个土地法是（）","options":{"A":"《兴国土地法》","B":"《井冈山土地法》","C":"《苏维埃土地法》","D":"《中国土地法大纲》"},"answer":["B"]},{"id":"S7","type":"single","label":"单选","title":"标志中国人民抗日救亡民主运动新高潮到来的事件是（）","options":{"A":"九一八事变","B":"五卅运动","C":"一二·九运动","D":"西安事变"},"answer":["C"]},{"id":"S8","type":"single","label":"单选","title":"1937 年 8 月中共中央制定抗日战争时期方针政策的会议是（）","options":{"A":"瓦窑堡会议","B":"洛川会议","C":"古田会议","D":"遵义会议"},"answer":["B"]},{"id":"S9","type":"single","label":"单选","title":"1921 年 8 月，中国共产党在上海成立了第一个公开领导工人运动的机构，成为党集中力量领导全国工人运动的起点。这个机构是（）","options":{"A":"中国劳动组合书记部","B":"中华全国总工会","C":"中共中央职工运动委员会","D":"上海机器工会"},"answer":["A"]},{"id":"S10","type":"single","label":"单选","title":"中国共产党成立初期，为发展青年运动，加强对青年团工作的领导，于 1922 年 5 月在广州召开了（）","options":{"A":"全国青年工人代表大会","B":"中华全国学生联合会成立大会","C":"中国社会主义青年团第一次全国代表大会","D":"中国新民主主义青年团成立大会"},"answer":["C"]},{"id":"S11","type":"single","label":"单选","title":"在革命先烈用鲜血与生命践行信仰的历程中，有一位烈士在就义前留下 “砍头不要紧，只要主义真” 的豪迈誓言，他是（）","options":{"A":"方志敏","B":"夏明翰","C":"李大钊","D":"瞿秋白"},"answer":["B"]},{"id":"S12","type":"single","label":"单选","title":"狱中写下《可爱的中国》《清贫》的革命先烈是（）","options":{"A":"李大钊","B":"方志敏","C":"叶挺","D":"董存瑞"},"answer":["B"]},{"id":"S13","type":"single","label":"单选","title":"面对敌人顽固防守的碉堡，年仅 19 岁的他挺身而出，用身体作为支撑点，点燃炸药包炸毁碉堡，为部队冲锋扫清障碍，这位英勇牺牲的革命先烈是（）","options":{"A":"黄继光","B":"董存瑞","C":"邱少云","D":"刘胡兰"},"answer":["B"]},{"id":"S14","type":"single","label":"单选","title":"被毛泽东称赞“生的伟大，死的光荣”的革命烈士是（）","options":{"A":"赵一曼","B":"刘胡兰","C":"江竹筠","D":"向警予"},"answer":["B"]},{"id":"S15","type":"single","label":"单选","title":"下列哪一位不属于在东北抗日联军坚持抗日并壮烈牺牲的民族英雄是（）","options":{"A":"杨靖宇","B":"赵尚志","C":"赵一曼","D":"吉鸿昌"},"answer":["D"]},{"id":"S16","type":"single","label":"单选","title":"中国共产党早期主要创始人之一，被誉为“中国共产主义运动的先驱”的是（）","options":{"A":"毛泽东","B":"陈独秀","C":"李大钊","D":"董必武"},"answer":["C"]},{"id":"S17","type":"single","label":"单选","title":"中国共产党人精神谱系的源头是（）","options":{"A":"红船精神","B":"伟大建党精神","C":"井冈山精神","D":"长征精神"},"answer":["B"]},{"id":"S18","type":"single","label":"单选","title":"关于红船精神的核心内涵，下列说法错误的是（）","options":{"A":"涵盖开天辟地、敢为人先的首创精神","B":"包含坚定理想、百折不挠的奋斗精神","C":"体现立党为公、忠诚为民的奉献精神","D":"核心是自力更生、艰苦创业的创业精神"},"answer":["D"]},{"id":"S19","type":"single","label":"单选","title":"井冈山革命根据地的创建，开辟了 “农村包围城市、武装夺取政权”的革命道路，在此过程中形成的井冈山精神，其内涵是（）","options":{"A":"坚定执着追理想、实事求是闯新路、艰苦奋斗攻难关、依靠群众求胜利","B":"农村包围城市、武装夺取政权","C":"依靠群众、土地革命","D":"官兵一致、同甘共苦"},"answer":["A"]},{"id":"S20","type":"single","label":"单选","title":"集中体现“革命理想高于天”，彰显红军不怕艰难险阻的伟大精神是（）","options":{"A":"抗战精神","B":"长征精神","C":"苏区精神","D":"老区精神"},"answer":["B"]},{"id":"S21","type":"single","label":"单选","title":"抗战精神是中华民族宝贵的精神财富，其核心要素聚焦于抵御侵略、捍卫民族尊严，下列选项中不属于这一精神核心要素的是（）","options":{"A":"天下兴亡、匹夫有责的爱国情怀","B":"视死如归、宁死不屈的民族气节","C":"不畏强暴、血战到底的英雄气概","D":"自力更生、艰苦创业的创业精神"},"answer":["D"]},{"id":"S22","type":"single","label":"单选","title":"东北抗联精神的内涵不包括（）","options":{"A":"忠诚于党的坚定信念","B":"勇赴国难的民族大义","C":"开天辟地的首创精神","D":"血战到底的英雄气概"},"answer":["C"]},{"id":"S23","type":"single","label":"单选","title":"西柏坡精神“两个务必”主要针对（）","options":{"A":"战争环境恶劣，坚持艰苦奋斗","B":"革命即将胜利，防止骄傲自满、贪图享乐","C":"巩固统一战线，团结一切力量","D":"推进土地改革，维护农民利益"},"answer":["B"]},{"id":"S24","type":"single","label":"单选","title":"属于新民主主义革命时期特有的精神是（）","options":{"A":"科学家精神","B":"抗美援朝精神","C":"特区精神","D":"红岩精神"},"answer":["D"]},{"id":"S25","type":"single","label":"单选","title":"在沂蒙革命根据地的斗争中，党与人民群众结下了牢不可破的血肉联系，形成了独具特质的沂蒙精神，其鲜明特征体现为（）","options":{"A":"万众一心、众志成城","B":"精益求精、追求卓越","C":"水乳交融、生死与共","D":"追逐梦想、勇于探索"},"answer":["C"]},{"id":"S26","type":"single","label":"单选","title":"面对日军的疯狂 “围剿” 与封锁，东北抗联将士坚守抗日阵地、宁死不屈，用热血铸就的东北抗联精神，其核心底色体现为（）","options":{"A":"忠贞报国、勇赴国难","B":"敢闯敢试、先行先试","C":"精准务实、攻坚克难","D":"自主创新、追求卓越"},"answer":["A"]},{"id":"S27","type":"single","label":"单选","title":"习近平总书记指出“红色政权来之不易，新中国来之不易，中国特色社会主义来之不易”，警示我们要（）","options":{"A":"忘记历史、珍惜当下","B":"铭记历史、不忘初心","C":"轻视历史、展望未来","D":"淡化历史、注重发展"},"answer":["B"]},{"id":"S28","type":"single","label":"单选","title":"习近平总书记强调“讲好党的故事、革命的故事、根据地的故事、英雄和烈士的故事”，目的是（）","options":{"A":"传承红色基因，培育爱国情怀","B":"单纯讲述历史","C":"提高知名度","D":"完成宣传任务"},"answer":["A"]},{"id":"S29","type":"single","label":"单选","title":"习近平总书记对青少年寄语“要从小学习做人、从小学习立志、从小学习创造”，要求青少年（）","options":{"A":"专注学习，不关心国家大事","B":"传承红色基因，树立远大理想","C":"贪图享乐，不思进取","D":"盲目跟风，缺乏主见"},"answer":["B"]},{"id":"S30","type":"single","label":"单选","title":"习近平总书记指出“革命博物馆、纪念馆、党史馆、烈士陵园等是党和国家红色基因库”，体现对（）的重视","options":{"A":"烈士纪念活动","B":"红色旅游开发","C":"博物馆建设","D":"红色资源保护与利用"},"answer":["D"]},{"id":"S31","type":"single","label":"单选","title":"习近平总书记强调“要把红色基因传承好，确保红色江山永不变色”，要求青少年（）","options":{"A":"自觉传承红色基因，践行时代使命","B":"只关注个人成长","C":"被动接受历史知识","D":"追求物质享受"},"answer":["A"]},{"id":"S32","type":"single","label":"单选","title":"习近平总书记指出“共和国是红色的，不能淡化这个颜色”，强调要（）","options":{"A":"坚守红色底色，传承红色血脉","B":"淡化红色历史","C":"忽视红色传统","D":"追求多元文化"},"answer":["A"]},{"id":"S33","type":"single","label":"单选","title":"中国共产党的“诞生地”，被誉为“中国革命源头”的红色地标是（）","options":{"A":"井冈山革命根据地","B":"延安","C":"上海中共一大会址","D":"遵义会议会址"},"answer":["C"]},{"id":"S34","type":"single","label":"单选","title":"红军长征胜利会师，被誉为“长征精神象征地”的地点是（）","options":{"A":"江西瑞金","B":"贵州遵义","C":"甘肃会宁","D":"陕西延安"},"answer":["C"]},{"id":"S35","type":"single","label":"单选","title":"承载“半条被子”故事，彰显军民鱼水情的红色旧址位于（）","options":{"A":"湖南汝城","B":"江西井冈山","C":"陕西延安","D":"河北西柏坡"},"answer":["A"]},{"id":"S36","type":"single","label":"单选","title":"新时代红色文化传承的核心路径不包括（）","options":{"A":"数字化保护与传播","B":"单一化历史讲授","C":"沉浸式体验教育","D":"跨界融合创新传播"},"answer":["B"]},{"id":"S37","type":"single","label":"单选","title":"下列属于红色文化创新实践案例的是（）","options":{"A":"红色经典戏曲改编演出","B":"红色遗址封闭保护","C":"红色历史书籍仅纸质发行","D":"红色教育活动形式单一"},"answer":["A"]},{"id":"S38","type":"single","label":"单选","title":"新时代传承红色文化的关键是（）","options":{"A":"依赖校外机构","B":"堆砌历史资料","C":"开展形式化活动","D":"激发青少年情感认同与行动自觉"},"answer":["D"]},{"id":"S39","type":"single","label":"单选","title":"下列属于红色经典歌曲的是（）","options":{"A":"《七里香》","B":"《青花瓷》","C":"《黄河大合唱》","D":"《霍元甲》"},"answer":["C"]},{"id":"S40","type":"single","label":"单选","title":"红色经典诗词《七律·长征》的作者是（）","options":{"A":"朱德","B":"毛泽东","C":"周恩来","D":"彭德怀"},"answer":["B"]},{"id":"S41","type":"single","label":"单选","title":"新中国成立初期，为打击投机资本、稳定市场物价，中央人民政府在上海等大城市先后组织了“银元之战”和“米棉之战”。这两场斗争（ ）","options":{"A":"彻底解决了中国的通货膨胀问题","B":"标志着国民经济得到全面恢复","C":"使人民政府完全掌握了市场主动权","D":"完成了对资本主义工商业的改造"},"answer":["C"]},{"id":"S42","type":"single","label":"单选","title":"新中国成立初期，为恢复国民经济采取的核心政策是（）","options":{"A":"土地改革","B":"大跃进","C":"文化大革命","D":"改革开放"},"answer":["A"]},{"id":"S43","type":"single","label":"单选","title":"1956 年完成的三大改造不包括（）","options":{"A":"农业合作化","B":"手工业合作化","C":"资本主义工商业改造","D":"土地私有化"},"answer":["D"]},{"id":"S44","type":"single","label":"单选","title":"标志中国进入社会主义初级阶段的事件是（）","options":{"A":"开国大典","B":"三大改造基本完成","C":"十一届三中全会","D":"新中国成立"},"answer":["B"]},{"id":"S45","type":"single","label":"单选","title":"我国第一颗原子弹爆炸成功的年份是（）","options":{"A":"1964 年","B":"1967 年","C":"1970 年","D":"1976 年"},"answer":["A"]},{"id":"S46","type":"single","label":"单选","title":"抗美援朝战争中，用身体堵住敌人枪眼的英雄是（）","options":{"A":"邱少云","B":"黄继光","C":"杨根思","D":"毛岸英"},"answer":["B"]},{"id":"S47","type":"single","label":"单选","title":"被誉为“县委书记的榜样”，全心全意为人民服务的是（）","options":{"A":"雷锋","B":"焦裕禄","C":"王进喜","D":"邓稼先"},"answer":["B"]},{"id":"S48","type":"single","label":"单选","title":"以“螺丝钉”精神著称，全心全意为人民服务的是（）","options":{"A":"焦裕禄","B":"雷锋","C":"黄继光","D":"邱少云"},"answer":["B"]},{"id":"S49","type":"single","label":"单选","title":"为祖国核事业奉献一生，被誉为“两弹元勋”的科学家是（）","options":{"A":"钱学森","B":"邓稼先","C":"袁隆平","D":"王淦昌"},"answer":["B"]},{"id":"S50","type":"single","label":"单选","title":"抗美援朝精神的核心内涵不包括（）","options":{"A":"祖国和人民利益高于一切","B":"舍生忘死、向死而生","C":"英勇顽强、舍生忘死","D":"追求名利、个人至上"},"answer":["D"]},{"id":"S51","type":"single","label":"单选","title":"脱贫攻坚精神的内涵不包括（）","options":{"A":"上下同心、尽锐出战","B":"精准务实、开拓创新","C":"学习国外、取长补短","D":"攻坚克难、不负人民"},"answer":["C"]},{"id":"S52","type":"single","label":"单选","title":"大庆精神（铁人精神）的核心内涵是（）","options":{"A":"爱国、创业、求实、奉献","B":"敢闯敢试、先行先试","C":"生命至上、举国同心","D":"精准务实、开拓创新"},"answer":["A"]},{"id":"S53","type":"single","label":"单选","title":"红旗渠精神集中体现的是（）","options":{"A":"自力更生、艰苦创业、团结协作、无私奉献","B":"大胆改革、勇于突破","C":"尊重科学、探索未知","D":"顾全大局、严守纪律"},"answer":["A"]},{"id":"S54","type":"single","label":"单选","title":"雷锋精神的本质是（）","options":{"A":"战天斗地、改造自然","B":"精益求精、追求卓越","C":"不畏艰险、远征太空","D":"服务人民、助人为乐"},"answer":["D"]},{"id":"S55","type":"single","label":"单选","title":"毛泽东同志号召“向雷锋同志学习”，主要是倡导全社会（）","options":{"A":"专注经济建设","B":"学习艰苦奋斗、无私奉献精神","C":"发展科技事业","D":"推进对外开放"},"answer":["B"]},{"id":"S56","type":"single","label":"单选","title":"老一辈无产阶级革命家强调搞建设要“自力更生、艰苦奋斗”，主要针对的时期是（）","options":{"A":"社会主义革命和建设时期","B":"新民主主义革命时期","C":"改革开放新时期","D":"新时代"},"answer":["A"]},{"id":"S57","type":"single","label":"单选","title":"见证“人工天河”建设壮举，体现红旗渠精神的红色地点是（）","options":{"A":"河南兰考","B":"黑龙江大庆","C":"河南林州","D":"甘肃酒泉"},"answer":["C"]},{"id":"S58","type":"single","label":"单选","title":"作为大庆油田建设的重要历史见证物，王进喜使用过的刹把现陈列于大庆油田历史陈列馆，它凝练并象征着中国石油工人铸就的哪一伟大精神（）","options":{"A":"大庆精神（铁人精神）","B":"抗战精神","C":"特区精神","D":"老区精神"},"answer":["A"]},{"id":"S59","type":"single","label":"单选","title":"大庆精神（铁人精神）、红旗渠精神凝结着艰苦奋斗、实干攻坚的时代底色，是新时代激励国人攻坚克难的宝贵精神财富，当下传承这两种精神的主要实践方式是（）","options":{"A":"仅保留文字记载","B":"开展主题研学、劳模宣讲、情景教育","C":"弱化艰苦奋斗教育","D":"完全依赖娱乐化传播"},"answer":["B"]},{"id":"S60","type":"single","label":"单选","title":"反映社会主义建设时期石油工人风貌的经典歌曲是（）","options":{"A":"《不忘初心》","B":"《义勇军进行曲》","C":"《春天的故事》","D":"《我为祖国献石油》"},"answer":["D"]},{"id":"S61","type":"single","label":"单选","title":"实现伟大历史转折，开启改革开放新时期的会议是（）","options":{"A":"中共八大","B":"中共十一届三中全会","C":"中共十四大","D":"中共十八大"},"answer":["B"]},{"id":"S62","type":"single","label":"单选","title":"从南海之滨的小渔村发展为现代化都市，我国对外开放的“窗口”，第一个经济特区是（）","options":{"A":"深圳","B":"上海","C":"广州","D":"海南"},"answer":["A"]},{"id":"S63","type":"single","label":"单选","title":"明确提出建立社会主义市场经济体制改革目标的会议是（）","options":{"A":"中共十二大","B":"中共十三大","C":"中共十四大","D":"中共十五大"},"answer":["C"]},{"id":"S64","type":"single","label":"单选","title":"标志我国进入依法治国新阶段的是（）","options":{"A":"1982 年宪法颁布实施","B":"1999 年宪法修正案将“依法治国”写入宪法","C":"中共十五大提出“依法治国”基本方略","D":"2014 年全面推进依法治国若干重大问题的决定"},"answer":["B"]},{"id":"S65","type":"single","label":"单选","title":"中国正式加入世界贸易组织的年份是（）","options":{"A":"2000 年","B":"2001 年","C":"2002 年","D":"2008 年"},"answer":["B"]},{"id":"S66","type":"single","label":"单选","title":"香港回归祖国的时间是（）","options":{"A":"1997 年 7 月 1 日","B":"1999 年 12 月 20 日","C":"1998 年 7 月 1 日","D":"2000 年 12 月 20 日"},"answer":["A"]},{"id":"S67","type":"single","label":"单选","title":"被誉为“杂交水稻之父”，解决亿万人民吃饭问题的时代楷模是（）","options":{"A":"钱学森","B":"邓稼先","C":"袁隆平","D":"王进喜"},"answer":["C"]},{"id":"S68","type":"single","label":"单选","title":"我国首位进入太空的女航天员是（）","options":{"A":"杨利伟","B":"翟志刚","C":"刘洋","D":"王亚平"},"answer":["C"]},{"id":"S69","type":"single","label":"单选","title":"2016 年 4 月，习近平总书记在安徽调研时强调:“革命传统教育要从娃娃抓起，既注重 ，又加强 ，使红色基因渗进血液、浸入心扉。”填入横线处的正确内容是（）","options":{"A":"理论学习 实践锻炼","B":"知识灌输 情感培育","C":"历史教育 品德养成","D":"课堂讲授 课外体验"},"answer":["B"]},{"id":"S70","type":"single","label":"单选","title":"特区精神的核心内涵是（）","options":{"A":"不畏强暴、血战到底","B":"军民团结、鱼水情深","C":"敢闯敢试、敢为人先、埋头苦干","D":"上下同心、攻坚克难"},"answer":["C"]},{"id":"S71","type":"single","label":"单选","title":"习近平总书记强调:“历史是最好的教科书，也是最好的清醒剂。”他出席全民族抗战爆发 77 周年纪念仪式、参加南京大屠杀死难者国家公祭仪式等，反复强调要牢记历史。这是因为重温红色伟大历史，心中就会（）","options":{"A":"激发奋斗热情","B":"增加很多正能量","C":"坚定必胜信念","D":"明确前进方向"},"answer":["B"]},{"id":"S72","type":"single","label":"单选","title":"从五连冠的辉煌到赛场之上的屡创佳绩，中国女排用拼搏诠释信仰，用坚持铸就传奇，其所凝聚的女排精神，核心内涵是（）","options":{"A":"追逐梦想、协同攻坚","B":"开拓创新、先行先试","C":"舍生忘死、命运与共","D":"祖国至上、团结协作、顽强拼搏、永不言败"},"answer":["D"]},{"id":"S73","type":"single","label":"单选","title":"2021 年 6 月 25 日，习近平总书记在中央政治局第三十一次集体学习时强调，要“设计符合认知特点的教育活动，建设富有特色的革命传统教育、爱国主义教育、青少年思想道德教育基地，引导 从小在心里树立红色理想。”填入横线处的正确内容是（）","options":{"A":"少年儿童","B":"青少年","C":"青年学生","D":"未成年人"},"answer":["B"]},{"id":"S74","type":"single","label":"单选","title":"从爱岗敬业的一线劳动者到精益求精的行业标兵，劳模精神始终彰显着劳动的价值与奋斗的意义，其内涵不包括（）","options":{"A":"贪图安逸、不思进取","B":"爱岗敬业、争创一流","C":"艰苦奋斗、勇于创新","D":"淡泊名利、甘于奉献"},"answer":["A"]},{"id":"S75","type":"single","label":"单选","title":"邓小平同志指出“改革开放胆子要大一些”，强调要（）","options":{"A":"关起门来搞建设","B":"固守传统、拒绝变化","C":"解放思想、实事求是","D":"只重视经济不重视精神"},"answer":["C"]},{"id":"S76","type":"single","label":"单选","title":"毛泽东同志在七届二中全会提出 “进京赶考”，其为民情怀是（）","options":{"A":"永葆公仆本色、不辜负人民","B":"建立集权管理体制","C":"优先发展城市工业","D":"实行计划配给制"},"answer":["A"]},{"id":"S77","type":"single","label":"单选","title":"见证改革开放起步历程，具有标志性意义的地点是（）","options":{"A":"深圳蛇口","B":"江西瑞金","C":"陕西延安","D":"河北西柏坡"},"answer":["A"]},{"id":"S78","type":"single","label":"单选","title":"中国航天博物馆内神舟飞船返回舱，体现的是（）","options":{"A":"长征精神","B":"载人航天精神","C":"红岩精神","D":"老区精神"},"answer":["B"]},{"id":"S79","type":"single","label":"单选","title":"改革开放以来红色文化传承的创新方向是（）","options":{"A":"与时代精神结合、与现实发展结合","B":"脱离时代、固守旧形式","C":"完全娱乐化、低俗化","D":"只讲历史不讲现实"},"answer":["A"]},{"id":"S80","type":"single","label":"单选","title":"98 抗洪精神、抗震救灾精神共同体现（）","options":{"A":"万众一心、众志成城、不怕困难、顽强拼搏","B":"解放思想、实事求是","C":"爱岗敬业、争创一流","D":"自主创新、追求卓越"},"answer":["A"]},{"id":"S81","type":"single","label":"单选","title":"习近平总书记强调，要“注重运用新时代伟大变革成功案例，充分发挥 育人功能，不断拓展实践育人和网络育人的空间和阵地。”填入横线处的正确内容是（）","options":{"A":"红色资源","B":"革命传统","C":"红色文化","D":"思政课堂"},"answer":["A"]},{"id":"S82","type":"single","label":"单选","title":"新时代我国社会主要矛盾是（）","options":{"A":"供需矛盾","B":"阶级矛盾","C":"城乡矛盾","D":"人民日益增长的美好生活需要和不平衡不充分的发展之间的矛盾"},"answer":["D"]},{"id":"S83","type":"single","label":"单选","title":"中国共产党第二十次全国代表大会召开于（）","options":{"A":"2022 年","B":"2021 年","C":"2020 年","D":"2023 年"},"answer":["A"]},{"id":"S84","type":"single","label":"单选","title":"下列属于新时代重大科技成就的是（）","options":{"A":"大庆油田建成","B":"第一颗原子弹爆炸","C":"北斗三号全球卫星导航系统建成","D":"成渝铁路通车"},"answer":["C"]},{"id":"S85","type":"single","label":"单选","title":"2025 年 7 月 7 日，在百团大战纪念馆，习近平总书记同青少年学生亲切交流时语重心长地说：“孩子们要争做 ，一定要把我们国家建得强盛起来。”填入横线处的正确内容是（）","options":{"A":"新时代好少年","B":"国家的栋梁","C":"民族的脊梁","D":"社会主义接班人"},"answer":["C"]},{"id":"S86","type":"single","label":"单选","title":"“战斗英雄”张富清在解放战争中荣立多次一等功，1955 年转业后主动选择到湖北最偏远的来凤县工作，扎根基层默默奉献。张富清“深藏功与名”的一生，集中体现了中国共产党人精神谱系中（）","options":{"A":"生命至上、举国同心、舍生忘死的奉献情怀","B":"敢为人先、锐意改革、开拓创新的进取精神","C":"自力更生、艰苦创业、迎难而上的奋斗意志","D":"淡泊名利、坚守初心、绝对忠诚的政治品格"},"answer":["D"]},{"id":"S87","type":"single","label":"单选","title":"2025 年，多地学校开展“AI+红色文化”创新实践活动，如用 AI 创作红色歌曲、VR 技术还原历史场景等。这些创新实践的主要目的是（）","options":{"A":"单纯让学生掌握 AI 技术，提升科技素养","B":"用科技手段让红色文化“活起来”，增强教育的沉浸感和吸引力","C":"替代传统的红色教育方式","D":"迎合科技潮流，让红色教育看起来更“时髦”"},"answer":["B"]},{"id":"S88","type":"single","label":"单选","title":"脱贫攻坚精神的内涵是（）","options":{"A":"上下同心、尽锐出战、精准务实、开拓创新、攻坚克难、不负人民","B":"敢闯敢试、敢为人先","C":"自力更生、艰苦奋斗","D":"军民团结、生死与共"},"answer":["A"]},{"id":"S89","type":"single","label":"单选","title":"2025 年国庆期间，富县鄜州博物馆创新融合腾讯公益“小红花”打卡机制与红军长征胜利 90 周年纪念主题，开展文化公益活动。观众通过拍摄上传文物影像，可为博物馆积累“热力值”，助力文物数字化保护。这种创新模式被称为（）","options":{"A":"“文化+旅游+商业+科技”模式","B":"“文化+公益+科技+传播”模式","C":"“科技+教育+传播+旅游”模式","D":"“公益+社交+电商+教育”模式"},"answer":["B"]},{"id":"S90","type":"single","label":"单选","title":"景德镇陶瓷大学“瓷心·乡跡”暑期社会实践队深入江西浮梁县红色名村，用红瓷勾勒烈士筹物资、传情报的鲜活故事，并开发“红映浮梁”系列文创产品。这一做法体现了红色文化传承的哪一创新路径（ ）","options":{"A":"红色旅游+生态观光","B":"高校设计赋能+红色产业振兴","C":"数字技术+虚拟体验","D":"研学旅行+红色教育"},"answer":["B"]},{"id":"S91","type":"single","label":"单选","title":"探月精神集中体现为（）","options":{"A":"严守纪律、顾全大局","B":"勤俭建国、反对浪费","C":"扎根基层、服务群众","D":"追逐梦想、勇于探索、协同攻坚、合作共赢"},"answer":["D"]},{"id":"S92","type":"single","label":"单选","title":"湖南通道转兵纪念馆将挖掘整理的 40 余个红色故事改编成情景剧、快板剧、音乐思政课等多种表演形式，并走出湖南在多地高校、部队巡回展演。这种创新做法被称为（）","options":{"A":"红色文化的静态陈列展示","B":"红色资源的数字化保护","C":"红色故事的“流动载体”传播","D":"红色旅游的线路开发"},"answer":["C"]},{"id":"S93","type":"single","label":"单选","title":"南京机电职业技术学院建成新四军文化实践育人基地，将“铁军精神”与职业教育中的“工匠精神”相融合，打造“可触摸”的红色思政课堂。这一做法的育人理念是（）","options":{"A":"红色教育与专业技能相分离","B":"红色精神与职业素养相融合","C":"红色文化替代专业课程教学","D":"红色教育仅限于思政课堂"},"answer":["B"]},{"id":"S94","type":"single","label":"单选","title":"贵州经贸职业技术学院马克思主义教学部在智慧马院一体化平台上线“红色文化地图”栏目，将遵义会议纪念馆等红色地标以星标形式呈现，学生可一键进入虚拟展厅沉浸式漫游。这种创新属于红色文化传承的哪一维度（）","options":{"A":"红色基因+地域资源融合","B":"校园文化+社会实践融合","C":"课程思政+专业教学融合","D":"数字技术+红色教育融合"},"answer":["D"]},{"id":"S95","type":"single","label":"单选","title":"某学校团支部策划“红色知识竞赛闯关”主题团课，将党史知识融入“启航红船”“星火井冈”“遵义光芒”等十个闯关模块，采用小组轮答+抢答补答机制开展学习。这种团课形式体现的创新特点是（）","options":{"A":"理论灌输、单向讲授","B":"以赛促学、寓教于乐","C":"参观考察、实地体验","D":"线上学习、自主完成"},"answer":["B"]},{"id":"S96","type":"single","label":"单选","title":"中国梦的核心目标是（）","options":{"A":"实现中华民族伟大复兴","B":"成为世界霸主","C":"全面私有化","D":"单纯经济增长"},"answer":["A"]},{"id":"S97","type":"single","label":"单选","title":"精准扶贫首倡地“十八洞村”所在的省份是（）","options":{"A":"陕西","B":"贵州","C":"湖南","D":"河北"},"answer":["C"]},{"id":"S98","type":"single","label":"单选","title":"塞罕坝林场纪念馆展示的核心精神是（）","options":{"A":"革命战争历史","B":"生态文明建设与艰苦创业","C":"改革开放历程","D":"航天科技成就"},"answer":["B"]},{"id":"S99","type":"single","label":"单选","title":"新时代红色文化创新传播形式不包括（）","options":{"A":"红色研学实践","B":"红色 VR 体验","C":"红色短视频创作","D":"历史虚无主义解读"},"answer":["D"]},{"id":"S100","type":"single","label":"单选","title":"反映新时代脱贫攻坚、乡村振兴的经典影视作品是（）","options":{"A":"《山海情》","B":"《地道战》","C":"《创业》","D":"《焦裕禄》"},"answer":["A"]},{"id":"M1","type":"multi","label":"多选","title":"下列关于中国共产党第一次全国代表大会的表述，正确的有（）","options":{"A":"会议先后在上海和浙江嘉兴南湖召开","B":"会议确定了党的中心工作是组织农民运动","C":"陈独秀被选为中央局书记","D":"会议通过了第一部《中国共产党章程》"},"answer":["A","C"]},{"id":"M2","type":"multi","label":"多选","title":"下列有关南昌起义的表述，正确的有（）","options":{"A":"打响了武装反抗国民党反动派的第一枪","B":"标志着中国共产党独立领导革命战争的开始","C":"起义后部队直接进入井冈山建立革命根据地","D":"起义由周恩来、贺龙、叶挺、朱德、刘伯承等领导"},"answer":["A","B","D"]},{"id":"M3","type":"multi","label":"多选","title":"下列有关遵义会议的表述，正确的有（）","options":{"A":"会议召开于 1935 年 1 月，是红军长征途中召开的重要会议","B":"会议批判了博古、李德等人的错误军事路线","C":"会议事实上确立了毛泽东在党和红军中的领导地位","D":"会议确定了“农村包围城市、武装夺取政权”的革命道路"},"answer":["A","B","C"]},{"id":"M4","type":"multi","label":"多选","title":"下列关于中共七大的表述，正确的有（）","options":{"A":"1945 年在延安召开","B":"将毛泽东思想确立为党的指导思想并写入党章","C":"提出了党的三大优良作风","D":"会议的中心议题是讨论抗战胜利后的建国问题"},"answer":["A","B","C"]},{"id":"M5","type":"multi","label":"多选","title":"下列关于中华人民共和国成立的表述，正确的有（）","options":{"A":"1949 年 10 月 1 日，毛泽东在天安门城楼上宣告中华人民共和国成立","B":"新中国的成立标志着中国新民主主义革命的基本胜利","C":"新中国成立后，中国进入了社会主义社会","D":"1949 年 9 月召开的中国人民政治协商会议通过了《共同纲领》，起临时宪法作用"},"answer":["A","B","D"]},{"id":"M6","type":"multi","label":"多选","title":"下列有关抗美援朝战争的表述，正确的有（）","options":{"A":"中国人民志愿军于 1950 年 10 月跨过鸭绿江奔赴朝鲜战场","B":"抗美援朝战争中涌现出黄继光、邱少云等战斗英雄","C":"抗美援朝战争的胜利提高了新中国的国际威望","D":"抗美援朝战争结束后，台湾回到祖国怀抱"},"answer":["A","B","C"]},{"id":"M7","type":"multi","label":"多选","title":"下列有关我国社会主义改造的表述，正确的有（）","options":{"A":"“三大改造”是指对农业、手工业、资本主义工商业的社会主义改造","B":"社会主义改造于 1956 年基本完成","C":"社会主义改造完成后，我国进入社会主义初级阶段","D":"社会主义改造采取了完全自愿、没有任何波折的和平方式"},"answer":["A","B","C"]},{"id":"M8","type":"multi","label":"多选","title":"解放战争时期，具有战略决战意义的三大战役是（）","options":{"A":"辽沈战役","B":"淮海战役","C":"平津战役","D":"渡江战役"},"answer":["A","B","C"]},{"id":"M9","type":"multi","label":"多选","title":"下列关于我国改革开放以来经济发展的表述，正确的有（）","options":{"A":"1980 年，我国设立了深圳、珠海、汕头、厦门四个经济特区","B":"农村普遍实行了家庭联产承包责任制","C":"经济体制改革的目标是建立社会主义市场经济体制","D":"改革开放开始于 20 世纪 80 年代末"},"answer":["A","B","C"]},{"id":"M10","type":"multi","label":"多选","title":"下列关于“一国两制”构想的表述，正确的有（）","options":{"A":"“一国两制”最早是为解决台湾问题提出的","B":"香港、澳门回归祖国是“一国两制”构想的成功实践","C":"“一国两制”下，港澳台地区可以保留原有的资本主义制度","D":"“一国两制”是指在一个中国的前提下，国家主体实行社会主义"},"answer":["A","B","C","D"]},{"id":"M11","type":"multi","label":"多选","title":"“敌人只能砍下我们的头颅，决不能动摇我们的信仰！”这句铮铮誓言出自方志敏烈士。下列关于方志敏的表述，正确的有（）","options":{"A":"他在狱中写下了《可爱的中国》《清贫》等不朽篇章","B":"他曾担任红十军团军政委员会主席","C":"他是中国共产党早期领导人之一，被称为“农民运动大王”","D":"毛泽东评价他的狱中遗作“是一个共产党员革命意志、情操和高尚人格的写照”"},"answer":["A","B","D"]},{"id":"M12","type":"multi","label":"多选","title":"1928 年 3 月，夏明翰在就义前写下气壮山河的就义诗：“砍头不要紧，只要主义真。杀了夏明翰，还有后来人！”下列关于夏明翰的表述，正确的有（）","options":{"A":"他牺牲时年仅 28 岁","B":"他就义前写下的诗篇体现了共产党人视死如归的革命气节","C":"他是中国共产党早期著名的革命活动家","D":"他曾担任黄埔军校政治部主任"},"answer":["A","B","C"]},{"id":"M13","type":"multi","label":"多选","title":"1948 年 5 月 25 日，董存瑞在解放隆化的战斗中舍身炸碉堡，壮烈牺牲。下列关于董存瑞的表述，正确的有（）","options":{"A":"他牺牲时年仅 19 岁","B":"他 13 岁时就曾掩护过八路军干部，被誉为“抗日小英雄”","C":"他于 1947 年加入中国共产党","D":"他牺牲后被追授“战斗英雄”称号"},"answer":["A","B","C","D"]},{"id":"M14","type":"multi","label":"多选","title":"“毒刑拷打，那是太小的考验。竹签子是竹子做的，共产党员的意志是钢铁！”这是江竹筠（江姐）在狱中留下的名言。下列关于江姐的表述，正确的有（）","options":{"A":"她因叛徒出卖于 1948 年 6 月被捕","B":"她被关押在重庆白公馆监狱","C":"她于 1949 年 11 月重庆解放前夕壮烈牺牲","D":"她牺牲时年仅 29 岁"},"answer":["A","C","D"]},{"id":"M15","type":"multi","label":"多选","title":"东北抗日联军领导人杨靖宇在极端艰苦的条件下坚持抗战，直至壮烈牺牲。下列关于杨靖宇的表述，正确的有（）","options":{"A":"他曾任东北抗日联军第一路军总司令兼政治委员","B":"他牺牲后，日军剖开他的胃部，发现只有枯草、树皮和棉絮","C":"他牺牲于 1942 年","D":"为纪念他，蒙江县改名为靖宇县"},"answer":["A","B","D"]},{"id":"M16","type":"multi","label":"多选","title":"井冈山斗争时期，王尔琢作为红四军参谋长兼 28 团团长，为革命根据地建设作出了重要贡献。下列关于王尔琢的表述，正确的有（）","options":{"A":"他毕业于黄埔军校第一期","B":"他在南昌起义后随朱德、陈毅转战，后与毛泽东会师井冈山","C":"他牺牲于 1929 年","D":"他被评选为“100 位为新中国成立作出突出贡献的英雄模范人物”"},"answer":["A","B","D"]},{"id":"M17","type":"multi","label":"多选","title":"黄旭华被誉为“中国核潜艇之父”，他隐姓埋名 30 年研制核潜艇。下列关于黄旭华的表述，正确的有（）","options":{"A":"他参与了中国第一代核潜艇的研制工作","B":"他曾说：“对国家的忠诚就是对父母最大的孝”","C":"他获得了“共和国勋章”","D":"他是中国核潜艇第二任总设计师"},"answer":["A","B","C","D"]},{"id":"M18","type":"multi","label":"多选","title":"下列属于全国重点红色旅游经典景区的有（）","options":{"A":"中共一大会址","B":"黄果树瀑布","C":"延安革命旧址","D":"西柏坡纪念馆"},"answer":["A","C","D"]},{"id":"M19","type":"multi","label":"多选","title":"邓稼先是中国核武器研制工作的开拓者和奠基者，被誉为“两弹元勋”。下列关于邓稼先的表述，正确的有（）","options":{"A":"他曾说：“如果做好了这件事，我这一辈子就活得很值得，就是为它死了也值得”","B":"他隐姓埋名 28 年从事核武器研制工作","C":"他于 1999 年被追授“两弹一星”功勋奖章","D":"他是中国第一颗原子弹爆炸成功的主要组织者之一"},"answer":["A","B","C","D"]},{"id":"M20","type":"multi","label":"多选","title":"王进喜是新中国石油工人的杰出代表，被誉为“铁人”。下列关于王进喜的表述，正确的有（）","options":{"A":"他曾说：“宁肯少活二十年，拼命也要拿下大油田！”","B":"他曾说：“有条件要上，没有条件创造条件也要上！”","C":"他参加了大庆石油会战","D":"他因在大庆石油会战中用身体搅拌泥浆制服井喷而被誉为“铁人”"},"answer":["A","B","C","D"]},{"id":"M21","type":"multi","label":"多选","title":"袁隆平被誉为“杂交水稻之父”，为解决中国和世界粮食问题作出了巨大贡献。下列关于袁隆平的表述，正确的有（）","options":{"A":"他曾说：“发展杂交水稻，造福世界人民”","B":"他于 2019 年被授予“共和国勋章”","C":"他的毕生梦想是让所有人远离饥饿","D":"他是中国工程院院士"},"answer":["A","B","C","D"]},{"id":"M22","type":"multi","label":"多选","title":"伟大建党精神是中国共产党的精神之源，其内涵包括“坚持真理、坚守理想，践行初心、担当使命，不怕牺牲、英勇斗争，对党忠诚、不负人民”。下列关于伟大建党精神的表述，正确的有（）","options":{"A":"“坚持真理、坚守理想”体现了中国共产党人对马克思主义的坚定信仰","B":"“不怕牺牲、英勇斗争”体现了中国共产党人视死如归的革命气节","C":"伟大建党精神形成于井冈山斗争时期","D":"“对党忠诚、不负人民”体现了中国共产党人的政治品格和为民情怀"},"answer":["A","B","D"]},{"id":"M23","type":"multi","label":"多选","title":"井冈山精神是中国共产党在井冈山斗争时期形成的伟大精神。下列选项中，属于井冈山精神核心内涵的有（）","options":{"A":"坚定执着追理想","B":"解放思想攻难关","C":"实事求是闯新路","D":"依靠群众求胜利"},"answer":["A","C","D"]},{"id":"M24","type":"multi","label":"多选","title":"长征精神是中国共产党在长征这一伟大壮举中铸就的精神丰碑。下列选项中，属于长征精神核心内涵的有（）","options":{"A":"把全国人民和中华民族的根本利益看得高于一切，坚定革命的理想和信念","B":"坚持独立自主、实事求是，一切从实际出发","C":"紧紧依靠人民群众，同人民群众生死相依、患难与共、艰苦奋斗","D":"敢闯敢试、敢为人先、埋头苦干"},"answer":["A","B","C"]},{"id":"M25","type":"multi","label":"多选","title":"“坚定正确的政治方向，解放思想、实事求是的思想路线，全心全意为人民服务的根本宗旨，自力更生、艰苦奋斗的创业精神。”这是对延安精神的概括，下列相关表述正确的有（）","options":{"A":"这是延安精神的核心内涵","B":"这一精神形成于抗日战争时期","C":"这一精神形成于改革开放时期","D":"“自力更生、艰苦奋斗”是这一精神的重要体现"},"answer":["A","B","D"]},{"id":"M26","type":"multi","label":"多选","title":"红岩精神是中国共产党在抗日战争时期和解放战争时期，在国民党统治区形成的伟大精神。下列选项中，属于红岩精神核心内涵的有（）","options":{"A":"坚如磐石的理想信念","B":"和衷共济的爱国情怀","C":"艰苦创业的奋斗精神","D":"不折不挠的凛然斗志"},"answer":["A","B","D"]},{"id":"M27","type":"multi","label":"多选","title":"西柏坡精神是中国共产党在解放战争后期形成的伟大精神，毛泽东同志在党的七届二中全会上提出的“两个务必”是其核心内容。下列选项中，属于西柏坡精神内涵的有（）","options":{"A":"务必使同志们继续地保持谦虚、谨慎、不骄、不躁的作风","B":"务必使同志们继续地保持艰苦奋斗的作风","C":"敢于斗争、敢于胜利的进取精神","D":"自力更生、发愤图强的创业精神"},"answer":["A","B","C"]},{"id":"M28","type":"multi","label":"多选","title":"“祖国和人民利益高于一切、为了祖国和民族的尊严而奋不顾身的爱国主义精神，英勇顽强、舍生忘死的革命英雄主义精神，不畏艰难困苦、始终保持高昂士气的革命乐观主义精神，为完成祖国和人民赋予的使命、慷慨奉献自己一切的革命忠诚精神，为了人类和平与正义事业而奋斗的国际主义精神。”这是对抗美援朝精神的概括，下列相关表述正确的有（）","options":{"A":"这是抗美援朝精神的核心内涵","B":"这一精神形成于 20 世纪 50 年代","C":"这一精神体现了中华民族不畏强暴、敢于斗争的英雄气概","D":"这一精神属于改革开放新时期形成的伟大精神"},"answer":["A","B","C"]},{"id":"M29","type":"multi","label":"多选","title":"“热爱祖国、无私奉献，自力更生、艰苦奋斗，大力协同、勇于登攀。”这是对“两弹一星”精神的凝练概括，下列相关表述正确的有（）","options":{"A":"这是“两弹一星”精神的核心内涵","B":"这一精神形成于 20 世纪五六十年代","C":"这一精神体现了科技工作者为祖国科技事业无私奉献的崇高品质","D":"这一精神属于中国特色社会主义新时代形成的伟大精神"},"answer":["A","B","C"]},{"id":"M30","type":"multi","label":"多选","title":"焦裕禄精神是中国共产党人精神谱系的重要组成部分。下列选项中，属于焦裕禄精神核心内涵的有（）","options":{"A":"亲民爱民","B":"艰苦奋斗","C":"科学求实","D":"开拓创新"},"answer":["A","B","C"]},{"id":"M31","type":"multi","label":"多选","title":"雷锋是伟大的共产主义战士，雷锋精神被列入第一批中国共产党人精神谱系。下列选项中，属于雷锋精神核心内涵的有（）","options":{"A":"服务人民、助人为乐的奉献精神","B":"干一行爱一行、专一行精一行的敬业精神","C":"锐意进取、自强不息的创新精神","D":"敢闯敢试、敢为人先的开拓精神"},"answer":["A","B","C"]},{"id":"M32","type":"multi","label":"多选","title":"“宁肯少活二十年，拼命也要拿下大油田！”“有条件要上，没有条件创造条件也要上！”这些豪迈誓言体现了以王进喜为代表的大庆精神（铁人精神），下列相关表述正确的有（）","options":{"A":"这是大庆精神（铁人精神）的核心体现","B":"这一精神形成于 20 世纪 60 年代的大庆石油会战","C":"这一精神体现了中国石油工人艰苦创业、无私奉献的崇高品格","D":"这一精神属于新民主主义革命时期形成的伟大精神"},"answer":["A","B","C"]},{"id":"M33","type":"multi","label":"多选","title":"红旗渠精神是中国共产党领导人民在社会主义建设时期创造的伟大精神。下列选项中，属于红旗渠精神核心内涵的有（）","options":{"A":"自力更生","B":"艰苦创业","C":"团结协作","D":"无私奉献"},"answer":["A","B","C","D"]},{"id":"M34","type":"multi","label":"多选","title":"“解放思想、实事求是、敢闯敢试、勇于创新、互利合作、命运与共。”这是对改革开放精神的概括，下列相关表述正确的有（）","options":{"A":"这是改革开放精神的核心内涵","B":"这一精神形成于 1978 年党的十一届三中全会以后","C":"这一精神是中国共产党在改革开放伟大实践中铸就的","D":"这一精神属于新民主主义革命时期形成的伟大精神"},"answer":["A","B","C"]},{"id":"M35","type":"multi","label":"多选","title":"“敢闯敢试、敢为人先、埋头苦干。”这是对特区精神的高度概括，下列相关表述正确的有（）","options":{"A":"这是特区精神的核心内涵","B":"这一精神形成于深圳等经济特区的建设实践中","C":"“时间就是金钱，效率就是生命”的口号体现了这一精神","D":"这一精神属于社会主义革命和建设时期形成的伟大精神"},"answer":["A","B","C"]},{"id":"M36","type":"multi","label":"多选","title":"“万众一心、众志成城，不怕困难、顽强拼搏，坚韧不拔、敢于胜利。”这是对抗洪精神的概括，下列相关表述正确的有（）","options":{"A":"这是抗洪精神的核心内涵","B":"这一精神形成于 1998 年抗洪抢险斗争中","C":"这一精神体现了中华民族万众一心、共克时艰的团结力量","D":"这一精神属于中国特色社会主义新时代形成的伟大精神"},"answer":["A","B","C"]},{"id":"M37","type":"multi","label":"多选","title":"习近平总书记多次强调要“传承红色基因、赓续红色血脉”。下列属于习近平总书记相关重要论述的有（）","options":{"A":"“红色基因就是要传承。中华民族从站起来、富起来到强起来，经历了多少坎坷，创造了多少奇迹，要让后代牢记”","B":"“我们要不忘初心，永远不可迷失了方向和道路”","C":"“红色基因是中国共产党区别于其他政党的唯一标志”","D":"“要教育引导全党大力发扬红色传统、传承红色基因，赓续共产党人精神血脉”"},"answer":["A","B","D"]},{"id":"M38","type":"multi","label":"多选","title":"习近平总书记指出：“回望过往历程，眺望前方征途，我们必须始终赓续红色血脉，用党的奋斗历程和伟大成就鼓舞斗志、指引方向”。下列属于习近平总书记强调的赓续红色血脉具体内涵的有（）","options":{"A":"用党的奋斗历程和伟大成就鼓舞斗志、指引方向","B":"用党的光荣传统和优良作风坚定信念、凝聚力量","C":"用党的历史经验和实践创造启迪智慧、砥砺品格","D":"用党的理论创新和思想解放引领时代、开创未来"},"answer":["A","B","C"]},{"id":"M39","type":"multi","label":"多选","title":"习近平总书记高度重视青少年成长，多次寄语广大青少年。下列属于习近平总书记对青少年殷切期望的有（）","options":{"A":"“你们今天是小树苗，将来要长成参天大树，中华民族伟大复兴的中国梦将在你们身上实现”","B":"“希望同学们把红色基因传承好，好好学习知识和本领，努力成长为德智体美劳全面发展的社会主义建设者和接班人”","C":"“广大青少年生逢其时，要赓续红色血脉，树立强国有我的远大志向，做堂堂正正、光荣自豪的中国人”","D":"“少年强则中国强，少年兴则中国兴，这是永恒不变的真理”"},"answer":["A","B","C"]},{"id":"M40","type":"multi","label":"多选","title":"习近平总书记强调要“讲好党的故事、革命的故事、根据地的故事、英雄和烈士的故事”。下列关于习近平总书记相关论述的表述，正确的有（）","options":{"A":"讲好这些故事的目的是加强革命传统教育、爱国主义教育、青少年思想道德教育","B":"这些故事是“把红色基因传承好，确保红色江山永不变色”的重要途径","C":"讲好故事只需注重知识灌输，不需要加强情感培育","D":"革命博物馆、纪念馆、党史馆、烈士陵园等是党和国家红色基因库"},"answer":["A","B","D"]},{"id":"M41","type":"multi","label":"多选","title":"习近平总书记在多个场合勉励青少年树立远大志向。下列属于习近平总书记相关寄语的有（）","options":{"A":"“一个人可以有很多志向，但人生最重要的志向应该同祖国和人民联系在一起”","B":"“这是人们各种具体志向的底盘，也是人生的脊梁”","C":"“你们要注意培养追求真理、报效祖国的志向，爱祖国、爱人民、爱劳动、爱科学、爱社会主义”","D":"“立大志、明大德、成大才、担大任，努力成为堪当民族复兴重任的时代新人”"},"answer":["A","B","C","D"]},{"id":"M42","type":"multi","label":"多选","title":"习近平总书记强调要“大力传承和弘扬我党我军优良传统，让红色基因代代相传，让新风正气更加充盈”。下列属于习近平总书记相关论述的有（）","options":{"A":"“一寸山河一寸血，一抔热土一抔魂。我们要沿着革命前辈的足迹继续前行，把红色江山世世代代传下去”","B":"“要讲好党的故事、革命的故事、根据地的故事、英雄和烈士的故事”","C":"“红色基因是中国特色社会主义最本质的特征”","D":"“把革命先烈流血牺牲打下的红色江山守护好、建设好，努力创造不负革命先辈期望的新业绩”"},"answer":["A","B","D"]},{"id":"M43","type":"multi","label":"多选","title":"习近平总书记多次强调要用好红色资源。下列属于习近平总书记相关重要论述的有（）","options":{"A":"“红色资源是我们党艰辛而辉煌奋斗历程的见证，是最宝贵的精神财富”","B":"“革命博物馆、纪念馆、党史馆、烈士陵园等是党和国家红色基因库”","C":"“要把这些红色资源作为坚定理想信念、加强党性修养的生动教材”","D":"“红色资源的开发利用应以经济效益为首要目标”"},"answer":["A","B","C"]},{"id":"M44","type":"multi","label":"多选","title":"毛泽东同志提出的群众路线内涵包括（）","options":{"A":"少数服从多数","B":"一切依靠群众","C":"从群众中来，到群众中去","D":"一切为了群众"},"answer":["B","C","D"]},{"id":"M45","type":"multi","label":"多选","title":"下列体现毛泽东同志人民情怀的论述有（）","options":{"A":"全心全意为人民服务","B":"一切从人民的利益出发","C":"人民当家作主","D":"坚持中国共产党的领导"},"answer":["A","B","C"]},{"id":"M46","type":"multi","label":"多选","title":"中共一大会址纪念馆是中国共产党诞生的重要见证。下列关于中共一大会址及相关文物的表述，正确的有（）","options":{"A":"中共一大最初在上海法租界望志路 106 号（今兴业路 76 号）召开","B":"会议期间因受到法租界巡捕的干扰，代表们转移至浙江嘉兴南湖的一艘游船上继续举行","C":"中共一大会址纪念馆内陈列着董必武题写的“作始也简，将毕也钜”的题词","D":"中共一大召开时，毛泽东、周恩来、朱德等代表在此住宿"},"answer":["A","B","C"]},{"id":"M47","type":"multi","label":"多选","title":"北大红楼（北京新文化运动纪念馆）是中国近代史上重要的革命旧址。下列关于北大红楼的表述，正确的有（）","options":{"A":"红楼始建于 1916 年，落成于 1918 年，曾是北京大学校部所在地","B":"1917 年，《新青年》编辑部迁至北京大学红楼，陈独秀、李大钊、鲁迅、胡适等人参与编辑工作","C":"1919 年 5 月 4 日，北京大学等高校学生从红楼出发到天安门游行，五四运动爆发","D":"北大红楼是中国共产党第一次全国代表大会的主要召开地"},"answer":["A","B","C"]},{"id":"M48","type":"multi","label":"多选","title":"井冈山革命博物馆珍藏了大量反映井冈山斗争时期的革命文物。下列选项中，属于井冈山革命博物馆馆藏重要文物或相关史实的有（）","options":{"A":"大井毛泽东旧居屋后保留的三件原物：一堵残墙、一块读书石、两棵“常青树”","B":"朱德在挑粮运动中使用的扁担，上面刻有“朱德扁担，不准乱拿”八个大字","C":"井冈山斗争时期红军传唱的《红米饭南瓜汤》歌谣，体现了红军的革命乐观主义精神","D":"井冈山革命博物馆于 1949 年正式建成并对外开放"},"answer":["A","B","C"]},{"id":"M49","type":"multi","label":"多选","title":"香山革命纪念馆记录了中共中央在北京香山时期波澜壮阔的革命历史。下列关于香山革命纪念馆及相关史实的表述，正确的有（）","options":{"A":"1949 年 3 月 25 日，毛泽东率中共中央进驻香山，香山成为中国共产党领导解放战争走向全国胜利的总指挥部","B":"香山革命纪念馆通过《我到香山来“赶考”》教育读本，向中小学生普及香山红色历史","C":"香山革命纪念馆的展品包括 1949 年《进步日报》关于南京解放的报道、开国大典使用的大红灯笼和礼炮等","D":"中共中央在香山时期的主要工作是开展土地改革运动"},"answer":["A","B","C"]},{"id":"M50","type":"multi","label":"多选","title":"邓小平同志对传承红色基因、坚持社会主义道路的重要主张有（）","options":{"A":"必须坚持四项基本原则","B":"必须坚持社会主义方向","C":"必须继承和发扬革命精神","D":"必须抛弃革命传统"},"answer":["A","B","C"]},{"id":"M51","type":"multi","label":"多选","title":"习近平总书记强调要“把红色资源利用好、把红色传统发扬好、把红色基因传承好”。下列选项中，属于让革命文物“亮”起来、“活”起来、“热”起来的创新举措有（）","options":{"A":"中共一大会址纪念馆推出“寻找诞生地”新媒体产品，通过扫码答题方式普及党史知识","B":"井冈山革命博物馆为青少年开设“井冈山斗争史知识问答”线上栏目","C":"香山革命纪念馆为中小学生打造《我到香山来“赶考”》教育读本，设置二维码扫码“开小灶”","D":"将革命文物长期封存于库房，避免文物因展出而损坏"},"answer":["A","B","C"]},{"id":"M52","type":"multi","label":"多选","title":"2025 年，上海市静安区在红色资源保护利用方面取得显著成效，探索出可推广的“静安模式”。下列属于静安区红色文化传承创新举措的有（）","options":{"A":"建立区级红色资源保护利用工作联席会议，形成统筹推进机制","B":"将红色场馆建设与石库门里弄、苏河湾岸线等城市更新统筹考虑","C":"所有红色场馆完全取消线下参观，全面转为线上虚拟展览","D":"推出《红色足印》情景党课和沉浸式戏剧《无声告白》，通过时空对话、角色扮演等方式演绎红色故事"},"answer":["A","B","D"]},{"id":"M53","type":"multi","label":"多选","title":"山东省青岛市城阳第七中学语文教研组以《红星照耀中国》、《红岩》等红色经典整本书阅读为载体，探索出革命文化精神传承路径。下列属于该校创新做法的有（）","options":{"A":"设计“寻找书中的同龄人”阅读活动，引导学生从书中同龄人的命运中拉近与历史的距离","B":"设置“信仰之问”讨论环节，引导学生深入文本细节体味历史条件下人物的具体心境","C":"将红色经典阅读完全交给学生自主完成，教师不进行任何干预和引导","D":"策划“抗战精神在身边”研学活动，组织学生走访本地抗战遗址、采访老战士后代"},"answer":["A","B","D"]},{"id":"M54","type":"multi","label":"多选","title":"江西省档案馆联合江西广播电视台打造的《跨越时空的追寻》节目，入选国家广播电视总局“中华文化广播电视传播工程”重点项目。下列属于该节目创新特点的有（）","options":{"A":"采用“红色档案溯源+行进式探访”的形式，邀请青年演员和党史专家重回红色故地","B":"通过 AI 技术活化红色档案，打造“线上档案馆”与青年网友在线互动","C":"节目完全采用传统纪录片拍摄手法，不加入任何互动元素","D":"设置“青年之问”环节，解读中国共产党人一脉相承的初心使命"},"answer":["A","B","D"]},{"id":"M55","type":"multi","label":"多选","title":"天津市宁河区俵口镇作为革命烈士于方舟的故乡，积极探索“红绿融合”发展模式。下列属于俵口镇红色文化传承创新举措的有（）","options":{"A":"提档升级“重走方舟路”红色研学路线，完成故居及体验场景的修缮提升","B":"挖掘整理于方舟烈士事迹与地域传说故事 36 个，融入 12 处研学场景","C":"引入原创沉浸式剧本杀《黎明——“新生社”的最后一次聚会》，举办“方舟精神青年说”大赛","D":"将所有红色场馆改为收费运营，以门票收入作为主要发展目标"},"answer":["A","B","C"]},{"id":"M56","type":"multi","label":"多选","title":"江西瑞金作为红色故都，积极探索红色文化现代化传播路径。下列属于瑞金红色文化创新举措的价值导向有（）","options":{"A":"打造红色基因传承超级 IP《少年家国梦》，以青少年喜闻乐见的动漫语言诠释革命精神","B":"联合企业推出“共和国摇篮系列 3D 立体拼图”，以红井、“一苏大”旧址等红色建筑为原型","C":"将红色文化传播局限于传统参观讲解模式，不进行任何形式创新","D":"在 3D 立体拼图中融入传统榫卯工艺，无需螺丝胶水即可拼装，兼具益智互动功能"},"answer":["A","B","D"]},{"id":"M57","type":"multi","label":"多选","title":"2025 年，陕西延安积极探索红色文化年轻化表达，通过数字技术让红色文化“活”起来。下列属于延安红色文化创新实践的有（）","options":{"A":"延安宝塔山景区推出 VR 体验，游客可“走进”1942 年的窑洞，目睹冼星海创作《黄河大合唱》的场景","B":"杨家岭革命旧址的研学课堂上，大学生用 AR 技术还原中共七大现场","C":"延安革命纪念馆推出“指尖上的思政课堂”项目，将 3.6 万件馆藏文物转化为 3D 数字模型","D":"完全放弃线下实体展览，将所有红色教育内容转移到线上平台"},"answer":["A","B","C"]},{"id":"M58","type":"multi","label":"多选","title":"红色经典诗歌《我爱这土地》是诗人艾青的代表作之一，创作于抗战时期武汉失守之后。下列关于这首诗的表述，正确的有（）","options":{"A":"诗中“为什么我的眼里常含泪水？因为我对这土地爱得深沉”表达了诗人对祖国的挚爱之情","B":"诗中“这被暴风雨所打击着的土地”中的“暴风雨”象征日本帝国主义的侵略","C":"这首诗最早发表于 1937 年抗日战争全面爆发初期","D":"诗中“和那来自林间的无比温柔的黎明”中的“黎明”象征着胜利的希望"},"answer":["A","B","D"]},{"id":"M59","type":"multi","label":"多选","title":"叶挺将军在皖南事变后被国民党非法逮捕，在狱中写下了不朽诗篇《囚歌》。下列关于这首诗的表述，正确的有（）","options":{"A":"“为人进出的门紧锁着，为狗爬走的洞敞开着”运用对比手法，揭露了反动派所给“自由”的本质","B":"诗中“我应该在烈火和热血中得到永生”表达了革命者宁死不屈、献身理想的崇高气节","C":"这首诗创作于 1941 年叶挺被囚禁于重庆“中美特种技术合作所”集中营期间","D":"叶挺是中国共产党早期领导人之一，曾参与领导南昌起义和广州起义"},"answer":["A","B","C","D"]},{"id":"M60","type":"multi","label":"多选","title":"《红星照耀中国》是美国记者埃德加·斯诺的纪实文学作品，向世界真实报道了中国共产党和红军的真实面貌。下列关于这部作品的表述，正确的有（）","options":{"A":"“红星”象征着中国共产党及其领导的红色革命","B":"作者在陕北革命根据地采访了毛泽东、周恩来、朱德等共产党领袖和红军将领","C":"这部作品记录了红军长征的伟大壮举，长征途中经历了巧渡金沙江、飞夺泸定桥等标志性事件","D":"作品出版后曾化名《西行漫记》，便于在国民党统治区传播"},"answer":["A","B","C","D"]},{"id":"J1","type":"judge","label":"判断","title":"中共一大召开当天，毛泽东同志作为代表亲自参加了会议。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J2","type":"judge","label":"判断","title":"“八七会议”确立了思想建党、政治建军的原则。","options":{"T":"正确","F":"错误"},"answer":["F"],"correction":"“八七会议”的核心是“纠正右倾错误，确定土地革命和武装斗争总方针”。“思想建党、政治建军”是“古田会议”确立的根本原则。"},{"id":"J3","type":"judge","label":"判断","title":"抗日战争的胜利，是近代以来中国抗击外敌入侵第一次完全胜利。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J4","type":"judge","label":"判断","title":"中华人民共和国的成立，实现了中国从几千年封建专制向人民民主的伟大飞跃。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J5","type":"judge","label":"判断","title":"1956 年三大改造完成，标志我国进入社会主义社会。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J6","type":"judge","label":"判断","title":"党的十一届三中全会开启了改革开放和社会主义现代化建设新时期。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J7","type":"judge","label":"判断","title":"中国特色社会主义进入新时代，我国社会主要矛盾发生转化。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J8","type":"judge","label":"判断","title":"全面建成小康社会，是中华民族的伟大光荣。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J9","type":"judge","label":"判断","title":"党的二十大擘画了以中国式现代化全面推进强国建设、民族复兴的宏伟蓝图。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J10","type":"judge","label":"判断","title":"夏明翰在就义前写下“砍头不要紧，只要主义真”。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J11","type":"judge","label":"判断","title":"黄继光在抗美援朝战争中用身体堵住敌人枪眼。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J12","type":"judge","label":"判断","title":"黄继光用身体搅拌泥浆制服井喷，被誉为“铁人”。","options":{"T":"正确","F":"错误"},"answer":["F"],"correction":"用身体搅拌泥浆制服井喷，被誉为“铁人”的是王进喜。黄继光是在抗美援朝战争中用身体堵住敌人枪眼，英勇牺牲的战斗英雄。"},{"id":"J13","type":"judge","label":"判断","title":"袁隆平成功培育杂交水稻，被誉为“杂交水稻之父”。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J14","type":"judge","label":"判断","title":"彭士禄是中国核动力事业的开拓者和奠基人之一，是“中国核潜艇第一任总设计师。”","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J15","type":"judge","label":"判断","title":"伟大建党精神是中国共产党人精神谱系的历史源头。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J16","type":"judge","label":"判断","title":"长征精神的核心是不怕牺牲、敢于胜利的革命英雄主义。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J17","type":"judge","label":"判断","title":"延安精神的内涵不包括自力更生、艰苦奋斗的创业精神。","options":{"T":"正确","F":"错误"},"answer":["F"],"correction":"延安精神的内涵包括坚定正确的政治方向、解放思想实事求是的思想路线、全心全意为人民服务的根本宗旨、自力更生、艰苦奋斗的创业精神。"},{"id":"J18","type":"judge","label":"判断","title":"“两弹一星”精神形成于改革开放初期。","options":{"T":"正确","F":"错误"},"answer":["F"],"correction":"“两弹一星”精神形成于中华人民共和国成立后的社会主义建设探索时期。"},{"id":"J19","type":"judge","label":"判断","title":"雷锋精神的本质是无私奉献、为人民服务。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J20","type":"judge","label":"判断","title":"特区精神的核心是敢闯敢试、敢为人先、埋头苦干。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J21","type":"judge","label":"判断","title":"脱贫攻坚精神的首要内涵是“上下同心、尽锐出战”。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J22","type":"judge","label":"判断","title":"伟大建党精神是中国共产党人精神谱系的重要组成部分，其内涵包括“坚持真理、坚守理想，践行初心、担当使命，不怕牺牲、英勇斗争，对党忠诚、不负人民。”","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J23","type":"judge","label":"判断","title":"北斗精神强调“自主创新、开放融合、万众一心、追求卓越。”","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J24","type":"judge","label":"判断","title":"探月精神体现了“追逐梦想、勇于探索、协同攻坚、合作共赢”的民族品格。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J25","type":"judge","label":"判断","title":"习近平总书记指出，青年要“扣好人生第一粒扣子。”","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J26","type":"judge","label":"判断","title":"习近平总书记强调，“共和国是红色的，我们绝不能淡化这个颜色。”","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J27","type":"judge","label":"判断","title":"毛泽东同志号召“向雷锋同志学习。”","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J28","type":"judge","label":"判断","title":"邓小平同志对改革开放的重要论述是“发展才是硬道理。”","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J29","type":"judge","label":"判断","title":"嘉兴南湖红船，是中国革命源头的象征。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J30","type":"judge","label":"判断","title":"红旗渠被称为“人工天河”，位于河南省林州市。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J31","type":"judge","label":"判断","title":"深圳蛇口是改革开放“第一声开山炮”打响的地方。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J32","type":"judge","label":"判断","title":"中国共产党历史展览馆是展示党的百年奋斗的重要阵地。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J33","type":"judge","label":"判断","title":"红色教育只需要在学校开展，家庭和社会无需参与。","options":{"T":"正确","F":"错误"},"answer":["F"],"correction":"红色教育是全民性的，需要学校、家庭、社会协同。"},{"id":"J34","type":"judge","label":"判断","title":"新时代传承艰苦奋斗精神，就是要过苦日子、不改善生活。","options":{"T":"正确","F":"错误"},"answer":["F"],"correction":"艰苦奋斗≠否定生活进步，而是奋斗中追求美好生活。"},{"id":"J35","type":"judge","label":"判断","title":"红色文化传承可以适度进行娱乐化、网红化改编。","options":{"T":"正确","F":"错误"},"answer":["F"],"correction":"红色文化传承需要以“守正”为前提，警惕娱乐化对精神内核的侵蚀。"},{"id":"J36","type":"judge","label":"判断","title":"青少年传承红色基因，重在实践，更要言行一致。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J37","type":"judge","label":"判断","title":"传承红色文化可以根据历史虚构情节。","options":{"T":"正确","F":"错误"},"answer":["F"],"correction":"传承红色文化需要尊重事实，不能随意虚构。"},{"id":"J38","type":"judge","label":"判断","title":"历史虚无主义本质是否定党的领导、否定社会主义道路。","options":{"T":"正确","F":"错误"},"answer":["T"]},{"id":"J39","type":"judge","label":"判断","title":"《义勇军进行曲》创作于解放战争时期。","options":{"T":"正确","F":"错误"},"answer":["F"],"correction":"《义勇军进行曲》是由田汉作词、聂耳作曲，创作于抗日战争时期（1935 年）。"},{"id":"J40","type":"judge","label":"判断","title":"《春天的故事》描绘的是改革开放的历史进程。","options":{"T":"正确","F":"错误"},"answer":["T"]}]}};
+    let banks = FALLBACK_BANKS;
+    const DATA_URL = "http://120.27.251.7/red-quiz-data/question-banks.json?v=20260520-2";
+
+    const state = {
+      view: "home",
+      group: "lowerPrimary",
+      current: 0,
+      answers: {},
+      submitted: {}
+    };
+
+    const els = {
+      homePanel: document.getElementById("homePanel"),
+      quizLayout: document.getElementById("quizLayout"),
+      bankSubtitle: document.getElementById("bankSubtitle"),
+      quizPanel: document.getElementById("quizPanel"),
+      questionMap: document.getElementById("questionMap"),
+      doneCount: document.getElementById("doneCount"),
+      rightCount: document.getElementById("rightCount"),
+      scoreCount: document.getElementById("scoreCount"),
+      progressBar: document.getElementById("progressBar"),
+      resetBtn: document.getElementById("resetBtn")
+    };
+
+    function initGroupState(key) {
+      if (!state.answers[key]) {
+        state.answers[key] = [];
+        state.submitted[key] = [];
+      }
+    }
+
+    function bank() {
+      return banks[state.group];
+    }
+
+    function questions() {
+      return bank().questions;
+    }
+
+    function answerFor(index) {
+      initGroupState(state.group);
+      return state.answers[state.group][index] || [];
+    }
+
+    function submittedFor(index) {
+      initGroupState(state.group);
+      return Boolean(state.submitted[state.group][index]);
+    }
+
+    function sameAnswer(a, b) {
+      const left = [...a].sort().join("|");
+      const right = [...b].sort().join("|");
+      return left === right;
+    }
+
+    function isCorrect(index) {
+      const q = questions()[index];
+      return submittedFor(index) && sameAnswer(answerFor(index), q.answer);
+    }
+
+    function formatAnswer(q, keys) {
+      if (!keys || keys.length === 0) return "未选择";
+      return keys.map(key => `${displayKey(key)}.${q.options[key]}`).join("、");
+    }
+
+    function displayKey(key) {
+      if (key === "T") return "√";
+      if (key === "F") return "×";
+      return key;
+    }
+
+    function cleanTitle(title) {
+      return title
+        .replace(/（\s*）/g, "")
+        .replace(/\(\s*\)/g, "")
+        .replace(/[。？?]$/g, "");
+    }
+
+    function explain(q) {
+      if (q.type === "judge") {
+        return q.correction || "这句话是正确的，可以作为记忆点。";
+      }
+      const answerText = formatAnswer(q, q.answer);
+      if (q.title.includes("不包括") || q.title.includes("没有")) {
+        return `题目问的是“不包括”或“没有”的一项，所以要选 ${answerText}。`;
+      }
+      if (q.type === "multi") {
+        return `这些选项都要一起看。正确答案是 ${answerText}。`;
+      }
+      return `本题的知识点是“${cleanTitle(q.title)}”，对应答案是 ${answerText}。`;
+    }
+
+    function renderHome() {
+      els.homePanel.classList.remove("hidden");
+      els.quizLayout.classList.add("hidden");
+      els.bankSubtitle.textContent = "请选择组别开始答题";
+      els.homePanel.innerHTML = `
+        <div class="home-panel">
+          <div class="home-heading">
+            <h2>选择比赛组别</h2>
+            <span>请选择对应组别</span>
+          </div>
+          <div class="group-grid">
+            ${Object.entries(banks).map(([key, item]) => {
+              const count = item.questions.length ? `${item.questions.length} 题` : "暂无题库";
+              const action = item.questions.length ? "进入答题" : "查看入口";
+              return `
+                <button class="group-card" type="button" data-group="${key}">
+                  <span>
+                    <h3>${item.name}</h3>
+                    <p>${item.subtitle}</p>
+                  </span>
+                  <span class="card-foot">
+                    <span class="card-status">${count}</span>
+                    <span class="card-action">${action}</span>
+                  </span>
+                </button>
+              `;
+            }).join("")}
+          </div>
+        </div>
+      `;
+
+      els.homePanel.querySelectorAll(".group-card").forEach(btn => {
+        btn.addEventListener("click", () => enterGroup(btn.dataset.group));
+      });
+    }
+
+    function enterGroup(key) {
+      state.view = "quiz";
+      state.group = key;
+      state.current = 0;
+      initGroupState(state.group);
+      render();
+    }
+
+    function backHome() {
+      state.view = "home";
+      render();
+    }
+
+    function renderEmpty() {
+      els.quizPanel.innerHTML = `
+        <div class="empty">
+          <div>
+            <div class="status-row">
+              <span class="pill">${bank().name}</span>
+              <button class="btn ghost" id="backHomeBtn" type="button">返回组别</button>
+            </div>
+            <h2>${bank().name}</h2>
+            <p>这个组别暂未导入题库。</p>
+          </div>
+        </div>
+      `;
+      els.questionMap.innerHTML = "";
+      els.doneCount.textContent = "0";
+      els.rightCount.textContent = "0";
+      els.scoreCount.textContent = "0";
+      els.progressBar.style.width = "0%";
+      document.getElementById("backHomeBtn").addEventListener("click", backHome);
+    }
+
+    function renderQuestion() {
+      const list = questions();
+      const q = list[state.current];
+      const picked = answerFor(state.current);
+      const submitted = submittedFor(state.current);
+      const correct = submitted && sameAnswer(picked, q.answer);
+      const optionHtml = Object.entries(q.options).map(([key, text]) => {
+        const selected = picked.includes(key);
+        const shouldShowCorrect = submitted && q.answer.includes(key);
+        const shouldShowWrong = submitted && selected && !q.answer.includes(key);
+        const classes = [
+          "option",
+          selected ? "selected" : "",
+          shouldShowCorrect ? "correct" : "",
+          shouldShowWrong ? "wrong" : ""
+        ].filter(Boolean).join(" ");
+        return `
+          <button class="${classes}" type="button" data-option="${key}" ${submitted ? "disabled" : ""}>
+            <span class="letter">${displayKey(key)}</span>
+            <span class="option-text">${text}</span>
+          </button>
+        `;
+      }).join("");
+
+      els.quizPanel.innerHTML = `
+        <div class="status-row">
+          <span class="pill">${q.label} · 第 ${state.current + 1} / ${list.length} 题</span>
+          <span class="status-actions">
+            <span class="pill">${bank().name}</span>
+            <button class="btn ghost" id="backHomeBtn" type="button">返回组别</button>
+          </span>
+        </div>
+        <h2 class="question-title">${q.title}</h2>
+        <div class="options">${optionHtml}</div>
+        <div class="actions">
+          <button class="btn primary" id="submitBtn" type="button" ${picked.length ? "" : "disabled"}>${submitted ? "已提交" : "提交本题"}</button>
+          <button class="btn secondary" id="retryBtn" type="button" ${submitted ? "" : "disabled"}>重做本题</button>
+          <button class="btn ghost" id="prevBtn" type="button" ${state.current === 0 ? "disabled" : ""}>上一题</button>
+          <button class="btn ghost" id="nextBtn" type="button" ${state.current === list.length - 1 ? "disabled" : ""}>下一题</button>
+        </div>
+        <div class="feedback ${submitted ? "show" : ""} ${correct ? "good" : "bad"}" id="feedback">
+          <div class="feedback-title">${correct ? "回答正确" : "回答错误"}</div>
+          <p>${submitted ? `你的答案：${formatAnswer(q, picked)}。正确答案：${formatAnswer(q, q.answer)}。${explain(q)}` : ""}</p>
+        </div>
+      `;
+
+      els.quizPanel.querySelectorAll(".option").forEach(btn => {
+        btn.addEventListener("click", () => chooseOption(btn.dataset.option));
+      });
+      document.getElementById("submitBtn").addEventListener("click", submitAnswer);
+      document.getElementById("retryBtn").addEventListener("click", retryQuestion);
+      document.getElementById("backHomeBtn").addEventListener("click", backHome);
+      document.getElementById("prevBtn").addEventListener("click", () => {
+        state.current = Math.max(0, state.current - 1);
+        render();
+      });
+      document.getElementById("nextBtn").addEventListener("click", () => {
+        state.current = Math.min(list.length - 1, state.current + 1);
+        render();
+      });
+    }
+
+    function chooseOption(key) {
+      if (submittedFor(state.current)) return;
+      const q = questions()[state.current];
+      const current = answerFor(state.current);
+      let next;
+      if (q.type === "multi") {
+        next = current.includes(key) ? current.filter(item => item !== key) : [...current, key];
+      } else {
+        next = [key];
+      }
+      state.answers[state.group][state.current] = next;
+      render();
+    }
+
+    function submitAnswer() {
+      if (!answerFor(state.current).length) return;
+      state.submitted[state.group][state.current] = true;
+      render();
+    }
+
+    function retryQuestion() {
+      state.answers[state.group][state.current] = [];
+      state.submitted[state.group][state.current] = false;
+      render();
+    }
+
+    function renderStats() {
+      const list = questions();
+      const done = list.filter((_, index) => submittedFor(index)).length;
+      const right = list.filter((_, index) => isCorrect(index)).length;
+      const score = list.length ? Math.round((right / list.length) * 100) : 0;
+      els.doneCount.textContent = done;
+      els.rightCount.textContent = right;
+      els.scoreCount.textContent = score;
+      els.progressBar.style.width = list.length ? `${(done / list.length) * 100}%` : "0%";
+
+      els.questionMap.innerHTML = list.map((_, index) => {
+        const doneClass = submittedFor(index) ? (isCorrect(index) ? "done-good" : "done-bad") : "";
+        return `<button class="dot ${state.current === index ? "current" : ""} ${doneClass}" type="button" data-index="${index}">${index + 1}</button>`;
+      }).join("");
+      els.questionMap.querySelectorAll(".dot").forEach(btn => {
+        btn.addEventListener("click", () => {
+          state.current = Number(btn.dataset.index);
+          render();
+        });
+      });
+    }
+
+    function render() {
+      if (!banks || !Object.keys(banks).length) return;
+      if (state.view === "home") {
+        renderHome();
+        return;
+      }
+      initGroupState(state.group);
+      els.homePanel.classList.add("hidden");
+      els.quizLayout.classList.remove("hidden");
+      els.bankSubtitle.textContent = bank().subtitle;
+      if (!questions().length) {
+        renderEmpty();
+        return;
+      }
+      renderQuestion();
+      renderStats();
+    }
+
+    els.resetBtn.addEventListener("click", () => {
+      if (!banks || !Object.keys(banks).length) return;
+      initGroupState(state.group);
+      state.answers[state.group] = [];
+      state.submitted[state.group] = [];
+      state.current = 0;
+      render();
+    });
+
+    async function start() {
+      initGroupState(state.group);
+      render();
+
+      try {
+        const response = await fetch(DATA_URL, { cache: "force-cache" });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const remoteBanks = await response.json();
+        if (remoteBanks && remoteBanks.lowerPrimary) {
+          banks = remoteBanks;
+          initGroupState(state.group);
+          render();
+        }
+      } catch (error) {
+        console.warn("题库 JSON 加载失败，已使用内置题库。", error);
+      }
+    }
+
+    start();
+  </script>
+</body>
+</html>

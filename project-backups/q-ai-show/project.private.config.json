@@ -1,0 +1,53 @@
+{
+  "description": "QAI智能助手私有配置文件",
+  "projectname": "q-ai-assistant",
+  "setting": {
+    "compileHotReLoad": true,
+    "urlCheck": false,
+    "preloadBackgroundData": false,
+    "coverView": true,
+    "autoAudits": false,
+    "showShadowRootInWxmlPanel": true,
+    "checkInvalidKey": true,
+    "lazyloadPlaceholderEnable": false,
+    "useApiHook": true,
+    "useApiHostProcess": true,
+    "useIsolateContext": false,
+    "showES6CompileOption": false
+  },
+  "compileType": "miniprogram",
+  "condition": {
+    "miniprogram": {
+      "list": [
+        {
+          "name": "课程详情页面",
+          "pathName": "pages/course-detail/index",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "个人中心",
+          "pathName": "pages/home/index",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "登录页面",
+          "pathName": "pages/login/index",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "支付页面",
+          "pathName": "pages/payment/index",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        }
+      ]
+    }
+  }
+}

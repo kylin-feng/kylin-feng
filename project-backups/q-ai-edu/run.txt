@@ -1,0 +1,151 @@
+# QAI智能助手 - 运行指南
+
+## 📋 基础命令
+
+### 初始化项目
+```bash
+taro init q-ai-assistant
+```
+
+### 开发环境运行
+```bash
+# 微信小程序开发模式
+npm run dev:weapp
+
+# H5开发模式  
+npm run dev:h5
+
+# 支付宝小程序开发模式
+npm run dev:alipay
+
+# 百度小程序开发模式
+npm run dev:swan
+
+# 字节跳动小程序开发模式
+npm run dev:tt
+
+# QQ小程序开发模式
+npm run dev:qq
+```
+
+### 生产环境构建
+```bash
+# 微信小程序生产构建
+npm run build:weapp
+
+# H5生产构建
+npm run build:h5
+
+# 支付宝小程序生产构建
+npm run build:alipay
+
+# 百度小程序生产构建
+npm run build:swan
+
+# 字节跳动小程序生产构建
+npm run build:tt
+
+# QQ小程序生产构建
+npm run build:qq
+```
+
+## 🔧 环境模式运行
+
+### 开发环境
+```bash
+npm run dev:weapp-dev
+```
+
+### 测试环境
+```bash
+npm run dev:weapp-test
+```
+
+### 体验环境
+```bash
+npm run dev:weapp-pre
+```
+
+### 生产环境
+```bash
+npm run dev:weapp-prd
+```
+
+## 🛠 工具命令
+
+### 更新Taro
+```bash
+# 更新CLI工具
+taro update self
+
+# 更新项目依赖
+taro update project
+```
+
+### 代码检查
+```bash
+# ESLint检查
+npm run lint
+
+# 自动修复代码规范问题
+npm run lint:fix
+```
+
+### 测试
+```bash
+# 运行测试
+npm test
+
+# 运行测试并生成覆盖率报告
+npm run test:coverage
+```
+
+## 📱 调试说明
+
+1. **微信开发者工具调试**
+   - 导入项目dist目录
+   - 开启调试模式
+   - 查看控制台输出
+
+2. **H5调试**
+   - 浏览器访问localhost:10086
+   - 使用开发者工具调试
+
+3. **真机调试**
+   - 使用微信开发者工具的真机调试功能
+   - 扫码在真机上预览
+
+## 🚀 部署发布
+
+### 微信小程序发布
+1. 使用微信开发者工具打开dist目录
+2. 点击右上角"上传"按钮
+3. 填写版本号和项目备注
+4. 提交审核
+
+### H5版本部署
+1. 执行 `npm run build:h5`
+2. 将dist目录部署到服务器
+3. 配置nginx或其他web服务器
+
+## ⚠️ 注意事项
+
+- 确保Node.js版本 >= 14.0
+- 微信小程序需要在微信开发者工具中运行
+- H5版本需要配置跨域和接口代理
+- 生产环境记得修改API接口地址
+
+## 🔍 常见问题
+
+**Q: 小程序无法正常运行？**
+A: 检查微信开发者工具版本，确保导入的是dist目录
+
+**Q: H5版本接口调用失败？**
+A: 检查config中的H5配置，确保代理设置正确
+
+**Q: 编译错误？**
+A: 删除node_modules和dist目录，重新安装依赖
+
+---
+
+📧 如有问题，请联系技术支持: tech@qai-assistant.com

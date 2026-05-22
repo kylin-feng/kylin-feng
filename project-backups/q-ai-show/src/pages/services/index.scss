@@ -1,0 +1,220 @@
+.services-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 40px 30px;
+
+  .header-section {
+    text-align: center;
+    margin-bottom: 40px;
+    
+    .page-title {
+      font-size: 48px;
+      font-weight: bold;
+      color: white;
+      margin-bottom: 15px;
+      display: block;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .page-subtitle {
+      font-size: 28px;
+      color: rgba(255, 255, 255, 0.9);
+      line-height: 1.6;
+    }
+  }
+
+  .services-container {
+    max-height: calc(100vh - 200px);
+  }
+
+  .services-list {
+    margin-bottom: 40px;
+  }
+
+  .service-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+
+    .service-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+
+      .service-icon {
+        font-size: 50px;
+        margin-right: 20px;
+      }
+
+      .service-info {
+        flex: 1;
+
+        .service-title {
+          font-size: 32px;
+          font-weight: bold;
+          color: #2d3748;
+          margin-bottom: 8px;
+          display: block;
+        }
+
+        .service-price {
+          font-size: 28px;
+          font-weight: 600;
+          color: #667eea;
+          display: block;
+        }
+      }
+    }
+
+    .service-description {
+      font-size: 26px;
+      color: #4a5568;
+      line-height: 1.6;
+      margin-bottom: 25px;
+      display: block;
+    }
+
+    .service-features {
+      margin-bottom: 25px;
+
+      .features-title {
+        font-size: 24px;
+        font-weight: bold;
+        color: #2d3748;
+        margin-bottom: 15px;
+        display: block;
+      }
+
+      .features-list {
+        .feature-item {
+          font-size: 24px;
+          color: #4a5568;
+          line-height: 1.8;
+          margin-bottom: 8px;
+          display: block;
+        }
+      }
+    }
+
+    .service-meta {
+      .meta-item {
+        font-size: 24px;
+        color: #718096;
+        font-weight: 500;
+      }
+    }
+  }
+
+  .advantages-section {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 40px;
+    backdrop-filter: blur(10px);
+
+    .section-title {
+      font-size: 36px;
+      font-weight: bold;
+      color: white;
+      text-align: center;
+      margin-bottom: 30px;
+      display: block;
+    }
+
+    .advantages-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+
+      .advantage-item {
+        text-align: center;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+
+        .advantage-icon {
+          font-size: 40px;
+          margin-bottom: 15px;
+          display: block;
+        }
+
+        .advantage-title {
+          font-size: 24px;
+          font-weight: bold;
+          color: white;
+          margin-bottom: 8px;
+          display: block;
+        }
+
+        .advantage-desc {
+          font-size: 20px;
+          color: rgba(255, 255, 255, 0.8);
+          line-height: 1.4;
+          display: block;
+        }
+      }
+    }
+  }
+
+  .process-section {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 30px;
+    backdrop-filter: blur(10px);
+
+    .section-title {
+      font-size: 36px;
+      font-weight: bold;
+      color: white;
+      text-align: center;
+      margin-bottom: 30px;
+      display: block;
+    }
+
+    .process-steps {
+      .process-step {
+        display: flex;
+        align-items: center;
+        margin-bottom: 25px;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+
+        .step-number {
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+          background: white;
+          color: #667eea;
+          font-size: 24px;
+          font-weight: bold;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-right: 20px;
+        }
+
+        .step-content {
+          flex: 1;
+
+          .step-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 5px;
+            display: block;
+          }
+
+          .step-desc {
+            font-size: 22px;
+            color: rgba(255, 255, 255, 0.8);
+            display: block;
+          }
+        }
+      }
+    }
+  }
+}

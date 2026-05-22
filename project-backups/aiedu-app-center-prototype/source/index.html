@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="https://assets.haoduo.vip/hd-ai-portal/pre/upload/platform-basic-info/1777280544859_f47454d1d3644127f42070181a8b9afc.jpg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="google" content="notranslate"/>
+  <title>某某区/校人工智能教育教学平台</title>
+  <script>
+    window.__env = "prod"
+    window.__logo = "https://assets.haoduo.vip/hd-ai-portal/pre/upload/platform-basic-info/1777280544859_f47454d1d3644127f42070181a8b9afc.jpg"
+    window.__title = "某某区/校人工智能教育教学平台"
+    window.tenantId = "24"
+    window.routerBase = "/";
+    window.publicPath = "//assets.haoduo.vip/assets/hd-ai-portal/p-hd-ai-portal-2026-05-15/1/"
+  </script>
+  <script>
+    (function () {
+      function normalizeBase(base) {
+        if (!base) {
+          throw new Error('[manifest-loader] window.publicPath is required');
+        }
+
+        return String(base).replace(/\/?$/, '/');
+      }
+
+      function pickEntry(manifest) {
+        var htmlEntry = manifest['index.html'];
+        if (htmlEntry) {
+          return htmlEntry;
+        }
+
+        var mainEntry = manifest['src/main.tsx'];
+        if (mainEntry) {
+          return mainEntry;
+        }
+
+        var keys = Object.keys(manifest);
+        for (var i = 0; i < keys.length; i++) {
+          var chunk = manifest[keys[i]];
+          if (chunk && chunk.isEntry) {
+            return chunk;
+          }
+        }
+
+        return null;
+      }
+
+      function walkImports(manifest, chunk, seen, visit) {
+        if (!chunk || !chunk.file || seen[chunk.file]) {
+          return;
+        }
+
+        seen[chunk.file] = true;
+        visit(chunk);
+
+        var imports = chunk.imports || [];
+        for (var i = 0; i < imports.length; i++) {
+          walkImports(manifest, manifest[imports[i]], seen, visit);
+        }
+      }
+
+      function injectModulePreload(base, files) {
+        for (var i = 0; i < files.length; i++) {
+          var href = base + files[i];
+          if (document.querySelector('link[data-manifest-preload="' + href + '"]')) {
+            continue;
+          }
+
+          var link = document.createElement('link');
+          link.rel = 'modulepreload';
+          link.crossOrigin = '';
+          link.href = href;
+          link.setAttribute('data-manifest-preload', href);
+          document.head.appendChild(link);
+        }
+      }
+
+      function injectCss(base, files) {
+        for (var i = 0; i < files.length; i++) {
+          var href = base + files[i];
+          if (document.querySelector('link[data-manifest-css="' + href + '"]')) {
+            continue;
+          }
+
+          var link = document.createElement('link');
+          link.rel = 'stylesheet';
+          link.href = href;
+          link.setAttribute('data-manifest-css', href);
+          document.head.appendChild(link);
+        }
+      }
+
+      function isEntryManifest(data) {
+        return !!(data && data.formatVersion === 1 && data.entryFile);
+      }
+
+      function applyEntryManifest(data, base) {
+        injectCss(base, data.entryCss || []);
+        injectCss(base, data.restCss || []);
+        injectModulePreload(base, data.preloadFiles || []);
+      }
+
+      function applyManifest(manifest, base) {
+        var entry = pickEntry(manifest);
+        if (!entry) {
+          return;
+        }
+
+        var entryCssFiles = entry.css || [];
+        var entryCssSet = {};
+        for (var i = 0; i < entryCssFiles.length; i++) {
+          entryCssSet[entryCssFiles[i]] = true;
+        }
+
+        injectCss(base, entryCssFiles);
+
+        var imports = entry.imports || [];
+        var preloadFiles = [];
+        var preloadSet = {};
+        var restCssFiles = [];
+        var restCssSet = {};
+        var seenImports = {};
+
+        for (var j = 0; j < imports.length; j++) {
+          walkImports(manifest, manifest[imports[j]], seenImports, function (chunk) {
+            if (chunk.file && !preloadSet[chunk.file]) {
+              preloadSet[chunk.file] = true;
+              preloadFiles.push(chunk.file);
+            }
+
+            var cssList = chunk.css || [];
+            for (var k = 0; k < cssList.length; k++) {
+              var css = cssList[k];
+              if (!entryCssSet[css] && !restCssSet[css]) {
+                restCssSet[css] = true;
+                restCssFiles.push(css);
+              }
+            }
+          });
+        }
+
+        injectCss(base, restCssFiles);
+        injectModulePreload(base, preloadFiles);
+      }
+
+      function loadWithFetch(url, done) {
+        fetch(url, { cache: 'no-cache' })
+            .then(function (res) {
+              if (!res.ok) {
+                throw new Error('manifest request failed: ' + res.status);
+              }
+
+              return res.json();
+            })
+            .then(function (manifest) {
+              done(null, manifest);
+            })
+            .catch(function (error) {
+              done(error);
+            });
+      }
+
+      function loadWithSyncXhr(url, done) {
+        try {
+          var xhr = new XMLHttpRequest();
+          xhr.open('GET', url, false);
+          xhr.send(null);
+
+          if (xhr.status >= 200 && xhr.status < 300) {
+            done(null, JSON.parse(xhr.responseText));
+          } else {
+            done(new Error('manifest request failed: ' + xhr.status));
+          }
+        } catch (error) {
+          done(error);
+        }
+      }
+
+      function init() {
+        if (!window.publicPath) {
+          return;
+        }
+
+        var env = String(window.__env || '').toLowerCase();
+        var shouldBustCache = env === 'dev' || env === 'qa';
+        var cacheSuffix = shouldBustCache ? '?t=' + new Date().valueOf() : '';
+        var base = normalizeBase(window.publicPath);
+        var entryManifestUrl = base + 'entry-manifest.json' + cacheSuffix;
+        var manifestUrl = base + 'manifest.json' + cacheSuffix;
+
+        var done = function (error, manifest) {
+          if (error) {
+            console.error('[manifest-loader]', error);
+            return;
+          }
+
+          try {
+            applyManifest(manifest, base);
+          } catch (applyError) {
+            console.error('[manifest-loader]', applyError);
+          }
+        };
+
+        if (typeof fetch === 'function') {
+          loadWithFetch(entryManifestUrl, function (entryError, entryManifest) {
+            if (!entryError && isEntryManifest(entryManifest)) {
+              applyEntryManifest(entryManifest, base);
+              return;
+            }
+
+            loadWithFetch(manifestUrl, done);
+          });
+          return;
+        }
+
+        loadWithSyncXhr(entryManifestUrl, function (entryError, entryManifest) {
+          if (!entryError && isEntryManifest(entryManifest)) {
+            applyEntryManifest(entryManifest, base);
+            return;
+          }
+
+          loadWithSyncXhr(manifestUrl, done);
+        });
+      }
+
+      init();
+    })();
+  </script>
+  <script type="module" crossorigin src="//assets.haoduo.vip/assets/hd-ai-portal/p-hd-ai-portal-2026-05-15/1/js/index.js"></script>
+  <link rel="stylesheet" crossorigin href="//assets.haoduo.vip/assets/hd-ai-portal/p-hd-ai-portal-2026-05-15/1/index-LWsfwkyU.css">
+</head>
+<body>
+<div id="root"></div>
+<script>
+  var userAgent = navigator.userAgent.toLowerCase();
+  var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("msie") > -1;
+  var isIE11 = userAgent.indexOf("trident") > -1 && userAgent.indexOf("rv") > -1;
+  var isEdge = userAgent.indexOf("edge") > -1;
+  var isChromeLess63 = userAgent.indexOf("chrome") > -1 && parseInt(userAgent.split("chrome/")[1]) < 63;
+  window.isLowerBrowser = isIE || isIE11 || isEdge || isChromeLess63
+  if (window.isLowerBrowser) {
+    var div = document.createElement("div");
+    div.style.display = "flex";
+    div.style.flexDirection = "column";
+    div.style.alignItems = "center";
+    div.style.paddingTop = "200px";
+    var img = document.createElement("img");
+    img.src = "https://assets.haoduo.vip/hd-school/browser.png";
+    img.width = "500";
+    img.height = "300";
+    var a = document.createElement("a");
+    a.innerText = "当前浏览器版本版本过低，点击跳转下载新版浏览器";
+    a.href = "https://browsehappy.com/";
+    a.target = "_blank";
+    a.style.marginBottom = "10px";
+    var div1 = document.createElement("div");
+    div1.innerText = "推荐使用Chrome浏览器, 如您使用360浏览器请切换极速版";
+    div.appendChild(img);
+    div.appendChild(a);
+    div.appendChild(div1);
+    document.body.appendChild(div);
+    document.body.removeChild(document.querySelector("#root"));
+  }
+</script>
+</body>
+</html>

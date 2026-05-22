@@ -1,0 +1,14 @@
+{
+  "app": {
+    "bundleName": "com.example.apphm",
+    "vendor": "example",
+    "versionCode": 1000000,
+    "versionName": "1.0.0",
+    "icon": "$media:layered_image",
+    "label": "$string:app_name",
+    "description": "AI小说生成器应用",
+    "minAPIVersion": 12,
+    "targetAPIVersion": 12,
+    "apiReleaseType": "Release1"
+  }
+}

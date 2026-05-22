@@ -1,0 +1,200 @@
+.showcase-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 40px 30px;
+
+  .header-section {
+    text-align: center;
+    margin-bottom: 40px;
+    
+    .page-title {
+      font-size: 48px;
+      font-weight: bold;
+      color: white;
+      margin-bottom: 15px;
+      display: block;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .page-subtitle {
+      font-size: 28px;
+      color: rgba(255, 255, 255, 0.9);
+      line-height: 1.6;
+    }
+  }
+
+  .projects-container {
+    max-height: calc(100vh - 200px);
+    margin-bottom: 30px;
+  }
+
+  .project-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+
+    .project-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+
+      .project-image {
+        width: 80px;
+        height: 80px;
+        border-radius: 15px;
+        margin-right: 20px;
+      }
+
+      .project-info {
+        flex: 1;
+
+        .project-title {
+          font-size: 32px;
+          font-weight: bold;
+          color: #2d3748;
+          margin-bottom: 10px;
+          display: block;
+        }
+
+        .project-category {
+          display: inline-block;
+          padding: 8px 16px;
+          border-radius: 20px;
+          margin-bottom: 10px;
+
+          .category-text {
+            font-size: 22px;
+            color: white;
+            font-weight: 600;
+          }
+        }
+      }
+    }
+
+    .project-description {
+      font-size: 26px;
+      color: #4a5568;
+      line-height: 1.6;
+      margin-bottom: 25px;
+      display: block;
+    }
+
+    .project-features {
+      margin-bottom: 25px;
+
+      .features-title {
+        font-size: 24px;
+        font-weight: bold;
+        color: #2d3748;
+        margin-bottom: 15px;
+        display: block;
+      }
+
+      .features-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+
+        .feature-tag {
+          background: #e6fffa;
+          color: #234e52;
+          padding: 8px 16px;
+          border-radius: 15px;
+          font-size: 22px;
+          border: 1px solid #81e6d9;
+        }
+      }
+    }
+
+    .project-tech {
+      margin-bottom: 25px;
+
+      .tech-title {
+        font-size: 24px;
+        font-weight: bold;
+        color: #2d3748;
+        margin-bottom: 15px;
+        display: block;
+      }
+
+      .tech-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+
+        .tech-tag {
+          background: #f7fafc;
+          color: #2d3748;
+          padding: 8px 16px;
+          border-radius: 15px;
+          font-size: 22px;
+          border: 1px solid #e2e8f0;
+          font-weight: 500;
+        }
+      }
+    }
+
+    .project-footer {
+      .project-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .meta-item {
+          font-size: 24px;
+          color: #718096;
+
+          &.status {
+            font-weight: 600;
+          }
+        }
+      }
+    }
+  }
+
+  .cta-section {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 40px 30px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+
+    .cta-title {
+      font-size: 36px;
+      font-weight: bold;
+      color: white;
+      margin-bottom: 15px;
+      display: block;
+    }
+
+    .cta-desc {
+      font-size: 26px;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 30px;
+      display: block;
+    }
+
+    .cta-button {
+      background: rgba(255, 255, 255, 0.2);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 25px;
+      padding: 20px 40px;
+      display: inline-block;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateY(-2px);
+      }
+
+      .cta-button-text {
+        font-size: 28px;
+        font-weight: 600;
+        color: white;
+      }
+    }
+  }
+}

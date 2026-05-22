@@ -1,0 +1,12 @@
+{
+  "name": "app-hm",
+  "version": "1.0.0",
+  "description": "这是一个基于华为鸿蒙系统开发的AI小说生成应用，使用最新的ArkTS语言和ArkUI框架构建。",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

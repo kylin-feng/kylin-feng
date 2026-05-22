@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartMeet AI - 手动启动指南</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .code-block {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 16px;
+      font-family: 'Monaco', 'Menlo', monospace;
+      color: #e2e8f0;
+      overflow-x: auto;
+    }
+    .status-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 8px;
+    }
+    .status-green { background-color: #10b981; }
+    .status-red { background-color: #ef4444; }
+    .status-yellow { background-color: #f59e0b; }
+  </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+  <div class="container mx-auto px-6 py-8">
+    <div class="text-center mb-8">
+      <h1 class="text-4xl font-bold mb-4 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+        🚀 SmartMeet AI 手动启动指南
+      </h1>
+      <p class="text-gray-300">由于bash环境问题，请手动启动服务</p>
+    </div>
+
+    <!-- 状态检查 -->
+    <div class="bg-gray-800 rounded-lg p-6 mb-6">
+      <h2 class="text-xl font-semibold mb-4">📊 服务状态检查</h2>
+      <div class="space-y-3">
+        <div class="flex items-center">
+          <span id="backend-dot" class="status-dot status-yellow"></span>
+          <span>后端服务 (http://localhost:5001)</span>
+          <button onclick="checkBackend()" class="ml-4 bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-sm">检查</button>
+        </div>
+        <div class="flex items-center">
+          <span id="frontend-dot" class="status-dot status-yellow"></span>
+          <span>前端服务 (http://localhost:3000)</span>
+          <button onclick="checkFrontend()" class="ml-4 bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-sm">检查</button>
+        </div>
+      </div>
+      <div id="status-message" class="mt-4 p-3 bg-gray-700 rounded text-sm"></div>
+    </div>
+
+    <!-- 启动说明 -->
+    <div class="grid md:grid-cols-2 gap-6">
+      <!-- 后端启动 -->
+      <div class="bg-gray-800 rounded-lg p-6">
+        <h3 class="text-lg font-semibold mb-4">🔧 步骤1: 启动后端服务</h3>
+        <p class="text-gray-300 mb-4">打开新的终端窗口，运行以下命令：</p>
+        <div class="code-block">
+cd /Users/shixianping/smart-meet/backend<br>
+npm install<br>
+npm run dev
+        </div>
+        <p class="text-sm text-gray-400 mt-2">成功后会看到 "SmartMeet AI API 启动成功!" 消息</p>
+      </div>
+
+      <!-- 前端启动 -->
+      <div class="bg-gray-800 rounded-lg p-6">
+        <h3 class="text-lg font-semibold mb-4">🎨 步骤2: 启动前端服务</h3>
+        <p class="text-gray-300 mb-4">打开另一个终端窗口，运行以下命令：</p>
+        <div class="code-block">
+cd /Users/shixianping/smart-meet/frontend<br>
+npm install<br>
+npm run dev
+        </div>
+        <p class="text-sm text-gray-400 mt-2">成功后会看到 "Local: http://localhost:3000/" 消息</p>
+      </div>
+    </div>
+
+    <!-- 快速链接 -->
+    <div class="bg-gray-800 rounded-lg p-6 mt-6">
+      <h3 class="text-lg font-semibold mb-4">🔗 快速访问</h3>
+      <div class="flex flex-wrap gap-4">
+        <a href="http://localhost:3000" target="_blank" 
+           class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded transition-colors">
+          📱 前端应用
+        </a>
+        <a href="http://localhost:5001/api/health" target="_blank"
+           class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded transition-colors">
+          🔧 API健康检查
+        </a>
+        <a href="http://localhost:5001/api/info" target="_blank"
+           class="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded transition-colors">
+          📖 API信息
+        </a>
+      </div>
+    </div>
+
+    <!-- 故障排除 -->
+    <div class="bg-gray-800 rounded-lg p-6 mt-6">
+      <h3 class="text-lg font-semibold mb-4">🛠 常见问题解决</h3>
+      <div class="space-y-4">
+        <div>
+          <h4 class="font-medium text-yellow-400">端口被占用</h4>
+          <div class="code-block text-sm mt-2">
+lsof -ti:3000 | xargs kill -9<br>
+lsof -ti:5001 | xargs kill -9
+          </div>
+        </div>
+        <div>
+          <h4 class="font-medium text-yellow-400">依赖问题</h4>
+          <div class="code-block text-sm mt-2">
+cd /Users/shixianping/smart-meet/frontend<br>
+rm -rf node_modules package-lock.json<br>
+npm install
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const updateStatus = (element, status, message) => {
+      const dot = document.getElementById(element);
+      const messageDiv = document.getElementById('status-message');
+      
+      dot.className = `status-dot status-${status}`;
+      messageDiv.innerHTML = `<strong>${new Date().toLocaleTimeString()}</strong> - ${message}`;
+    };
+
+    const checkBackend = async () => {
+      try {
+        const response = await fetch('http://localhost:5001/api/health');
+        if (response.ok) {
+          const data = await response.json();
+          updateStatus('backend-dot', 'green', '✅ 后端服务运行正常');
+          return true;
+        } else {
+          updateStatus('backend-dot', 'red', '❌ 后端服务响应异常');
+          return false;
+        }
+      } catch (error) {
+        updateStatus('backend-dot', 'red', '❌ 无法连接后端服务，请确保已启动');
+        return false;
+      }
+    };
+
+    const checkFrontend = async () => {
+      try {
+        const response = await fetch('http://localhost:3000');
+        if (response.ok) {
+          updateStatus('frontend-dot', 'green', '✅ 前端服务运行正常');
+          return true;
+        } else {
+          updateStatus('frontend-dot', 'red', '❌ 前端服务响应异常');
+          return false;
+        }
+      } catch (error) {
+        updateStatus('frontend-dot', 'red', '❌ 无法连接前端服务，请确保已启动');
+        return false;
+      }
+    };
+
+    // 自动检查状态
+    setTimeout(async () => {
+      updateStatus('backend-dot', 'yellow', '正在检查服务状态...');
+      const backendOk = await checkBackend();
+      if (backendOk) {
+        setTimeout(checkFrontend, 1000);
+      }
+    }, 1000);
+
+    // 定期检查
+    setInterval(async () => {
+      await checkBackend();
+      await checkFrontend();
+    }, 10000);
+  </script>
+</body>
+</html>

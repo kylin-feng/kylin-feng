@@ -1,0 +1,311 @@
+/* shadcn/ui Design System for Taro */
+
+:root {
+  /* Color System */
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+  --primary: 222.2 47.4% 11.2%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 210 40% 96%;
+  --secondary-foreground: 222.2 84% 4.9%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+  --accent: 210 40% 96%;
+  --accent-foreground: 222.2 84% 4.9%;
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 222.2 84% 4.9%;
+
+  /* Spacing System */
+  --radius: 12rpx;
+  --spacing-xs: 8rpx;
+  --spacing-sm: 16rpx;
+  --spacing-md: 24rpx;
+  --spacing-lg: 32rpx;
+  --spacing-xl: 48rpx;
+  --spacing-2xl: 64rpx;
+
+  /* Typography */
+  --font-size-xs: 24rpx;
+  --font-size-sm: 28rpx;
+  --font-size-base: 32rpx;
+  --font-size-lg: 36rpx;
+  --font-size-xl: 40rpx;
+  --font-size-2xl: 48rpx;
+  --font-size-3xl: 60rpx;
+  --font-size-4xl: 72rpx;
+
+  /* Layout */
+  --container-padding: 32rpx;
+  --max-width: 750rpx;
+
+  /* Animation */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+}
+
+/* Base Styles */
+page {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.5;
+}
+
+/* Utility Classes */
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+}
+
+.card {
+  background-color: hsl(var(--card));
+  color: hsl(var(--card-foreground));
+  border-radius: var(--radius);
+  border: 1rpx solid hsl(var(--border));
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.06);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  transition: all var(--transition-fast);
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+
+  &-primary {
+    background-color: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+
+  &-secondary {
+    background-color: hsl(var(--secondary));
+    color: hsl(var(--secondary-foreground));
+    border: 1rpx solid hsl(var(--border));
+    
+    &:hover {
+      background-color: hsl(var(--accent));
+    }
+  }
+
+  &-sm {
+    padding: 16rpx 24rpx;
+    height: 72rpx;
+  }
+
+  &-md {
+    padding: 20rpx 32rpx;
+    height: 88rpx;
+  }
+
+  &-lg {
+    padding: 24rpx 48rpx;
+    height: 104rpx;
+  }
+}
+
+/* Geometric Shapes */
+.shape-circle {
+  border-radius: 50%;
+}
+
+.shape-rounded {
+  border-radius: var(--radius);
+}
+
+.shape-rounded-lg {
+  border-radius: calc(var(--radius) * 2);
+}
+
+/* Pure Color Blocks */
+.bg-primary {
+  background-color: hsl(var(--primary));
+}
+
+.bg-secondary {
+  background-color: hsl(var(--secondary));
+}
+
+.bg-muted {
+  background-color: hsl(var(--muted));
+}
+
+.bg-accent {
+  background-color: hsl(var(--accent));
+}
+
+/* Text Utilities */
+.text-primary {
+  color: hsl(var(--primary));
+}
+
+.text-muted {
+  color: hsl(var(--muted-foreground));
+}
+
+.text-center {
+  text-align: center;
+}
+
+.font-light {
+  font-weight: 300;
+}
+
+.font-normal {
+  font-weight: 400;
+}
+
+.font-medium {
+  font-weight: 500;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+/* Layout Utilities */
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.gap-xs {
+  gap: var(--spacing-xs);
+}
+
+.gap-sm {
+  gap: var(--spacing-sm);
+}
+
+.gap-md {
+  gap: var(--spacing-md);
+}
+
+.gap-lg {
+  gap: var(--spacing-lg);
+}
+
+/* Spacing */
+.p-xs { padding: var(--spacing-xs); }
+.p-sm { padding: var(--spacing-sm); }
+.p-md { padding: var(--spacing-md); }
+.p-lg { padding: var(--spacing-lg); }
+.p-xl { padding: var(--spacing-xl); }
+
+.m-xs { margin: var(--spacing-xs); }
+.m-sm { margin: var(--spacing-sm); }
+.m-md { margin: var(--spacing-md); }
+.m-lg { margin: var(--spacing-lg); }
+.m-xl { margin: var(--spacing-xl); }
+
+.mt-xs { margin-top: var(--spacing-xs); }
+.mt-sm { margin-top: var(--spacing-sm); }
+.mt-md { margin-top: var(--spacing-md); }
+.mt-lg { margin-top: var(--spacing-lg); }
+.mt-xl { margin-top: var(--spacing-xl); }
+
+.mb-xs { margin-bottom: var(--spacing-xs); }
+.mb-sm { margin-bottom: var(--spacing-sm); }
+.mb-md { margin-bottom: var(--spacing-md); }
+.mb-lg { margin-bottom: var(--spacing-lg); }
+.mb-xl { margin-bottom: var(--spacing-xl); }
+
+/* Animation Classes */
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.5s ease-out forwards;
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+.animate-slide-up {
+  animation: slideUp 0.4s ease-out forwards;
+  opacity: 0;
+  transform: translateY(40rpx);
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Interaction States */
+.hover-lift {
+  transition: transform var(--transition-normal);
+  
+  &:hover {
+    transform: translateY(-4rpx);
+  }
+}
+
+.hover-scale {
+  transition: transform var(--transition-fast);
+  
+  &:hover {
+    transform: scale(1.02);
+  }
+}
+
+/* Minimalist List */
+.minimal-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  
+  .list-item {
+    padding: var(--spacing-md) 0;
+    border-bottom: 1rpx solid hsl(var(--border));
+    
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}

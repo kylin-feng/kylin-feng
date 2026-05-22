@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI实验室</title>
+    <!-- shadcn/ui CSS via CDN -->
+    <link rel="stylesheet" href="https://ui.shadcn.com/themes/default.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: ["class"],
+            content: ["./index.html"],
+            theme: {
+                container: {
+                    center: true,
+                    padding: "2rem",
+                    screens: {
+                        "2xl": "1400px",
+                    },
+                },
+                extend: {
+                    colors: {
+                        border: "hsl(var(--border))",
+                        input: "hsl(var(--input))",
+                        ring: "hsl(var(--ring))",
+                        background: "hsl(var(--background))",
+                        foreground: "hsl(var(--foreground))",
+                        primary: {
+                            DEFAULT: "hsl(var(--primary))",
+                            foreground: "hsl(var(--primary-foreground))",
+                        },
+                        secondary: {
+                            DEFAULT: "hsl(var(--secondary))",
+                            foreground: "hsl(var(--secondary-foreground))",
+                        },
+                        muted: {
+                            DEFAULT: "hsl(var(--muted))",
+                            foreground: "hsl(var(--muted-foreground))",
+                        },
+                        accent: {
+                            DEFAULT: "hsl(var(--accent))",
+                            foreground: "hsl(var(--accent-foreground))",
+                        },
+                        card: {
+                            DEFAULT: "hsl(var(--card))",
+                            foreground: "hsl(var(--card-foreground))",
+                        },
+                    },
+                    borderRadius: {
+                        lg: "var(--radius)",
+                        md: "calc(var(--radius) - 2px)",
+                        sm: "calc(var(--radius) - 4px)",
+                    },
+                    keyframes: {
+                        "fade-in": {
+                            from: { opacity: 0, transform: "translateY(20px)" },
+                            to: { opacity: 1, transform: "translateY(0)" },
+                        },
+                        "pulse-subtle": {
+                            "0%, 100%": { opacity: 1 },
+                            "50%": { opacity: 0.8 },
+                        },
+                    },
+                    animation: {
+                        "fade-in": "fade-in 0.6s ease-out forwards",
+                        "pulse-subtle": "pulse-subtle 2s ease-in-out infinite",
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        :root {
+            --background: 0 0% 100%;
+            --foreground: 222.2 84% 4.9%;
+            --card: 0 0% 100%;
+            --card-foreground: 222.2 84% 4.9%;
+            --primary: 222.2 47.4% 11.2%;
+            --primary-foreground: 210 40% 98%;
+            --secondary: 210 40% 96%;
+            --secondary-foreground: 222.2 84% 4.9%;
+            --muted: 210 40% 96%;
+            --muted-foreground: 215.4 16.3% 46.9%;
+            --accent: 210 40% 96%;
+            --accent-foreground: 222.2 84% 4.9%;
+            --border: 214.3 31.8% 91.4%;
+            --input: 214.3 31.8% 91.4%;
+            --ring: 222.2 84% 4.9%;
+            --radius: 0.5rem;
+        }
+
+        body {
+            background-color: hsl(var(--background));
+            color: hsl(var(--foreground));
+        }
+
+        .animate-delay-100 { animation-delay: 0.1s; }
+        .animate-delay-200 { animation-delay: 0.2s; }
+        .animate-delay-300 { animation-delay: 0.3s; }
+        .animate-delay-400 { animation-delay: 0.4s; }
+        .animate-delay-500 { animation-delay: 0.5s; }
+        .animate-delay-600 { animation-delay: 0.6s; }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .status-online { background-color: #22c55e; }
+        .status-busy { background-color: #f59e0b; }
+        .status-idle { background-color: #94a3b8; }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="min-h-screen bg-background font-sans antialiased">
+    <!-- Hero Section -->
+    <section class="container space-y-6 pb-8 pt-6 md:pb-12 md:pt-10 lg:py-32">
+        <div class="mx-auto flex max-w-[980px] flex-col items-center gap-2 text-center">
+            <h1 class="text-3xl font-light leading-tight tracking-tighter md:text-4xl lg:text-5xl">
+                Q.AI Lab
+            </h1>
+        </div>
+    </section>
+
+    <!-- Labs Section -->
+    <section class="container space-y-6 pb-16">
+        <div class="mx-auto grid max-w-6xl gap-6 md:grid-cols-2">
+            
+            <!-- Multi-Agent Lab -->
+            <div class="opacity-0 animate-fade-in animate-delay-100">
+                <a href="multi-agent.html" class="block">
+                    <div class="rounded-lg border bg-card p-6 text-card-foreground shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                                <div class="w-4 h-4 rounded-full bg-primary"></div>
+                            </div>
+                            <h3 class="text-lg font-medium">Multi-Agent</h3>
+                        </div>
+                        <p class="text-muted-foreground text-sm mb-4">Collaborative intelligent systems</p>
+                        <div class="flex items-center gap-2">
+                            <div class="status-indicator status-online animate-pulse-subtle"></div>
+                            <span class="text-xs text-muted-foreground">4 agents active</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Context Management Lab -->
+            <div class="opacity-0 animate-fade-in animate-delay-200">
+                <a href="context.html" class="block">
+                    <div class="rounded-lg border bg-card p-6 text-card-foreground shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-full bg-secondary/50 flex items-center justify-center">
+                                <div class="w-4 h-4 rounded-sm bg-foreground/60"></div>
+                            </div>
+                            <h3 class="text-lg font-medium">Context Management</h3>
+                        </div>
+                        <p class="text-muted-foreground text-sm mb-4">Long-form text processing & retrieval</p>
+                        <div class="flex items-center gap-2">
+                            <div class="status-indicator status-busy"></div>
+                            <span class="text-xs text-muted-foreground">Processing 12.5K tokens</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Workflow Lab -->
+            <div class="opacity-0 animate-fade-in animate-delay-300">
+                <a href="workflow.html" class="block">
+                    <div class="rounded-lg border bg-card p-6 text-card-foreground shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
+                                <div class="w-3 h-3 rounded bg-foreground/40"></div>
+                            </div>
+                            <h3 class="text-lg font-medium">Workflow</h3>
+                        </div>
+                        <p class="text-muted-foreground text-sm mb-4">Automated task orchestration</p>
+                        <div class="flex items-center gap-2">
+                            <div class="status-indicator status-online"></div>
+                            <span class="text-xs text-muted-foreground">3 flows running</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Memory Control Lab -->
+            <div class="opacity-0 animate-fade-in animate-delay-400">
+                <a href="memory.html" class="block">
+                    <div class="rounded-lg border bg-card p-6 text-card-foreground shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-full bg-accent flex items-center justify-center">
+                                <div class="w-2 h-2 rounded-full bg-accent-foreground/60"></div>
+                            </div>
+                            <h3 class="text-lg font-medium">Memory Control</h3>
+                        </div>
+                        <p class="text-muted-foreground text-sm mb-4">Intelligent knowledge compression</p>
+                        <div class="flex items-center gap-2">
+                            <div class="status-indicator status-idle"></div>
+                            <span class="text-xs text-muted-foreground">Compression 85%</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Lab Detail Section -->
+    <section class="container pb-16">
+        <div class="mx-auto max-w-4xl">
+            
+
+            <!-- Context Management Detail -->
+            <div id="context" class="lab-detail hidden opacity-0 animate-fade-in">
+                <div class="rounded-lg border bg-card p-8 text-card-foreground shadow-sm">
+                    <h3 class="text-xl font-medium mb-6">Context Management Research</h3>
+                    
+                    <div class="space-y-4 mb-6">
+                        <div class="p-4 rounded-lg border-l-4 border-l-blue-400 bg-muted/30">
+                            <div class="font-medium mb-2">Key Papers & Literature</div>
+                            <div class="space-y-2 text-sm text-muted-foreground">
+                                <div>• "Attention Is All You Need" - Transformer Architecture</div>
+                                <div>• "LongT5: Efficient Text-To-Text Transformer" - Long Context</div>
+                                <div>• "BigBird: Transformers for Longer Sequences" - Sparse Attention</div>
+                            </div>
+                        </div>
+                        
+                        <div class="p-4 rounded-lg border-l-4 border-l-green-400 bg-muted/30">
+                            <div class="font-medium mb-2">Implementation & Code</div>
+                            <div class="space-y-2 text-sm text-muted-foreground">
+                                <div>• <a href="#" class="underline hover:text-foreground">github.com/context-manager</a> - Core Implementation</div>
+                                <div>• <a href="#" class="underline hover:text-foreground">huggingface.co/models</a> - Pre-trained Models</div>
+                                <div>• <a href="#" class="underline hover:text-foreground">papers-with-code.com</a> - Benchmarks</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center space-x-3">
+                        <button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-6">
+                            View Papers
+                        </button>
+                        <button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-6">
+                            GitHub Repo
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Workflow Detail -->
+            <div id="workflow" class="lab-detail hidden opacity-0 animate-fade-in">
+                <div class="rounded-lg border bg-card p-8 text-card-foreground shadow-sm">
+                    <h3 class="text-xl font-medium mb-6">Workflow Research & Development</h3>
+                    
+                    <div class="space-y-4 mb-6">
+                        <div class="p-4 rounded-lg border-l-4 border-l-orange-400 bg-muted/30">
+                            <div class="font-medium mb-2">Academic Research</div>
+                            <div class="space-y-2 text-sm text-muted-foreground">
+                                <div>• "Workflow Management: Models, Methods, and Systems"</div>
+                                <div>• "Business Process Management" - Workflow Patterns</div>
+                                <div>• "Apache Airflow" - Modern Workflow Systems</div>
+                            </div>
+                        </div>
+                        
+                        <div class="p-4 rounded-lg border-l-4 border-l-purple-400 bg-muted/30">
+                            <div class="font-medium mb-2">Open Source Projects</div>
+                            <div class="space-y-2 text-sm text-muted-foreground">
+                                <div>• <a href="#" class="underline hover:text-foreground">github.com/apache/airflow</a> - Workflow Engine</div>
+                                <div>• <a href="#" class="underline hover:text-foreground">github.com/netflix/conductor</a> - Orchestration</div>
+                                <div>• <a href="#" class="underline hover:text-foreground">github.com/temporal</a> - Temporal Workflows</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center space-x-3">
+                        <button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-6">
+                            Research Papers
+                        </button>
+                        <button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-6">
+                            Source Code
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Memory Control Detail -->
+            <div id="memory" class="lab-detail hidden opacity-0 animate-fade-in">
+                <div class="rounded-lg border bg-card p-8 text-card-foreground shadow-sm">
+                    <h3 class="text-xl font-medium mb-6">Memory Control Research</h3>
+                    
+                    <div class="space-y-4 mb-6">
+                        <div class="p-4 rounded-lg border-l-4 border-l-pink-400 bg-muted/30">
+                            <div class="font-medium mb-2">Memory Systems Literature</div>
+                            <div class="space-y-2 text-sm text-muted-foreground">
+                                <div>• "Neural Turing Machines" - External Memory</div>
+                                <div>• "Memory Networks" - Persistent Memory</div>
+                                <div>• "Transformer-XL" - Recurrent Memory</div>
+                            </div>
+                        </div>
+                        
+                        <div class="p-4 rounded-lg border-l-4 border-l-cyan-400 bg-muted/30">
+                            <div class="font-medium mb-2">Implementation Resources</div>
+                            <div class="space-y-2 text-sm text-muted-foreground">
+                                <div>• <a href="#" class="underline hover:text-foreground">github.com/deepmind/dnc</a> - Neural Computer</div>
+                                <div>• <a href="#" class="underline hover:text-foreground">github.com/facebookresearch</a> - Memory Models</div>
+                                <div>• <a href="#" class="underline hover:text-foreground">memory-compression.org</a> - Techniques</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center space-x-3">
+                        <button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-6">
+                            Literature Review
+                        </button>
+                        <button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-6">
+                            Implementations
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <script>
+        let currentLab = null;
+
+        function showLab(labId) {
+            // 隐藏当前实验室
+            if (currentLab) {
+                document.getElementById(currentLab).classList.add('hidden');
+            }
+            
+            // 显示新实验室
+            const labElement = document.getElementById(labId);
+            labElement.classList.remove('hidden');
+            labElement.classList.remove('opacity-0');
+            
+            currentLab = labId;
+        }
+
+        // 页面加载动画
+        document.addEventListener('DOMContentLoaded', function() {
+            const fadeElements = document.querySelectorAll('.animate-fade-in');
+            fadeElements.forEach(element => {
+                element.classList.remove('opacity-0');
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+{
+  "name": "ai-writer-ets",
+  "version": "1.0.0",
+  "description": "AI小说生成器鸿蒙应用 - ETS模块",
+  "main": "./entryability/EntryAbility.ets",
+  "author": "",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {}
+}

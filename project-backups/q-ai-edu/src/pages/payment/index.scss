@@ -1,0 +1,460 @@
+.payment-page {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+  padding-bottom: 150px;
+
+  .loading,
+  .error {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-size: 28px;
+    color: #666;
+    gap: 20px;
+  }
+
+  // 订单信息区域
+  .order-section {
+    background: white;
+    margin: 20px 30px;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+
+    .section-title {
+      font-size: 28px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 25px;
+      border-left: 4px solid #667eea;
+      padding-left: 20px;
+    }
+
+    .order-card {
+      display: flex;
+      background: #f8f9fa;
+      border-radius: 15px;
+      padding: 25px;
+      margin-bottom: 25px;
+
+      .course-cover {
+        width: 120px;
+        height: 90px;
+        border-radius: 10px;
+        margin-right: 20px;
+        flex-shrink: 0;
+        background: #e9ecef;
+      }
+
+      .course-info {
+        flex: 1;
+
+        .course-title {
+          font-size: 24px;
+          font-weight: 600;
+          color: #333;
+          margin-bottom: 15px;
+          line-height: 1.4;
+        }
+
+        .price-info {
+          display: flex;
+          align-items: center;
+          gap: 15px;
+
+          .current-price {
+            font-size: 32px;
+            font-weight: 700;
+            color: #667eea;
+          }
+
+          .original-price {
+            font-size: 22px;
+            color: #999;
+            text-decoration: line-through;
+          }
+
+          .discount-badge {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+          }
+        }
+      }
+    }
+
+    .order-details {
+      .detail-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 0;
+        border-bottom: 1px solid #f0f0f0;
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        &.total {
+          border-top: 2px solid #f0f0f0;
+          padding-top: 20px;
+          margin-top: 10px;
+
+          .label {
+            font-size: 26px;
+            font-weight: 600;
+          }
+
+          .value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #667eea;
+          }
+        }
+
+        .label {
+          font-size: 22px;
+          color: #666;
+        }
+
+        .value {
+          font-size: 22px;
+          color: #333;
+          font-weight: 500;
+
+          &.discount {
+            color: #ff6b6b;
+            font-weight: 600;
+          }
+        }
+      }
+    }
+  }
+
+  // 支付方式区域
+  .payment-section {
+    background: white;
+    margin: 20px 30px;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+
+    .section-title {
+      font-size: 28px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 25px;
+      border-left: 4px solid #667eea;
+      padding-left: 20px;
+    }
+
+    .payment-methods {
+      .payment-method {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px;
+        margin-bottom: 15px;
+        background: #f8f9fa;
+        border-radius: 15px;
+        border: 2px solid transparent;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        &.active {
+          border-color: #667eea;
+          background: rgba(102, 126, 234, 0.05);
+        }
+
+        .method-info {
+          display: flex;
+          align-items: center;
+
+          .method-icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 15px;
+          }
+
+          .method-name {
+            font-size: 24px;
+            font-weight: 500;
+            color: #333;
+          }
+        }
+
+        .radio {
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          border: 2px solid #ddd;
+          position: relative;
+          transition: all 0.3s ease;
+
+          &.checked {
+            border-color: #667eea;
+
+            &::after {
+              content: '';
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%);
+              width: 10px;
+              height: 10px;
+              border-radius: 50%;
+              background: #667eea;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // 优惠信息
+  .discount-section {
+    margin: 20px 30px;
+
+    .discount-info {
+      background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(238, 90, 36, 0.1));
+      border: 2px solid #ff6b6b;
+      border-radius: 15px;
+      padding: 20px;
+      text-align: center;
+
+      .discount-title {
+        font-size: 24px;
+        font-weight: 600;
+        color: #ff6b6b;
+        margin-bottom: 8px;
+        display: block;
+      }
+
+      .discount-desc {
+        font-size: 20px;
+        color: #666;
+        display: block;
+      }
+    }
+  }
+
+  // 支付协议
+  .agreement-section {
+    margin: 20px 30px;
+    text-align: center;
+
+    .agreement-text {
+      font-size: 20px;
+      color: #999;
+      line-height: 1.6;
+
+      .link {
+        color: #667eea;
+        text-decoration: underline;
+      }
+    }
+  }
+
+  // 底部支付栏
+  .payment-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    padding: 25px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+
+    .price-summary {
+      .total-label {
+        font-size: 20px;
+        color: #666;
+        display: block;
+        margin-bottom: 5px;
+      }
+
+      .total-price {
+        font-size: 36px;
+        font-weight: 700;
+        color: #667eea;
+        display: block;
+      }
+    }
+
+    .payment-actions {
+      display: flex;
+      gap: 20px;
+
+      .cancel-btn {
+        background: #f8f9fa;
+        color: #666;
+        border: 2px solid #ddd;
+        border-radius: 12px;
+        padding: 15px 25px;
+        font-size: 22px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+
+        &:hover {
+          background: #e9ecef;
+          border-color: #999;
+        }
+      }
+
+      .pay-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        padding: 15px 40px;
+        font-size: 22px;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        transition: all 0.3s ease;
+
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        &:disabled {
+          opacity: 0.6;
+          transform: none;
+          box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+      }
+    }
+  }
+}
+
+// 响应式设计
+@media (max-width: 768px) {
+  .payment-page {
+    .order-section,
+    .payment-section {
+      margin: 15px 20px;
+      padding: 25px 20px;
+
+      .section-title {
+        font-size: 26px;
+      }
+    }
+
+    .order-section {
+      .order-card {
+        flex-direction: column;
+        padding: 20px;
+
+        .course-cover {
+          width: 100%;
+          height: 150px;
+          margin-right: 0;
+          margin-bottom: 15px;
+        }
+
+        .course-info {
+          .course-title {
+            font-size: 22px;
+          }
+
+          .price-info {
+            .current-price {
+              font-size: 28px;
+            }
+
+            .original-price {
+              font-size: 20px;
+            }
+          }
+        }
+      }
+
+      .order-details .detail-item {
+        &.total {
+          .label {
+            font-size: 24px;
+          }
+
+          .value {
+            font-size: 28px;
+          }
+        }
+
+        .label,
+        .value {
+          font-size: 20px;
+        }
+      }
+    }
+
+    .payment-section .payment-methods .payment-method {
+      .method-info .method-name {
+        font-size: 22px;
+      }
+    }
+
+    .discount-section {
+      margin: 15px 20px;
+
+      .discount-info {
+        padding: 18px;
+
+        .discount-title {
+          font-size: 22px;
+        }
+
+        .discount-desc {
+          font-size: 18px;
+        }
+      }
+    }
+
+    .agreement-section {
+      margin: 15px 20px;
+
+      .agreement-text {
+        font-size: 18px;
+      }
+    }
+
+    .payment-bar {
+      padding: 20px;
+      flex-direction: column;
+      gap: 20px;
+
+      .price-summary {
+        text-align: center;
+
+        .total-price {
+          font-size: 32px;
+        }
+      }
+
+      .payment-actions {
+        width: 100%;
+        flex-direction: column;
+        gap: 15px;
+
+        .cancel-btn,
+        .pay-btn {
+          width: 100%;
+          padding: 15px;
+          font-size: 20px;
+        }
+      }
+    }
+  }
+} 

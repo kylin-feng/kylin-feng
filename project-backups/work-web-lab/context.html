@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Context Management Research - AI Lab</title>
+    <!-- shadcn/ui CSS via CDN -->
+    <link rel="stylesheet" href="https://ui.shadcn.com/themes/default.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: ["class"],
+            content: ["./context.html"],
+            theme: {
+                container: {
+                    center: true,
+                    padding: "2rem",
+                    screens: {
+                        "2xl": "1400px",
+                    },
+                },
+                extend: {
+                    colors: {
+                        border: "hsl(var(--border))",
+                        input: "hsl(var(--input))",
+                        ring: "hsl(var(--ring))",
+                        background: "hsl(var(--background))",
+                        foreground: "hsl(var(--foreground))",
+                        primary: {
+                            DEFAULT: "hsl(var(--primary))",
+                            foreground: "hsl(var(--primary-foreground))",
+                        },
+                        secondary: {
+                            DEFAULT: "hsl(var(--secondary))",
+                            foreground: "hsl(var(--secondary-foreground))",
+                        },
+                        muted: {
+                            DEFAULT: "hsl(var(--muted))",
+                            foreground: "hsl(var(--muted-foreground))",
+                        },
+                        accent: {
+                            DEFAULT: "hsl(var(--accent))",
+                            foreground: "hsl(var(--accent-foreground))",
+                        },
+                        card: {
+                            DEFAULT: "hsl(var(--card))",
+                            foreground: "hsl(var(--card-foreground))",
+                        },
+                    },
+                    borderRadius: {
+                        lg: "var(--radius)",
+                        md: "calc(var(--radius) - 2px)",
+                        sm: "calc(var(--radius) - 4px)",
+                    },
+                    keyframes: {
+                        "fade-in": {
+                            from: { opacity: 0, transform: "translateY(20px)" },
+                            to: { opacity: 1, transform: "translateY(0)" },
+                        },
+                    },
+                    animation: {
+                        "fade-in": "fade-in 0.6s ease-out forwards",
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        :root {
+            --background: 0 0% 100%;
+            --foreground: 222.2 84% 4.9%;
+            --card: 0 0% 100%;
+            --card-foreground: 222.2 84% 4.9%;
+            --primary: 222.2 47.4% 11.2%;
+            --primary-foreground: 210 40% 98%;
+            --secondary: 210 40% 96%;
+            --secondary-foreground: 222.2 84% 4.9%;
+            --muted: 210 40% 96%;
+            --muted-foreground: 215.4 16.3% 46.9%;
+            --accent: 210 40% 96%;
+            --accent-foreground: 222.2 84% 4.9%;
+            --border: 214.3 31.8% 91.4%;
+            --input: 214.3 31.8% 91.4%;
+            --ring: 222.2 84% 4.9%;
+            --radius: 0.5rem;
+        }
+
+        body {
+            background-color: hsl(var(--background));
+            color: hsl(var(--foreground));
+        }
+
+        .animate-delay-100 { animation-delay: 0.1s; }
+        .animate-delay-200 { animation-delay: 0.2s; }
+        .animate-delay-300 { animation-delay: 0.3s; }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="min-h-screen bg-background font-sans antialiased">
+    <!-- Navigation -->
+    <nav class="border-b">
+        <div class="container flex h-14 items-center">
+            <a href="index.html" class="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                ← Back to Lab
+            </a>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <section class="container space-y-6 pb-8 pt-6 md:pb-12 md:pt-10">
+        <div class="mx-auto flex max-w-[980px] flex-col gap-2">
+            <div class="opacity-0 animate-fade-in">
+                <h1 class="text-3xl font-light leading-tight tracking-tighter md:text-4xl lg:text-5xl mb-4">
+                    Context Management Research
+                </h1>
+                <p class="text-muted-foreground text-lg">
+                    Long-form text processing, retrieval & memory systems
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Research Content -->
+    <section class="container space-y-6 pb-16">
+        <div class="mx-auto max-w-4xl space-y-6">
+            
+            <!-- Key Papers -->
+            <div class="opacity-0 animate-fade-in animate-delay-100">
+                <div class="rounded-lg border bg-card p-8 text-card-foreground shadow-sm">
+                    <h3 class="text-xl font-medium mb-6">Key Papers & Literature</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="p-4 rounded-lg bg-muted/30">
+                            <h4 class="font-medium mb-2">"Attention Is All You Need"</h4>
+                            <p class="text-sm text-muted-foreground mb-2">Vaswani, A., et al. (2017)</p>
+                            <p class="text-sm text-muted-foreground">Foundation of Transformer architecture and self-attention mechanisms</p>
+                        </div>
+                        
+                        <div class="p-4 rounded-lg bg-muted/30">
+                            <h4 class="font-medium mb-2">"LongT5: Efficient Text-To-Text Transformer for Long Sequences"</h4>
+                            <p class="text-sm text-muted-foreground mb-2">Guo, M., et al. (2022)</p>
+                            <p class="text-sm text-muted-foreground">Scaling Transformers to handle longer input sequences efficiently</p>
+                        </div>
+                        
+                        <div class="p-4 rounded-lg bg-muted/30">
+                            <h4 class="font-medium mb-2">"BigBird: Transformers for Longer Sequences"</h4>
+                            <p class="text-sm text-muted-foreground mb-2">Zaheer, M., et al. (2020)</p>
+                            <p class="text-sm text-muted-foreground">Sparse attention patterns for processing long sequences</p>
+                        </div>
+                        
+                        <div class="p-4 rounded-lg bg-muted/30">
+                            <h4 class="font-medium mb-2">"Lost in the Middle: How Language Models Use Long Contexts"</h4>
+                            <p class="text-sm text-muted-foreground mb-2">Liu, N., et al. (2023)</p>
+                            <p class="text-sm text-muted-foreground">Analysis of how models utilize information in long contexts</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Implementation Resources -->
+            <div class="opacity-0 animate-fade-in animate-delay-200">
+                <div class="rounded-lg border bg-card p-8 text-card-foreground shadow-sm">
+                    <h3 class="text-xl font-medium mb-6">Implementation & Code</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="p-4 rounded-lg bg-muted/30">
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="font-medium">Transformers Library</h4>
+                                <a href="https://github.com/huggingface/transformers" target="_blank" class="text-sm text-primary hover:underline">
+                                    GitHub →
+                                </a>
+                            </div>
+                            <p class="text-sm text-muted-foreground">HuggingFace implementation of long-context models</p>
+                        </div>
+                        
+                        <div class="p-4 rounded-lg bg-muted/30">
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="font-medium">LongBench</h4>
+                                <a href="https://github.com/THUDM/LongBench" target="_blank" class="text-sm text-primary hover:underline">
+                                    GitHub →
+                                </a>
+                            </div>
+                            <p class="text-sm text-muted-foreground">Benchmark for long context understanding</p>
+                        </div>
+                        
+                        <div class="p-4 rounded-lg bg-muted/30">
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="font-medium">LangChain</h4>
+                                <a href="https://github.com/langchain-ai/langchain" target="_blank" class="text-sm text-primary hover:underline">
+                                    GitHub →
+                                </a>
+                            </div>
+                            <p class="text-sm text-muted-foreground">Framework for building context-aware applications</p>
+                        </div>
+                        
+                        <div class="p-4 rounded-lg bg-muted/30">
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="font-medium">LlamaIndex</h4>
+                                <a href="https://github.com/run-llama/llama_index" target="_blank" class="text-sm text-primary hover:underline">
+                                    GitHub →
+                                </a>
+                            </div>
+                            <p class="text-sm text-muted-foreground">Data framework for LLM applications with context management</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Research Directions -->
+            <div class="opacity-0 animate-fade-in animate-delay-300">
+                <div class="rounded-lg border bg-card p-8 text-card-foreground shadow-sm">
+                    <h3 class="text-xl font-medium mb-6">Current Research Directions</h3>
+                    
+                    <div class="grid gap-4 md:grid-cols-2">
+                        <div class="p-4 rounded-lg bg-muted/30">
+                            <h4 class="font-medium mb-2">Efficient Attention</h4>
+                            <p class="text-sm text-muted-foreground">Linear attention, sparse patterns, and approximation methods</p>
+                        </div>
+                        
+                        <div class="p-4 rounded-lg bg-muted/30">
+                            <h4 class="font-medium mb-2">Retrieval Augmentation</h4>
+                            <p class="text-sm text-muted-foreground">RAG systems and external knowledge integration</p>
+                        </div>
+                        
+                        <div class="p-4 rounded-lg bg-muted/30">
+                            <h4 class="font-medium mb-2">Context Compression</h4>
+                            <p class="text-sm text-muted-foreground">Summarization and information distillation techniques</p>
+                        </div>
+                        
+                        <div class="p-4 rounded-lg bg-muted/30">
+                            <h4 class="font-medium mb-2">Memory Architectures</h4>
+                            <p class="text-sm text-muted-foreground">External memory systems and persistent context</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Benchmarks & Datasets -->
+            <div class="opacity-0 animate-fade-in animate-delay-300">
+                <div class="rounded-lg border bg-card p-8 text-card-foreground shadow-sm">
+                    <h3 class="text-xl font-medium mb-6">Benchmarks & Datasets</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="p-4 rounded-lg bg-muted/30">
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="font-medium">SCROLLS</h4>
+                                <a href="https://www.scrolls-benchmark.com/" target="_blank" class="text-sm text-primary hover:underline">
+                                    Website →
+                                </a>
+                            </div>
+                            <p class="text-sm text-muted-foreground">Standardized benchmark for long text understanding</p>
+                        </div>
+                        
+                        <div class="p-4 rounded-lg bg-muted/30">
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="font-medium">LongBench</h4>
+                                <a href="https://arxiv.org/abs/2308.14508" target="_blank" class="text-sm text-primary hover:underline">
+                                    Paper →
+                                </a>
+                            </div>
+                            <p class="text-sm text-muted-foreground">Comprehensive evaluation for long context models</p>
+                        </div>
+                        
+                        <div class="p-4 rounded-lg bg-muted/30">
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="font-medium">RULER</h4>
+                                <a href="https://arxiv.org/abs/2404.06654" target="_blank" class="text-sm text-primary hover:underline">
+                                    Paper →
+                                </a>
+                            </div>
+                            <p class="text-sm text-muted-foreground">Synthetic benchmark for needle-in-haystack tasks</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <script>
+        // Page load animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const fadeElements = document.querySelectorAll('.animate-fade-in');
+            fadeElements.forEach(element => {
+                element.classList.remove('opacity-0');
+            });
+        });
+    </script>
+</body>
+</html>

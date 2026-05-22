@@ -1,0 +1,24 @@
+{
+  "string": [
+    {
+      "name": "app_name",
+      "value": "AI小说生成器"
+    },
+    {
+      "name": "app_description",
+      "value": "使用AI技术生成个性化小说"
+    },
+    {
+      "name": "module_desc",
+      "value": "AI小说生成器主模块"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "AI小说生成器主入口"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "AI小说生成器"
+    }
+  ]
+}

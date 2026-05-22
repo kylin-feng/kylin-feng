@@ -1,0 +1,5 @@
+export default definePageConfig({
+  navigationBarTitleText: '确认支付',
+  navigationBarBackgroundColor: '#667eea',
+  navigationBarTextStyle: 'white'
+}) 

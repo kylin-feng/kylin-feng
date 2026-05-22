@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Agent Research - AI Lab</title>
+    <!-- shadcn/ui CSS via CDN -->
+    <link rel="stylesheet" href="https://ui.shadcn.com/themes/default.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: ["class"],
+            content: ["./multi-agent.html"],
+            theme: {
+                container: {
+                    center: true,
+                    padding: "2rem",
+                    screens: {
+                        "2xl": "1400px",
+                    },
+                },
+                extend: {
+                    colors: {
+                        border: "hsl(var(--border))",
+                        input: "hsl(var(--input))",
+                        ring: "hsl(var(--ring))",
+                        background: "hsl(var(--background))",
+                        foreground: "hsl(var(--foreground))",
+                        primary: {
+                            DEFAULT: "hsl(var(--primary))",
+                            foreground: "hsl(var(--primary-foreground))",
+                        },
+                        secondary: {
+                            DEFAULT: "hsl(var(--secondary))",
+                            foreground: "hsl(var(--secondary-foreground))",
+                        },
+                        muted: {
+                            DEFAULT: "hsl(var(--muted))",
+                            foreground: "hsl(var(--muted-foreground))",
+                        },
+                        accent: {
+                            DEFAULT: "hsl(var(--accent))",
+                            foreground: "hsl(var(--accent-foreground))",
+                        },
+                        card: {
+                            DEFAULT: "hsl(var(--card))",
+                            foreground: "hsl(var(--card-foreground))",
+                        },
+                    },
+                    borderRadius: {
+                        lg: "var(--radius)",
+                        md: "calc(var(--radius) - 2px)",
+                        sm: "calc(var(--radius) - 4px)",
+                    },
+                    keyframes: {
+                        "fade-in": {
+                            from: { opacity: 0, transform: "translateY(20px)" },
+                            to: { opacity: 1, transform: "translateY(0)" },
+                        },
+                    },
+                    animation: {
+                        "fade-in": "fade-in 0.6s ease-out forwards",
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        :root {
+            --background: 0 0% 100%;
+            --foreground: 222.2 84% 4.9%;
+            --card: 0 0% 100%;
+            --card-foreground: 222.2 84% 4.9%;
+            --primary: 222.2 47.4% 11.2%;
+            --primary-foreground: 210 40% 98%;
+            --secondary: 210 40% 96%;
+            --secondary-foreground: 222.2 84% 4.9%;
+            --muted: 210 40% 96%;
+            --muted-foreground: 215.4 16.3% 46.9%;
+            --accent: 210 40% 96%;
+            --accent-foreground: 222.2 84% 4.9%;
+            --border: 214.3 31.8% 91.4%;
+            --input: 214.3 31.8% 91.4%;
+            --ring: 222.2 84% 4.9%;
+            --radius: 0.5rem;
+        }
+
+        body {
+            background-color: hsl(var(--background));
+            color: hsl(var(--foreground));
+        }
+
+        .animate-delay-100 { animation-delay: 0.1s; }
+        .animate-delay-200 { animation-delay: 0.2s; }
+        .animate-delay-300 { animation-delay: 0.3s; }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="min-h-screen bg-background font-sans antialiased">
+    <!-- Navigation -->
+    <nav class="border-b">
+        <div class="container flex h-14 items-center">
+            <a href="index.html" class="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                ← Back to Lab
+            </a>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <section class="container space-y-6 pb-8 pt-6 md:pb-12 md:pt-10">
+        <div class="mx-auto flex max-w-[980px] flex-col gap-2">
+            <div class="opacity-0 animate-fade-in">
+                <h1 class="text-3xl font-light leading-tight tracking-tighter md:text-4xl lg:text-5xl mb-4">
+                    Multi-Agent Research
+                </h1>
+                <p class="text-muted-foreground text-lg">
+                    Collaborative intelligent systems & coordination protocols
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Research Content -->
+    <section class="container space-y-6 pb-16">
+        <div class="mx-auto max-w-4xl space-y-6">
+            
+            <!-- Key Papers -->
+            <div class="opacity-0 animate-fade-in animate-delay-100">
+                <div class="rounded-lg border bg-card p-8 text-card-foreground shadow-sm">
+                    <h3 class="text-xl font-medium mb-6">Key Papers & Literature</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="p-4 rounded-lg bg-muted/30">
+                            <h4 class="font-medium mb-2">"Multi-Agent Reinforcement Learning"</h4>
+                            <p class="text-sm text-muted-foreground mb-2">Tampuu, A., et al. (2017)</p>
+                            <p class="text-sm text-muted-foreground">Foundation work on MARL algorithms and coordination mechanisms</p>
+                        </div>
+                        
+                        <div class="p-4 rounded-lg bg-muted/30">
+                            <h4 class="font-medium mb-2">"Emergent Communication in Multi-Agent Deep Learning"</h4>
+                            <p class="text-sm text-muted-foreground mb-2">Foerster, J., et al. (2016)</p>
+                            <p class="text-sm text-muted-foreground">Communication protocols emergence in cooperative environments</p>
+                        </div>
+                        
+                        <div class="p-4 rounded-lg bg-muted/30">
+                            <h4 class="font-medium mb-2">"AutoGen: Enabling Next-Gen LLM Applications"</h4>
+                            <p class="text-sm text-muted-foreground mb-2">Wu, Q., et al. (2023)</p>
+                            <p class="text-sm text-muted-foreground">Framework for conversational multi-agent systems</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Implementation Resources -->
+            <div class="opacity-0 animate-fade-in animate-delay-200">
+                <div class="rounded-lg border bg-card p-8 text-card-foreground shadow-sm">
+                    <h3 class="text-xl font-medium mb-6">Implementation & Code</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="p-4 rounded-lg bg-muted/30">
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="font-medium">AutoGen Framework</h4>
+                                <a href="https://github.com/microsoft/autogen" target="_blank" class="text-sm text-primary hover:underline">
+                                    GitHub →
+                                </a>
+                            </div>
+                            <p class="text-sm text-muted-foreground">Microsoft's multi-agent conversation framework</p>
+                        </div>
+                        
+                        <div class="p-4 rounded-lg bg-muted/30">
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="font-medium">CrewAI</h4>
+                                <a href="https://github.com/joaomdmoura/crewAI" target="_blank" class="text-sm text-primary hover:underline">
+                                    GitHub →
+                                </a>
+                            </div>
+                            <p class="text-sm text-muted-foreground">Framework for orchestrating role-playing agents</p>
+                        </div>
+                        
+                        <div class="p-4 rounded-lg bg-muted/30">
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="font-medium">LangGraph</h4>
+                                <a href="https://github.com/langchain-ai/langgraph" target="_blank" class="text-sm text-primary hover:underline">
+                                    GitHub →
+                                </a>
+                            </div>
+                            <p class="text-sm text-muted-foreground">Library for building stateful multi-actor applications</p>
+                        </div>
+                        
+                        <div class="p-4 rounded-lg bg-muted/30">
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="font-medium">MetaGPT</h4>
+                                <a href="https://github.com/geekan/MetaGPT" target="_blank" class="text-sm text-primary hover:underline">
+                                    GitHub →
+                                </a>
+                            </div>
+                            <p class="text-sm text-muted-foreground">Multi-agent meta programming framework</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Research Directions -->
+            <div class="opacity-0 animate-fade-in animate-delay-300">
+                <div class="rounded-lg border bg-card p-8 text-card-foreground shadow-sm">
+                    <h3 class="text-xl font-medium mb-6">Current Research Directions</h3>
+                    
+                    <div class="grid gap-4 md:grid-cols-2">
+                        <div class="p-4 rounded-lg bg-muted/30">
+                            <h4 class="font-medium mb-2">Coordination Mechanisms</h4>
+                            <p class="text-sm text-muted-foreground">Task allocation, consensus protocols, and synchronization</p>
+                        </div>
+                        
+                        <div class="p-4 rounded-lg bg-muted/30">
+                            <h4 class="font-medium mb-2">Emergent Communication</h4>
+                            <p class="text-sm text-muted-foreground">Language evolution and protocol emergence</p>
+                        </div>
+                        
+                        <div class="p-4 rounded-lg bg-muted/30">
+                            <h4 class="font-medium mb-2">Scalability</h4>
+                            <p class="text-sm text-muted-foreground">Large-scale systems and hierarchical organization</p>
+                        </div>
+                        
+                        <div class="p-4 rounded-lg bg-muted/30">
+                            <h4 class="font-medium mb-2">Safety & Alignment</h4>
+                            <p class="text-sm text-muted-foreground">Cooperative AI safety and value alignment</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <script>
+        // Page load animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const fadeElements = document.querySelectorAll('.animate-fade-in');
+            fadeElements.forEach(element => {
+                element.classList.remove('opacity-0');
+            });
+        });
+    </script>
+</body>
+</html>
